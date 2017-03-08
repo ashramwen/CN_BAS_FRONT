@@ -1,9 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { MaterialRootModule } from '@angular/material';
 import {
   NgModule,
-  ApplicationRef
+  ApplicationRef,
+  OpaqueToken
 } from '@angular/core';
 import {
   removeNgStyles,
@@ -14,6 +16,7 @@ import {
   RouterModule,
   PreloadAllModules
 } from '@angular/router';
+import { LocalStorageModule } from 'angular-2-local-storage';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -31,6 +34,8 @@ import { XLargeDirective } from './home/x-large';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
+import { AppSharedModule } from './shared/shared.module';
+import { BASE_CONFIG, AppConfigToken } from './app.config';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -60,9 +65,19 @@ type StoreType = {
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    AppSharedModule,
+    MaterialRootModule,
+    LocalStorageModule.withConfig({
+        prefix: 'bas',
+        storageType: 'localStorage'
+    })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
+    {
+      provide: AppConfigToken,
+      useValue: BASE_CONFIG[ENV]
+    },
     ENV_PROVIDERS,
     APP_PROVIDERS
   ]

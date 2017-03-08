@@ -30,6 +30,10 @@
   version "2.4.6"
   resolved "http://registry.npm.taobao.org/@angular/http/download/@angular/http-2.4.6.tgz#32952ce82558f939be52863faa8cab19b20351fd"
 
+"@angular/material@^2.0.0-beta.2":
+  version "2.0.0-beta.2"
+  resolved "http://registry.npm.taobao.org/@angular/material/download/@angular/material-2.0.0-beta.2.tgz#65ee8733990347b7518b7f42113e02e069dc109b"
+
 "@angular/platform-browser-dynamic@2.4.6":
   version "2.4.6"
   resolved "http://registry.npm.taobao.org/@angular/platform-browser-dynamic/download/@angular/platform-browser-dynamic-2.4.6.tgz#d50d8b66f7fa00c0449f33c2c1b5348b67c9fcda"
@@ -75,6 +79,26 @@
 "@angularclass/hmr@~1.2.2":
   version "1.2.2"
   resolved "http://registry.npm.taobao.org/@angularclass/hmr/download/@angularclass/hmr-1.2.2.tgz#46a18f89a1e94d05c268b83c9480e005f73fc265"
+
+"@ngrx/core@^1.2.0":
+  version "1.2.0"
+  resolved "http://registry.npm.taobao.org/@ngrx/core/download/@ngrx/core-1.2.0.tgz#882b46abafa2e0e6d887cb71a1b2c2fa3e6d0dc6"
+
+"@ngrx/db@^2.0.1":
+  version "2.0.1"
+  resolved "http://registry.npm.taobao.org/@ngrx/db/download/@ngrx/db-2.0.1.tgz#c14a2204ab34c587e41bb5c57411877f8f832183"
+
+"@ngrx/effects@^2.0.0":
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/@ngrx/effects/download/@ngrx/effects-2.0.0.tgz#db4c3e1b69030229cb6b908477115b3479e4c4e0"
+
+"@ngrx/router-store@^1.2.5":
+  version "1.2.5"
+  resolved "http://registry.npm.taobao.org/@ngrx/router-store/download/@ngrx/router-store-1.2.5.tgz#1cff82c5488fab995872c6f0d57a29a7ac91e598"
+
+"@ngrx/store@^2.2.1":
+  version "2.2.1"
+  resolved "http://registry.npm.taobao.org/@ngrx/store/download/@ngrx/store-2.2.1.tgz#316ec1e43aa5a0166e5e6e1aa2c34a4049386510"
 
 "@types/fs-extra@0.0.33":
   version "0.0.33"
@@ -236,6 +260,10 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
 amdefine@>=0.0.4, amdefine@^1.0.0:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/amdefine/download/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
+
+angular-2-local-storage@^1.0.1:
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/angular-2-local-storage/download/angular-2-local-storage-1.0.1.tgz#3b846c90b2fffc9124f7bacc347f22d043a1e3a4"
 
 angular2-template-loader@^0.6.0:
   version "0.6.2"
@@ -3236,11 +3264,7 @@ lowercase-keys@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/lowercase-keys/download/lowercase-keys-1.0.0.tgz#4e3366b39e7f5457e35f1324bdf6f88d0bfc7306"
 
-lru-cache@2:
-  version "2.7.3"
-  resolved "http://registry.npm.taobao.org/lru-cache/download/lru-cache-2.7.3.tgz#6d4524e8b955f95d4f5b58851ce21dd72fb4e952"
-
-lru-cache@2.2.x:
+lru-cache@2, lru-cache@2.2.x:
   version "2.2.4"
   resolved "http://registry.npm.taobao.org/lru-cache/download/lru-cache-2.2.4.tgz#6c658619becf14031d0d0b594b16042ce4dc063d"
 
