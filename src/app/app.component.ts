@@ -28,14 +28,13 @@ import { AppState } from './app.service';
   ],
   templateUrl: './app.component.html'
 })
-export class AppComponent implements OnInit {
+export class AppCmp implements OnInit {
   public angularclassLogo = 'assets/img/angularclass-avatar.png';
   public name = 'Angular 2 Webpack Starter';
   public url = 'https://twitter.com/AngularClass';
-  private loading: boolean = false;
+  public loading: boolean = false;
 
   constructor(
-    public appState: AppState,
     private router: Router
   ) {}
 

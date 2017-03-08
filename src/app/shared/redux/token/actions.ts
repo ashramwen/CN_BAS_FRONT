@@ -9,10 +9,11 @@ export const ActionTypes = {
   CLEAR: type('[Token] Clear'),
   VALIDATE: type('[Token] Validate'),
   LOAD: type('[Token] Load'),
-  LOAD_SUCCESS: type('[Token] Load'),
+  LOAD_SUCCESS: type('[Token] LoadSuccess'),
   LOAD_FAILED: type('[Token] LoadFailed'),
   LOGIN_SUCCESS: type('[Token] LoginSuccess'),
   LOGIN_FAILED: type('[Token] LoginFailed'),
+  LOGOUT: type('[Token] Logout')
 };
 
 export class LoginSuccessAction implements Action {
@@ -24,7 +25,13 @@ export class LoginSuccessAction implements Action {
 export class LoginFailureAction implements Action {
   public type = ActionTypes.LOGIN_FAILED;
 
-  constructor(public payload: {errorCode: number, statusCode: number, errorMessage: string}) { }
+  constructor(public payload: {errorCode: number | string, statusCode: number, errorMessage: string}) { }
+}
+
+export class LogOutAction implements Action {
+  public type = ActionTypes.LOGOUT;
+
+  constructor() { }
 }
 
 export class ValidateAction implements Action {
@@ -57,6 +64,12 @@ export class LoadFailureAction implements Action {
   constructor() { }
 }
 
+export class StoreAction implements Action {
+  public type = ActionTypes.STORE;
+
+  constructor(public payload: Token) { }
+}
+
 export class StoreSuccessAction implements Action {
   public type = ActionTypes.STORE_SUCCESS;
 
@@ -70,4 +83,5 @@ export type Actions =
   ValidateAction |
   LoadAction |
   LoadSuccessAction |
-  LoadFailureAction;
+  LoadFailureAction |
+  LogOutAction;

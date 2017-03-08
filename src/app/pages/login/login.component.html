@@ -1,0 +1,20 @@
+<div class="login-page" #loginPage>
+	<div class="row">
+		<div class="col-lg-4 col-lg-offset-4">
+        	<img src="assets/img/SB-admin.png" width="150px" height="150px" class="user-avatar" />
+			<h1>B A S</h1>
+			<form role="form" (submit)="login()" autocomplete="false">
+				<div class="form-content">
+					<div class="form-group">
+						<input type="text" name="username" autocomplete="false" [(ngModel)]="credentials.userName" class="form-control input-underline input-lg" id="" placeholder="Username">
+					</div>
+
+					<div class="form-group">
+						<input type="password" name="password" autocomplete="false" class="form-control input-underline input-lg" [(ngModel)]="credentials.password" placeholder="Password">
+					</div>
+				</div>
+				<button class="btn rounded-btn" type="submit"> Log in </button>				
+			</form>
+		</div>	
+	</div>
+</div>

@@ -1,27 +1,20 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home';
-import { AboutComponent } from './about';
-import { NoContentComponent } from './no-content';
 
-import { DataResolver } from './app.resolver';
+import { LoginCmp } from './pages/login/login.component';
+import { LandingCmp } from './pages/landing/landing.component';
 
 export const ROUTES: Routes = [
   {
     path: '',
-    component: HomeComponent,
-    resolve: {
-      data: DataResolver
-    },
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
   {
-    path: 'home',
-    component: HomeComponent,
-    resolve: {
-      data: DataResolver
-    }
+    path: 'login',
+    component: LoginCmp,
   },
-  { path: 'about', component: AboutComponent },
-  { path: 'detail', loadChildren: './+detail#DetailModule'},
-  { path: 'barrel', loadChildren: './+barrel#BarrelModule'},
-  { path: '**',    component: NoContentComponent },
+  {
+    path: 'landing',
+    component: LandingCmp
+  }
 ];

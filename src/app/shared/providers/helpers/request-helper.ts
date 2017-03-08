@@ -14,7 +14,7 @@ export class RequestHelper {
   
   public get headers(): Observable<Headers> {
     let headers = new Headers({
-      contentType: 'application/json'
+      'content-type': 'application/json'
     });
 
     return Observable.of(headers);
@@ -39,7 +39,7 @@ export class RequestHelper {
             });
           });
         });
-        
+
         return newHeaders;
       });
     

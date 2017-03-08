@@ -10,6 +10,6 @@ export class ConfigHelper {
   ) { }
 
   public buildUrl(apiPath: string) {
-    return path.join(this.config.cloudUrl, apiPath);
+    return [this.config.siteUrl, path.join('api', apiPath)].join('/');
   }
 }

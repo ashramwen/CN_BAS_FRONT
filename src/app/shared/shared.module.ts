@@ -8,6 +8,8 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { DBModule } from '@ngrx/db';
 import { RouterStoreModule } from '@ngrx/router-store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 
 import { EFFECTS, reducers } from './redux/index';
 import { schema } from '../configs/db';
@@ -22,7 +24,11 @@ import { HttpModule } from '@angular/http';
     DBModule.provideDB(schema),
     RouterStoreModule.connectRouter(),
     StoreModule.provideStore(reducers),
-    HttpModule
+    HttpModule,
+    StoreDevtoolsModule.instrumentOnlyWithExtension({
+      maxAge: 5,
+      monitor: useLogMonitor({ visible: false, position: 'right' })
+    })
   ],
   exports: [SHARED_COMPONENTS, SHARED_DIRECTIVES],
   declarations: [SHARED_COMPONENTS, SHARED_DIRECTIVES],

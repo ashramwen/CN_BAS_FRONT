@@ -96,6 +96,14 @@
   version "1.2.5"
   resolved "http://registry.npm.taobao.org/@ngrx/router-store/download/@ngrx/router-store-1.2.5.tgz#1cff82c5488fab995872c6f0d57a29a7ac91e598"
 
+"@ngrx/store-devtools@^3.2.3":
+  version "3.2.3"
+  resolved "http://registry.npm.taobao.org/@ngrx/store-devtools/download/@ngrx/store-devtools-3.2.3.tgz#3e89ac95ba7e96ebb20180a61d731954078728fb"
+
+"@ngrx/store-log-monitor@^3.0.2":
+  version "3.0.2"
+  resolved "http://registry.npm.taobao.org/@ngrx/store-log-monitor/download/@ngrx/store-log-monitor-3.0.2.tgz#951dc2e3d8ba0113ea4ed6744d9ce7640fee3271"
+
 "@ngrx/store@^2.2.1":
   version "2.2.1"
   resolved "http://registry.npm.taobao.org/@ngrx/store/download/@ngrx/store-2.2.1.tgz#316ec1e43aa5a0166e5e6e1aa2c34a4049386510"

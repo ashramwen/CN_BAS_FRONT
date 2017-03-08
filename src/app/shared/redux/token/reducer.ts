@@ -1,5 +1,5 @@
 import { Location } from '../../models/location.interface';
-import { Actions, ActionTypes, LoadAction, LoadSuccessAction, LoadFailureAction, LoginFailureAction, LoginSuccessAction } from './actions';
+import { Actions, ActionTypes, LoadAction, LoadSuccessAction, LoadFailureAction, LoginFailureAction, LoginSuccessAction, ClearAction } from './actions';
 import { Action } from '@ngrx/store';
 import { Token } from '../../models/token.interface';
 
@@ -22,6 +22,7 @@ export const initialState: TokenState = {
 };
 
 export function tokenReducer(state = initialState, action: Actions): TokenState {
+  debugger;
   switch (action.type) {
     case ActionTypes.LOAD_SUCCESS: {
       return onLoadSuccess(state, <LoadSuccessAction>action);
@@ -34,6 +35,9 @@ export function tokenReducer(state = initialState, action: Actions): TokenState 
     }  
     case ActionTypes.LOGIN_FAILED: {
       return onLoginFailed(state, <LoginFailureAction>action);
+    }  
+    case ActionTypes.CLEAR: {
+      return onClear(state, <ClearAction>action);
     }  
     default: {
       return null;
@@ -82,5 +86,16 @@ function onLoginFailed(state: TokenState, action: LoginFailureAction): TokenStat
     errorCode: null,
     errorMessage: null,
     statusCode: null
-  }, action)
+  }, action.payload)
+}
+
+function onClear(state: TokenState, action: ClearAction): TokenState {
+  return {
+    token: null,
+    loggedIn: false,
+    loginFailed: false,
+    errorCode: null,
+    errorMessage: null,
+    statusCode: null
+  };
 }
