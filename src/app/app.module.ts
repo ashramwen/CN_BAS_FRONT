@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 import { MaterialRootModule } from '@angular/material';
 import {
   NgModule,
@@ -36,10 +36,20 @@ import { BASE_CONFIG, AppConfigToken } from './app.config';
 import { LandingCmp } from './pages/landing/landing.component';
 import { StoreModule } from '@ngrx/store';
 import { LocationCmp } from './pages/location/location.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+// localize router
+// import { LocalizeRouterModule, StaticParserLoader, LocalizeParser } from 'localize-router';
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: Http) {
+  return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
+}
 
 // Application wide providers
 const APP_PROVIDERS = [
-  
+
 ];
 
 /**
@@ -57,14 +67,22 @@ const APP_PROVIDERS = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     AppSharedModule,
     MaterialRootModule,
     StoreLogMonitorModule,
     LocalStorageModule.withConfig({
       prefix: 'bas',
       storageType: 'localStorage'
-    })
+    }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [Http]
+      }
+    }),
+    // LocalizeRouterModule.forRoot(ROUTES), // localize router
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     {
@@ -79,6 +97,6 @@ export class AppModule {
 
   constructor(
     public appRef: ApplicationRef,
-  ) {}
+  ) { }
 
 }
