@@ -61,7 +61,7 @@ export class LoginCmp implements OnInit {
         this.store.dispatch(new LoginSuccessAction(token));
         this.router.queryParams.subscribe((params) => {
           let redirectUrl = params['redirectUrl'];
-          let  newParams = Object.assign({}, params);
+          let newParams = Object.assign({}, params);
           delete newParams['redirectUrl'];
 
           if (redirectUrl) {
