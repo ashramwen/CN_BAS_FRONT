@@ -1,22 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { go, replace, search, show, back, forward } from '@ngrx/router-store';
+import { Response } from '@angular/http';
 
 import { SessionService } from '../../shared/providers/session.service';
-import { RootState, StateSelectors } from '../../shared/redux/index';
+import { RootState } from '../../shared/redux/index';
 import { Token } from '../../shared/models/token.interface';
 import { LoginSuccessAction, LoginFailureAction } from '../../shared/redux/token/actions';
 import { Credential } from '../../shared/models/credential.interface';
 import { HttpError } from '../../shared/models/http-error.interface';
 import { TokenState } from '../../shared/redux/token/reducer';
+import { StateSelectors } from '../../shared/redux/selectors';
 
 @Component({
-  selector: 'login',
+  selector: 'bas-login',
   styleUrls: ['./login.component.scss'],
   templateUrl: './login.component.html'
 })
-export class LoginCmp implements OnInit{
+export class LoginCmp implements OnInit {
 
   public credentials: Credential = {
     userName: '',
@@ -26,19 +29,16 @@ export class LoginCmp implements OnInit{
 
   constructor(
     private loginService: SessionService,
-    private store: Store<RootState>
-  ) {}
+    private store: Store<RootState>,
+    private router: ActivatedRoute
+  ) { }
 
   public ngOnInit() {
-    setTimeout(() => {
-      debugger;
-      this.store.select(StateSelectors.token).subscribe((tokenState: TokenState) => {
-        if (tokenState && tokenState.loggedIn) {
-          this.store.dispatch(go(['/landing']));
-        }
-      });
-    }, 300);
-        
+    this.store.select(StateSelectors.token).subscribe((tokenState: TokenState) => {
+      if (tokenState && tokenState.loggedIn) {
+        this.store.dispatch(go(['/landing']));
+      }
+    });
   }
 
   public login(value: string) {
@@ -55,12 +55,21 @@ export class LoginCmp implements OnInit{
           errorCode: msg.errorCode,
           errorMessage: msg.errorMessage
         }));
-        return Observable.of();
+        return void 0;
       })
       .subscribe((token: Token) => {
         this.store.dispatch(new LoginSuccessAction(token));
-        this.store.dispatch(go(['/landing']));
-        console.log(token);
+        this.router.queryParams.subscribe((params) => {
+          let redirectUrl = params['redirectUrl'];
+          let  newParams = Object.assign({}, params);
+          delete newParams['redirectUrl'];
+
+          if (redirectUrl) {
+            this.store.dispatch(go([redirectUrl], newParams));
+          } else {
+            this.store.dispatch(go(['/landing']));
+          }
+        });
       });
   }
 }

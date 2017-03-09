@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { RootState } from '../../redux';
 import { TokenState } from '../../redux/token/reducer';
 import { Observable } from 'rxjs/Observable';
+import { StateSelectors } from '../../redux/selectors';
 
 @Injectable()
 export class RequestHelper {
@@ -21,12 +22,12 @@ export class RequestHelper {
   }
 
   public get headersWithToken() {
-    return this.store.select('token')  
+    return this.store.select(StateSelectors.token)
       .map((tokenState: TokenState) => {
-      let headers = new Headers({
-        authorization: `Bearer ${tokenState.token}`
-      });
-      return headers;
+        let headers = new Headers({
+          authorization: `Bearer ${tokenState.token.accessToken}`
+        });
+        return headers;
       })
       .zip(this.headers)
       .map((s: Array<Headers>) => {
@@ -35,13 +36,12 @@ export class RequestHelper {
         s.forEach((header) => {
           header.forEach((values, name) => {
             values.forEach(value => {
-              newHeaders.append(value, name);
+              newHeaders.append(name, value);
             });
           });
         });
 
         return newHeaders;
       });
-    
   }
 }

@@ -9,9 +9,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { DBModule } from '@ngrx/db';
 import { RouterStoreModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
+import { useLogMonitor } from '@ngrx/store-log-monitor';
 
-import { EFFECTS, reducers } from './redux/index';
+import { EFFECTS, reducer } from './redux/index';
 import { schema } from '../configs/db';
 import { HttpModule } from '@angular/http';
 
@@ -22,13 +22,13 @@ import { HttpModule } from '@angular/http';
     FormsModule,
     ...EFFECTS,
     DBModule.provideDB(schema),
-    RouterStoreModule.connectRouter(),
-    StoreModule.provideStore(reducers),
+    StoreModule.provideStore(reducer),
     HttpModule,
     StoreDevtoolsModule.instrumentOnlyWithExtension({
-      maxAge: 5,
+      maxAge: 15,
       monitor: useLogMonitor({ visible: false, position: 'right' })
-    })
+    }),
+    RouterStoreModule.connectRouter()
   ],
   exports: [SHARED_COMPONENTS, SHARED_DIRECTIVES],
   declarations: [SHARED_COMPONENTS, SHARED_DIRECTIVES],

@@ -9,7 +9,7 @@ export class ConfigHelper {
     @Inject(AppConfigToken) private config: AppConfig
   ) { }
 
-  public buildUrl(apiPath: string) {
-    return [this.config.siteUrl, path.join('api', apiPath)].join('/');
+  public buildUrl(apiPath: string, paths: string[] = []) {
+    return [this.config.siteUrl, path.join('api', apiPath), ...paths].join('/');
   }
 }

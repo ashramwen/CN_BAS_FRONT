@@ -1,17 +1,21 @@
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/skip';
-import 'rxjs/add/operator/takeUntil';
 import { Injectable } from '@angular/core';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { empty } from 'rxjs/observable/empty';
 import { of } from 'rxjs/observable/of';
-import { ActionTypes, LoadAction, LoadSuccessAction, LoadFailureAction, StoreSuccessAction, StoreAction, LogOutAction, ClearAction } from './actions';
 import { LocalStorageService } from 'angular-2-local-storage';
+
+import {
+  ActionTypes,
+  LoadAction,
+  LoadSuccessAction,
+  LoadFailureAction,
+  StoreSuccessAction,
+  StoreAction,
+  LogOutAction,
+  ClearAction
+} from './actions';
 import { LOCAL_STORAGE_KEYS } from '../../constants/local-storage';
 import { Token } from '../../models/token.interface';
 import { SessionService } from '../../providers/session.service';
@@ -26,7 +30,6 @@ export class TokenEffects {
     .ofType(ActionTypes.LOAD)
     .startWith(new LoadAction())
     .switchMap(() => {
-      debugger;
       return Observable.of(this.localStorage.get(LOCAL_STORAGE_KEYS.TOKEN))
         .map((token: Token) => {
           if (token) {
@@ -58,13 +61,23 @@ export class TokenEffects {
     });
   
   @Effect()
-  public logout$: Observable<Action > = this.actions$
+  public logout$: Observable<Action> = this.actions$
     .ofType(ActionTypes.LOGOUT)
     .switchMap(() => {
       this.store.dispatch(go(['/login']));
-
-      return this.session.logout().map(() => new ClearAction);
-    });  
+      this.session.logout()
+        .map(() => new ClearAction)
+        .delay(0);
+      return Observable.of(new ClearAction).delay(0);
+    });
+  
+  @Effect()
+  public clear$: Observable<Action> = this.actions$
+    .ofType(ActionTypes.CLEAR)
+    .switchMap(() => {
+      this.localStorage.clearAll();
+      return Observable.of();
+    });
     
   constructor(
     private actions$: Actions,

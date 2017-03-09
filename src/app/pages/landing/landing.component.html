@@ -2,3 +2,7 @@
 <div>
   <button (click)="logout()">Logout</button>
 </div>
+<h5>token</h5>
+<div>
+  {{token | async | json}}
+</div>

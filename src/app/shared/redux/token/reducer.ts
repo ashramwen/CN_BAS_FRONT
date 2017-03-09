@@ -22,7 +22,6 @@ export const initialState: TokenState = {
 };
 
 export function tokenReducer(state = initialState, action: Actions): TokenState {
-  debugger;
   switch (action.type) {
     case ActionTypes.LOAD_SUCCESS: {
       return onLoadSuccess(state, <LoadSuccessAction>action);
@@ -32,15 +31,15 @@ export function tokenReducer(state = initialState, action: Actions): TokenState 
     }
     case ActionTypes.LOGIN_SUCCESS: {
       return onLoginSucceeded(state, <LoginSuccessAction>action);
-    }  
+    }
     case ActionTypes.LOGIN_FAILED: {
       return onLoginFailed(state, <LoginFailureAction>action);
-    }  
+    }
     case ActionTypes.CLEAR: {
       return onClear(state, <ClearAction>action);
-    }  
+    }
     default: {
-      return null;
+      return state;
     }
   }
 }

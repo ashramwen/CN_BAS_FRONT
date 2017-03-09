@@ -3,7 +3,3 @@ import { RootState } from '../index';
 
 export { TokenState, tokenReducer } from './reducer';
 export { TokenEffects } from './effects';
-
-export const tokenSelector = (state: RootState) => {
-  return state.token;
-};

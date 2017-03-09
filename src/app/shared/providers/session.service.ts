@@ -20,7 +20,7 @@ export class SessionService {
     this.requestHelper.headers.subscribe((_headers) => {
       headers = _headers;
     });
-    let url = [this.configHelper.buildUrl(RESOURCE_URLS.AUTH), 'login'].join('/');
+    let url = this.configHelper.buildUrl(RESOURCE_URLS.AUTH, ['login']);
     let requestOptions: RequestOptionsArgs = {
       headers: headers
     };
@@ -32,5 +32,4 @@ export class SessionService {
   public logout() {
     return Observable.of().delay(0);
   }
-
 }

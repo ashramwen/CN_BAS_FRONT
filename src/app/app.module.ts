@@ -35,6 +35,7 @@ import { AppSharedModule } from './shared/shared.module';
 import { BASE_CONFIG, AppConfigToken } from './app.config';
 import { LandingCmp } from './pages/landing/landing.component';
 import { StoreModule } from '@ngrx/store';
+import { LocationCmp } from './pages/location/location.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -49,7 +50,8 @@ const APP_PROVIDERS = [
   declarations: [
     AppCmp,
     LoginCmp,
-    LandingCmp
+    LandingCmp,
+    LocationCmp
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -62,9 +64,7 @@ const APP_PROVIDERS = [
     LocalStorageModule.withConfig({
       prefix: 'bas',
       storageType: 'localStorage'
-    }),
-    StoreModule.provideStore({ router: routerReducer }),
-    RouterStoreModule.connectRouter()
+    })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     {
