@@ -7,6 +7,7 @@ import { routes } from './portal.routes';
 import { LandingCmp } from './landing/landing.component';
 import { CommonModule } from '@angular/common';
 import { LAYOUT_CMP } from './components/index';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { LAYOUT_CMP } from './components/index';
     LAYOUT_CMP
   ],
   imports: [
+    TranslateModule,
     FormsModule,
     MaterialModule,
     RouterModule.forChild(routes),
