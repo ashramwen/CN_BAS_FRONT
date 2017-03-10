@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 import { MaterialRootModule } from '@angular/material';
 import {
   NgModule,
@@ -19,7 +19,9 @@ import {
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { StoreLogMonitorModule } from '@ngrx/store-log-monitor';
 import { routerReducer, RouterStoreModule } from '@ngrx/router-store';
-
+import { StoreModule } from '@ngrx/store';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -33,13 +35,20 @@ import '../styles/styles.scss';
 import '../styles/headings.css';
 import { AppSharedModule } from './shared/shared.module';
 import { BASE_CONFIG, AppConfigToken } from './app.config';
-import { StoreModule } from '@ngrx/store';
 import { LocationCmp } from './pages/location/location.component';
 import { PortalModule } from './pages/+portal/portal.module';
 
+// localize router
+// import { LocalizeRouterModule, StaticParserLoader, LocalizeParser } from 'localize-router';
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: Http) {
+  return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
+}
+
 // Application wide providers
 const APP_PROVIDERS = [
-  
+
 ];
 
 /**
@@ -57,7 +66,6 @@ const APP_PROVIDERS = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     AppSharedModule,
     MaterialRootModule,
     StoreLogMonitorModule,
@@ -65,6 +73,16 @@ const APP_PROVIDERS = [
       prefix: 'bas',
       storageType: 'localStorage'
     }),
+
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [Http]
+      }
+    }),
+    // LocalizeRouterModule.forRoot(ROUTES), // localize router
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
 
     // app modules
     PortalModule
@@ -82,6 +100,6 @@ export class AppModule {
 
   constructor(
     public appRef: ApplicationRef,
-  ) {}
+  ) { }
 
 }

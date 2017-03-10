@@ -27,5 +27,6 @@ export const ROUTES: Routes = [
     resolve: {
       locations: LocationResolver
     }
-  }
+  },
+  { path: '**', redirectTo: 'login' }
 ];

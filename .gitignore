@@ -63,7 +63,7 @@ dll/
 # IDE #
 .idea/
 *.swp
-
+.vscode/settings.json
 
 # Angular #
 *.ngfactory.ts
