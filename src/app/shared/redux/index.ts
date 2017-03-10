@@ -19,12 +19,14 @@ import { storeFreeze } from 'ngrx-store-freeze';
  */
 import { combineReducers } from '@ngrx/store';
 
-import {TokenState, TokenEffects, tokenReducer} from './token';
+import { LayoutState, layoutReducer } from './layout';
+import { TokenState, TokenEffects, tokenReducer } from './token';
 import { routerReducer } from '@ngrx/router-store';
 
 const reducers = {
   token: tokenReducer,
-  router: routerReducer
+  router: routerReducer,
+  layout: layoutReducer
 };
 
 export const EFFECTS = [TokenEffects].map(effect => {
@@ -32,7 +34,8 @@ export const EFFECTS = [TokenEffects].map(effect => {
 });
 
 export interface RootState {
-  token: TokenState
+  token: TokenState,
+  layout: LayoutState
 }
 
 const developmentReducer: ActionReducer<RootState> = compose(storeFreeze, combineReducers)(reducers);

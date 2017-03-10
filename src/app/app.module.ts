@@ -33,9 +33,9 @@ import '../styles/styles.scss';
 import '../styles/headings.css';
 import { AppSharedModule } from './shared/shared.module';
 import { BASE_CONFIG, AppConfigToken } from './app.config';
-import { LandingCmp } from './pages/landing/landing.component';
 import { StoreModule } from '@ngrx/store';
 import { LocationCmp } from './pages/location/location.component';
+import { PortalModule } from './pages/+portal/portal.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -50,10 +50,10 @@ const APP_PROVIDERS = [
   declarations: [
     AppCmp,
     LoginCmp,
-    LandingCmp,
     LocationCmp
   ],
   imports: [ // import Angular's modules
+    // vendor modules  
     BrowserModule,
     FormsModule,
     HttpModule,
@@ -64,7 +64,10 @@ const APP_PROVIDERS = [
     LocalStorageModule.withConfig({
       prefix: 'bas',
       storageType: 'localStorage'
-    })
+    }),
+
+    // app modules
+    PortalModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     {

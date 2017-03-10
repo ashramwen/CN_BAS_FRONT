@@ -3,6 +3,10 @@
 @import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
 @import 'variables';
 
+body, html{
+  margin: 0px;
+}
+
 
 nav {
   margin-top: 16px;

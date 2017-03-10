@@ -13,6 +13,9 @@ export class RequestHelper {
     private store: Store<RootState>
   ) { }
   
+  /**
+   * @description get bas fixed headers
+   */
   public get headers(): Observable<Headers> {
     let headers = new Headers({
       'content-type': 'application/json'
@@ -21,6 +24,9 @@ export class RequestHelper {
     return Observable.of(headers);
   }
 
+  /**
+   * @description get BAS fixed headers with auth token
+   */  
   public get headersWithToken() {
     return this.store.select(StateSelectors.token)
       .map((tokenState: TokenState) => {

@@ -4,6 +4,11 @@ const tokenSelector = (state: RootState) => {
   return state.token;
 };
 
+const layoutSelector = (state: RootState) => {
+  return state.layout;
+};
+
 export const StateSelectors = {
-  token: tokenSelector
+  token: tokenSelector,
+  layout: layoutSelector
 };
