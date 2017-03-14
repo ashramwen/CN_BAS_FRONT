@@ -21,6 +21,7 @@ import { Token } from '../../models/token.interface';
 import { SessionService } from '../../providers/session.service';
 import { RootState } from '../index';
 import { go } from '@ngrx/router-store';
+import { GoMainAction } from '../layout/actions';
 
 @Injectable()
 export class TokenEffects {
@@ -64,7 +65,7 @@ export class TokenEffects {
   public logout$: Observable<Action> = this.actions$
     .ofType(ActionTypes.LOGOUT)
     .switchMap(() => {
-      this.store.dispatch(go(['/login']));
+      this.store.dispatch(new GoMainAction);
       this.session.logout()
         .map(() => new ClearAction)
         .delay(0);
@@ -75,6 +76,7 @@ export class TokenEffects {
   public clear$: Observable<Action> = this.actions$
     .ofType(ActionTypes.CLEAR)
     .switchMap(() => {
+      this.store.dispatch(go(['/login']));
       this.localStorage.clearAll();
       return Observable.of();
     });

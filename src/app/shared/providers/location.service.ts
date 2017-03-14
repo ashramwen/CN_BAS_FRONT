@@ -4,14 +4,15 @@ import { ConfigHelper } from './helpers/config-helper';
 import { RequestHelper } from './helpers/request-helper';
 import { RESOURCE_URLS } from '../constants/resource-urls';
 import { Observable } from 'rxjs';
+import { BeehiveClient } from './helpers/beehive-client.service';
 
 @Injectable()
 export class LocationService {
 
   constructor(
-    private http: Http,
+    private http: BeehiveClient,
     private configHelper: ConfigHelper,
-    private requestHelper: RequestHelper
+    private requestHelper: RequestHelper,
   ) { }
 
   /**
@@ -20,13 +21,8 @@ export class LocationService {
    */
   public fetchLocations(): Observable<Response> {
     let headers: Headers;
-    this.requestHelper.headersWithToken.subscribe((_headers) => {
-      headers = _headers;
-    });
     let url = this.configHelper.buildUrl(RESOURCE_URLS.LOCATION_TAGS, ['fullTree']);
-    let requestOptions: RequestOptionsArgs = {
-      headers: headers
-    };
+    let requestOptions: RequestOptionsArgs = {};
 
     return this.http
       .get(url, requestOptions);

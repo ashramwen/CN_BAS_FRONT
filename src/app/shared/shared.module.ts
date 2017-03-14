@@ -18,7 +18,6 @@ import { HttpModule } from '@angular/http';
 
 @NgModule({
   imports: [
-    BrowserModule,
     FormsModule,
     ...EFFECTS,
     DBModule.provideDB(schema),
@@ -28,10 +27,11 @@ import { HttpModule } from '@angular/http';
       maxAge: 15,
       monitor: useLogMonitor({ visible: false, position: 'right' })
     }),
-    RouterStoreModule.connectRouter()
+    RouterStoreModule.connectRouter(),
+    ...SHARED_COMPONENTS
   ],
-  exports: [SHARED_COMPONENTS, SHARED_DIRECTIVES],
-  declarations: [SHARED_COMPONENTS, SHARED_DIRECTIVES],
+  exports: [...SHARED_COMPONENTS, SHARED_DIRECTIVES],
+  declarations: [SHARED_DIRECTIVES],
   providers: [SHARED_PROVIDERS],
 })
 export class AppSharedModule { }

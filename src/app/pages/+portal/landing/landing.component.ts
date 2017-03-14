@@ -15,13 +15,10 @@ export class LandingCmp {
   constructor(
     private store: Store<RootState>,
     private session: SessionService,
-  ) {}
+  ) { }
 
   public get token() {
     return this.store.select(StateSelectors.token);
   }
 
-  public logout() {
-    this.store.dispatch(new LogOutAction());
-  }
 }

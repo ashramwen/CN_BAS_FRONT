@@ -1,0 +1,9 @@
+
+.error-message{
+  display: none;
+  margin-top: 5px;
+  font-size: 13px;
+  &.has-error{
+    display: block;
+  }
+}

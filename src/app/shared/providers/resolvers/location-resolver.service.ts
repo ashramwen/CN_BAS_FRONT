@@ -3,6 +3,13 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { ContactsService } from './contacts.service';
 import { Location } from '../../models/location.interface';
 import { LocationService } from '../location.service';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import { RootState } from '../../redux/index';
+import { AddAction } from '../../redux/location/actions';
+import { StateSelectors } from '../../redux/selectors';
+import { createSelector } from 'reselect';
+import { LocationState } from '../../redux/location/reducer';
 
 interface LocationResponse {
   location: string;
@@ -11,15 +18,19 @@ interface LocationResponse {
 }
 
 @Injectable()
-export class LocationResolver implements Resolve<Location> {
+export class LocationResolver implements Resolve<Observable<Location>> {
 
-  constructor(private locationService: LocationService) {}
+  constructor(private locationService: LocationService, private store: Store<RootState>) {}
 
   public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.locationService.fetchLocations()
       .map(res => {
         let locationResponse: LocationResponse = res.json();
-        return this.restructureLocation(locationResponse, null);
+        let location = this.restructureLocation(locationResponse, null);
+        this.store.dispatch(new AddAction(location));
+        return this.store.select(createSelector(StateSelectors.location, (state: LocationState) => {
+          return state.locations;
+        }));
       });
   }
 

@@ -13,6 +13,7 @@ import { Credential } from '../../shared/models/credential.interface';
 import { HttpError } from '../../shared/models/http-error.interface';
 import { TokenState } from '../../shared/redux/token/reducer';
 import { StateSelectors } from '../../shared/redux/selectors';
+import { ShowLoadingAction, HideLoadingAction } from '../../shared/redux/layout/actions';
 
 @Component({
   selector: 'bas-login',
@@ -42,6 +43,7 @@ export class LoginCmp implements OnInit {
   }
 
   public login(value: string) {
+    this.store.dispatch(new ShowLoadingAction);
     this.loginService
       .login(this.credentials)
       .map(res => {
@@ -55,7 +57,10 @@ export class LoginCmp implements OnInit {
           errorCode: msg.errorCode,
           errorMessage: msg.errorMessage
         }));
-        return void 0;
+        return Observable.empty();
+      })
+      .finally(() => {
+        this.store.dispatch(new HideLoadingAction);
       })
       .subscribe((token: Token) => {
         this.store.dispatch(new LoginSuccessAction(token));

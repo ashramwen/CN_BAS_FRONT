@@ -26,7 +26,7 @@ export class RequestHelper {
 
   /**
    * @description get BAS fixed headers with auth token
-   */  
+   */
   public get headersWithToken() {
     return this.store.select(StateSelectors.token)
       .map((tokenState: TokenState) => {
@@ -36,18 +36,20 @@ export class RequestHelper {
         return headers;
       })
       .zip(this.headers)
-      .map((s: Array<Headers>) => {
-        let newHeaders = new Headers();
-        
-        s.forEach((header) => {
-          header.forEach((values, name) => {
-            values.forEach(value => {
-              newHeaders.append(name, value);
-            });
-          });
-        });
+      .map(this.mergeHeaders);
+  }
 
-        return newHeaders;
+  public mergeHeaders(headersArr: Array<Headers>): Headers {
+    let newHeaders = new Headers();
+
+    headersArr.forEach((header) => {
+      header.forEach((values, name) => {
+        values.forEach(value => {
+          newHeaders.append(name, value);
+        });
       });
+    });
+
+    return newHeaders;
   }
 }

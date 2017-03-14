@@ -6,6 +6,8 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/zip';
+import 'rxjs/add/observable/throw';
+import 'hammerjs';
 
 /*
  * Angular bootstraping

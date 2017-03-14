@@ -16,6 +16,13 @@ import {
 } from '@angular/router';
 import { AppState } from './app.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { RootState } from './shared/redux/index';
+import { createSelector } from 'reselect';
+import { StateSelectors } from './shared/redux/selectors';
+import { LayoutState } from './shared/redux/layout/reducer';
+import { ShowLoadingAction, HideLoadingAction } from './shared/redux/layout/actions';
 
 /*
  * App Component
@@ -25,25 +32,29 @@ import { TranslateService } from '@ngx-translate/core';
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
   styleUrls: [
-    './app.component.css'
+    './app.component.scss'
   ],
   templateUrl: './app.component.html'
 })
 export class AppCmp implements OnInit {
-  public angularclassLogo = 'assets/img/angularclass-avatar.png';
-  public name = 'Angular 2 Webpack Starter';
-  public url = 'https://twitter.com/AngularClass';
-  public loading: boolean = false;
+  public url = 'https://cn.kii.com';
+  public loading$: Observable<boolean>;
 
   constructor(
     private router: Router,
-    translate: TranslateService
+    private store: Store<RootState>,
+    translate: TranslateService,
   ) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang('en');
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en');
+
+    this.loading$ = store.select(createSelector(
+      StateSelectors.layout,
+      (state: LayoutState) => !!state.loading
+    ));
   }
 
   public ngOnInit() {
@@ -55,17 +66,17 @@ export class AppCmp implements OnInit {
   // Shows and hides the loading spinner during RouterEvent changes
   private navigationInterceptor(event: RouterEvent): void {
     if (event instanceof NavigationStart) {
-      this.loading = true;
+      this.store.dispatch(new ShowLoadingAction);
     }
     if (event instanceof NavigationEnd) {
-      this.loading = false;
+      this.store.dispatch(new HideLoadingAction);
     }
 
     if (event instanceof NavigationCancel) {
-      this.loading = false;
+      this.store.dispatch(new HideLoadingAction);
     }
     if (event instanceof NavigationError) {
-      this.loading = false;
+      this.store.dispatch(new HideLoadingAction);
     }
   }
 

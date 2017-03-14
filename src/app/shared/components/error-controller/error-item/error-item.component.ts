@@ -1,0 +1,17 @@
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { FormControl } from '@angular/forms';
+
+@Component({
+  selector: 'error-item',
+  templateUrl: './error-item.component.html',
+  styleUrls: ['./error-item.component.scss'],
+})
+export class ErrorItemCmp {
+  @Input() errorName: string;
+  @Input() control: FormControl;
+
+  get show(): boolean {
+    if (!this.control || !this.control.errors) return false;
+    return !!this.control.errors[this.errorName];
+  }
+}

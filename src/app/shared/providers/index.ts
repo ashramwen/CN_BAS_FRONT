@@ -4,10 +4,11 @@ import { SessionService } from './session.service';
 import { GUARD_SERVICES } from './guards/index';
 import { LocationService } from './location.service';
 import { RESOLVERS } from './resolvers/index';
+import { HELPER_SERVICES } from './helpers/index';
 
 export const SHARED_PROVIDERS = [
   // helpers
-  ConfigHelper, RequestHelper,
+  ...HELPER_SERVICES,
   
   // shared services
   SessionService,

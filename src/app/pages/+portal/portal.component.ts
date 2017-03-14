@@ -1,40 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { createSelector } from 'reselect';
+import { MdDialog, MdDialogConfig } from '@angular/material';
+
 import { RootState } from '../../shared/redux/index';
 import { StateSelectors } from '../../shared/redux/selectors';
-import { createSelector } from 'reselect';
 import { LayoutState } from '../../shared/redux/layout/reducer';
-import { HideSideNavAction, ShowSideNavAction, ToggleSideNavAction } from '../../shared/redux/layout/actions';
+import { LocationCmp } from './location/location.component';
+import { GoUserInfoAction } from '../../shared/redux/layout/actions';
+import {
+  HideSideNavAction,
+  ShowSideNavAction,
+  ToggleSideNavAction
+} from '../../shared/redux/layout/actions';
 
 @Component({
   selector: 'bas-portal',
-  template: `
-    <md-sidenav-container fullscreen>
-      <md-sidenav  #sidenav mode="side" [opened]="showSidenav$ | async">
-        <side-nav></side-nav>
-      </md-sidenav>
-      <div class="content-container">
-        <bas-toolbar (toggleMenu)="toggleSidenav()" [menuVisible]="showSidenav$ | async">
-          Book Collection
-        </bas-toolbar>
-
-        <router-outlet></router-outlet>
-      </div>
-    </md-sidenav-container>
-  `,
-  styles: [
-    `
-      md-sidenav{
-        box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.3);
-      }
-    `
+  templateUrl: './portal.component.html',
+  styleUrls: [
+    './portal.component.scss'
   ]
 })
-export class PortalCmp {
+export class PortalCmp implements OnDestroy{
   public showSidenav$: Observable<boolean>;
+  public swipeTabIndex$: Observable<number>;
 
-  constructor(private store: Store<RootState>) {
+  constructor(
+    private store: Store<RootState>,
+    private dialog: MdDialog
+  ) {
     /**
      * Selectors can be applied with the `select` operator which passes the state
      * tree to the provided selector
@@ -45,10 +40,27 @@ export class PortalCmp {
         StateSelectors.layout,
         (state: LayoutState) => state.sideMenuVisible
       ));
+    
+    this.swipeTabIndex$ = this.store.select(
+      createSelector(
+        StateSelectors.layout,
+        (state: LayoutState) => state.swipeTabIndex
+      ));
   }
 
   public toggleSidenav() {
     this.store.dispatch(new ToggleSideNavAction());
   }
 
+  public onRouteActivated() {
+    this.store.dispatch(new HideSideNavAction());
+  }
+
+  public showUserInfo() {
+    this.store.dispatch(new GoUserInfoAction);
+  }
+
+  public ngOnDestroy() {
+    
+  }
 }

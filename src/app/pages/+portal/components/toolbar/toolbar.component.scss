@@ -1,0 +1,16 @@
+.menu-toggle{
+  &.active{
+    transform: rotate(90deg);
+  }
+  transition: all 0.2s ease;
+}
+
+.portrait {
+  color: #fff;
+  font-size: 36px;
+  width: 100%;
+}
+
+md-toolbar-row {
+  justify-content: space-between;
+}

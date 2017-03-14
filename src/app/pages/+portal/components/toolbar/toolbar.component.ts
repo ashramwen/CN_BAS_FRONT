@@ -9,6 +9,9 @@ import { Observable } from 'rxjs';
         <md-icon class="menu-toggle" [class.active]="menuVisible">menu</md-icon>
       </button>
       <ng-content></ng-content>
+      <button md-icon-button (click)="showUser.emit()">
+        <md-icon class="portrait">account_circle</md-icon>
+      </button>
     </md-toolbar>
   `,
   styleUrls: [
@@ -19,4 +22,5 @@ import { Observable } from 'rxjs';
 export class ToolbarCmp {
   @Input() public menuVisible: boolean;
   @Output() public toggleMenu = new EventEmitter();
+  @Output() public showUser: EventEmitter<any> = new EventEmitter();
 }

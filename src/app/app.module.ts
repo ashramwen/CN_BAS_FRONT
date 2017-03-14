@@ -35,7 +35,6 @@ import '../styles/styles.scss';
 import '../styles/headings.css';
 import { AppSharedModule } from './shared/shared.module';
 import { BASE_CONFIG, AppConfigToken } from './app.config';
-import { LocationCmp } from './pages/location/location.component';
 import { PortalModule } from './pages/+portal/portal.module';
 
 // localize router
@@ -58,8 +57,7 @@ const APP_PROVIDERS = [
   bootstrap: [AppCmp],
   declarations: [
     AppCmp,
-    LoginCmp,
-    LocationCmp
+    LoginCmp
   ],
   imports: [ // import Angular's modules
     // vendor modules  
