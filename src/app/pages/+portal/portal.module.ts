@@ -17,6 +17,7 @@ import {
 } from '../../shared/components/error-controller/error-controller.module';
 import { ConfirmModalModule } from '../../shared/components/confirm-modal/confirm-modal.module';
 import { MapViewCmp } from './map-view/map-view.component';
+import { BasMapModule } from '../../shared/components/bas-map/bas-map.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MapViewCmp } from './map-view/map-view.component';
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     ConfirmModalModule,
-    ErrorControllerModule
+    ErrorControllerModule,
+    BasMapModule,
   ],
   entryComponents: [PasswordChangeCmp],
   exports: [PortalCmp],

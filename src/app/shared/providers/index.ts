@@ -5,6 +5,7 @@ import { GUARD_SERVICES } from './guards/index';
 import { LocationService } from './location.service';
 import { RESOLVERS } from './resolvers/index';
 import { HELPER_SERVICES } from './helpers/index';
+import { MapService } from './map.service';
 
 export const SHARED_PROVIDERS = [
   // helpers
@@ -13,6 +14,7 @@ export const SHARED_PROVIDERS = [
   // shared services
   SessionService,
   LocationService,
+  MapService,
 
   // Route Guard services
   ...GUARD_SERVICES,

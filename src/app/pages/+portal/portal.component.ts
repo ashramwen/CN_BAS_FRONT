@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { createSelector } from 'reselect';
@@ -20,7 +20,8 @@ import {
   templateUrl: './portal.component.html',
   styleUrls: [
     './portal.component.scss'
-  ]
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class PortalCmp {
   public showSidenav$: Observable<boolean>;

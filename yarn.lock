@@ -122,6 +122,10 @@
   dependencies:
     "@types/node" "*"
 
+"@types/geojson@*":
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/@types/geojson/download/@types/geojson-1.0.0.tgz#6af48a0d492c09068e97cb78e6bef940d57fb36d"
+
 "@types/hammerjs@^2.0.33":
   version "2.0.34"
   resolved "http://registry.npm.taobao.org/@types/hammerjs/download/@types/hammerjs-2.0.34.tgz#9cbac4f41cb039436141785e1be50b3ab10a04a9"
@@ -139,6 +143,12 @@
   resolved "http://registry.npm.taobao.org/@types/jasmine/download/@types/jasmine-2.5.43.tgz#6328a8c26082f2fd84f043c802c9ed7fa110b2dd"
   dependencies:
     typescript ">=2.1.4"
+
+"@types/leaflet@^1.0.56":
+  version "1.0.56"
+  resolved "http://registry.npm.taobao.org/@types/leaflet/download/@types/leaflet-1.0.56.tgz#954e6cd4394f76b61f49c218b54620216cf7ba70"
+  dependencies:
+    "@types/geojson" "*"
 
 "@types/lodash@^4.14.37":
   version "4.14.54"

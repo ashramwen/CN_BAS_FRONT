@@ -142,7 +142,7 @@ module.exports = function (options) {
          * See: https://github.com/webpack/json-loader
          */
         {
-          test: /\.json$/,
+          test: /\.(json|geojson)$/,
           use: 'json-loader'
         },
 

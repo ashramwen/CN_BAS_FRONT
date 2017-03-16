@@ -4,12 +4,13 @@
       <md-sidenav #sidenav mode="side" [opened]="showSidenav$ | async">
         <side-nav></side-nav>
       </md-sidenav>
-      <div class="content-container">
+      <div class="main">
         <bas-toolbar (toggleMenu)="toggleSidenav()" (showUser)="showUserInfo()" [menuVisible]="showSidenav$ | async">
           Book Collection
         </bas-toolbar>
-
-        <router-outlet (activate)="onRouteActivated($event)"></router-outlet>
+        <div class="content-container">
+          <router-outlet (activate)="onRouteActivated($event)"></router-outlet>
+        </div>
       </div>
     </md-sidenav-container>
   </swipe-tab>
