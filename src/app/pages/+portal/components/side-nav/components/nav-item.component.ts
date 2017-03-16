@@ -5,7 +5,6 @@ import {
   NavigationEnd
 } from '@angular/router';
 
-
 @Component({
   selector: 'bas-nav-item',
   template: `
@@ -32,14 +31,12 @@ import {
     }
   `]
 })
-export class NavItemCmp implements OnInit{
-  @Input() icon = '';
-  @Input() hint = '';
-  @Input() routerLink: string = '/';
+export class NavItemCmp implements OnInit {
+  @Input() public icon = '';
+  @Input() public hint = '';
+  @Input() public routerLink: string = '/';
 
-  constructor(private router: Router) {
-    
-  }
+  constructor(private router: Router) { }
 
   public ngOnInit() {
     // let reg = new RegExp('/' + this.routerLink.replace(/\//, '\\/') + '$');

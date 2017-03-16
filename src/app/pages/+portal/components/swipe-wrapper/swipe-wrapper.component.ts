@@ -8,7 +8,6 @@ import { SwipeTabCmp } from './swipe-tab.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { replace } from '@ngrx/router-store';
 
-
 @Component({
   selector: 'swipe-wrapper',
   template: `
@@ -58,7 +57,9 @@ export class SwipeWrapperCmp {
   }
 
   get classes() {
-    if (!this.tabs) return 'portal-wrapper';
+    if (!this.tabs) {
+      return 'portal-wrapper';
+    }
     return ['portal-wrapper', this.tabs.toArray()[this.index || 0].activeClass || ''].join(' ');
   }
 

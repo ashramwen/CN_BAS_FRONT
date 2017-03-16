@@ -36,7 +36,7 @@ export class TokenEffects {
           if (token) {
             return new LoadSuccessAction(token);
           } else {
-            return new LoadFailureAction;
+            return new LoadFailureAction();
           }
         });
     });
@@ -47,10 +47,10 @@ export class TokenEffects {
     .map(toPayload)
     .switchMap((token: Token) => {
       this.localStorage.set(LOCAL_STORAGE_KEYS.TOKEN, token);
-      return Observable.of(new StoreSuccessAction)
+      return Observable.of(new StoreSuccessAction())
         .delay(0);
     });
-  
+
   @Effect()
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(ActionTypes.LOGIN_SUCCESS)
@@ -60,18 +60,18 @@ export class TokenEffects {
         .of(new StoreAction(token))
         .delay(0);
     });
-  
+
   @Effect()
   public logout$: Observable<Action> = this.actions$
     .ofType(ActionTypes.LOGOUT)
     .switchMap(() => {
-      this.store.dispatch(new GoMainAction);
+      this.store.dispatch(new GoMainAction());
       this.session.logout()
-        .map(() => new ClearAction)
+        .map(() => new ClearAction())
         .delay(0);
-      return Observable.of(new ClearAction).delay(0);
+      return Observable.of(new ClearAction()).delay(0);
     });
-  
+
   @Effect()
   public clear$: Observable<Action> = this.actions$
     .ofType(ActionTypes.CLEAR)
@@ -80,7 +80,7 @@ export class TokenEffects {
       this.localStorage.clearAll();
       return Observable.of();
     });
-    
+
   constructor(
     private actions$: Actions,
     private localStorage: LocalStorageService,

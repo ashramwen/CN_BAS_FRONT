@@ -4,7 +4,6 @@ import { Observable, Subscriber } from 'rxjs';
 
 import { ConfirmModalComponent, ConfirmConifg } from './confirm-modal.component';
 
-
 export interface ConfirmOptions {
   callback?: () => Promise<any>;
   message?: string;
@@ -18,7 +17,7 @@ export type StateType = 'SUCCESS' | 'CANCEL';
 export class ConfirmModal {
 
   private defaultConfig: MdDialogConfig = {
-    width: "300px",
+    width: '300px',
   };
 
   constructor(
@@ -70,7 +69,7 @@ export class ConfirmModal {
           } else {
             subscriber.next('SUCCESS');
           }
-        }else{
+        } else {
           subscriber.next('SUCCESS');
         }
       });

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
-import { MaterialRootModule } from '@angular/material';
+import { MaterialRootModule, OverlayContainer } from '@angular/material';
 import {
   NgModule,
   ApplicationRef,
@@ -37,9 +37,6 @@ import { AppSharedModule } from './shared/shared.module';
 import { BASE_CONFIG, AppConfigToken } from './app.config';
 import { PortalModule } from './pages/+portal/portal.module';
 
-// localize router
-// import { LocalizeRouterModule, StaticParserLoader, LocalizeParser } from 'localize-router';
-
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -60,13 +57,14 @@ const APP_PROVIDERS = [
     LoginCmp
   ],
   imports: [ // import Angular's modules
-    // vendor modules  
+    // vendor modules
     BrowserModule,
     FormsModule,
     HttpModule,
     AppSharedModule,
     MaterialRootModule,
     StoreLogMonitorModule,
+    ReactiveFormsModule,
     LocalStorageModule.withConfig({
       prefix: 'bas',
       storageType: 'localStorage'
@@ -98,6 +96,7 @@ export class AppModule {
 
   constructor(
     public appRef: ApplicationRef,
+    overlayContainer: OverlayContainer
   ) { }
 
 }

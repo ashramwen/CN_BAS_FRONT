@@ -18,7 +18,7 @@ import { of } from 'rxjs/observable/of';
 
 @Injectable()
 export class BeehiveClient extends Http {
-  
+
   constructor(
     _backend: ConnectionBackend,
     _requestOpt: RequestOptions,
@@ -27,20 +27,20 @@ export class BeehiveClient extends Http {
   ) {
     super(_backend, _requestOpt);
   }
-  
+
   public request(url: string | Request, options: RequestOptionsArgs = {}): Observable<Response> {
-    
+
     let beehiveHeaders = this.beehiveHeaders;
     let requestOptions = url instanceof String ? options : url;
-    
+
     requestOptions.headers = requestOptions.headers ?
       this.requestHelder.mergeHeaders([requestOptions.headers, beehiveHeaders]) :
       beehiveHeaders;
-   
+
     return super.request(url, requestOptions)
       .catch((res) => {
         if (res.status === 401) {
-          this.store.dispatch(new ClearAction);
+          this.store.dispatch(new ClearAction());
           return null;
         }
         return Observable.throw(res);
@@ -52,12 +52,12 @@ export class BeehiveClient extends Http {
 
     if (this.loggedIn) {
       this.requestHelder.headersWithToken
-        .subscribe(headers => {
+        .subscribe((headers) => {
           beehiveHeaders = headers;
         });
     } else {
       this.requestHelder.headers
-        .subscribe(headers => {
+        .subscribe((headers) => {
           beehiveHeaders = headers;
         });
     }

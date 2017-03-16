@@ -5,14 +5,13 @@ import { XHRBackend, RequestOptions,  } from '@angular/http';
 import { Store } from '@ngrx/store';
 import { RootState } from '../../redux/index';
 
-
 export const HELPER_SERVICES = [
   {
     provide: BeehiveClient,
     deps: [
       XHRBackend,
       RequestOptions,
-      Store, 
+      Store,
       RequestHelper
     ],
     useFactory: (backend, options, store, requestHelper) => {

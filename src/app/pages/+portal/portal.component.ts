@@ -22,7 +22,7 @@ import {
     './portal.component.scss'
   ]
 })
-export class PortalCmp implements OnDestroy{
+export class PortalCmp {
   public showSidenav$: Observable<boolean>;
   public swipeTabIndex$: Observable<number>;
 
@@ -34,13 +34,12 @@ export class PortalCmp implements OnDestroy{
      * Selectors can be applied with the `select` operator which passes the state
      * tree to the provided selector
      */
-    
     this.showSidenav$ = this.store.select(
       createSelector(
         StateSelectors.layout,
         (state: LayoutState) => state.sideMenuVisible
       ));
-    
+
     this.swipeTabIndex$ = this.store.select(
       createSelector(
         StateSelectors.layout,
@@ -57,10 +56,6 @@ export class PortalCmp implements OnDestroy{
   }
 
   public showUserInfo() {
-    this.store.dispatch(new GoUserInfoAction);
-  }
-
-  public ngOnDestroy() {
-    
+    this.store.dispatch(new GoUserInfoAction());
   }
 }

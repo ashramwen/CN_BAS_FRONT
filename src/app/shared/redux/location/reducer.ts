@@ -7,7 +7,7 @@ import {
 import { Action } from '@ngrx/store';
 
 export interface LocationState {
-  locations: Location
+  locations: Location;
 };
 
 export const initialState: LocationState = {
@@ -17,7 +17,7 @@ export const initialState: LocationState = {
 export function locationReducer(state = initialState, action: Actions): LocationState {
   switch (action.type) {
     case ActionTypes.ADD: {
-      return onAddAction(state, <AddAction>action);
+      return onAddAction(state, <AddAction> action);
     }
     default: {
       return state;

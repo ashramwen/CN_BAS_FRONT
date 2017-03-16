@@ -1,4 +1,46 @@
 <div class="login-page" #loginPage>
+	<video id="vid" 
+		autoplay="autoplay"
+		style="position: absolute; left: 0px; top: 0px; height: 100%;"
+		muted="muted" 
+		loop="loop" 
+		autobuffer="autobuffer"
+		preload="auto" 
+		oncontextmenu="return false" 
+		data-hasaudio="" 
+		src="//az29176.vo.msecnd.net/videocontent/SF_SutroBaths-4K_nimia_573584_768_ZH-CN.mp4"
+	></video>
+
+	<form class="login-form" [formGroup]="loginForm">
+		<div>
+			<md-input-container>
+				<input 
+					mdInput 
+					placeholder="{{'Login.Username' | translate}}" 
+					formControlName="userName"
+				>
+			</md-input-container>
+		</div>
+
+		<div>
+			<md-input-container>
+				<input 
+					mdInput 
+					type="password"
+					placeholder="{{'Login.Password' | translate}}" 
+					formControlName="password"
+				>
+			</md-input-container>
+		</div>
+
+		<div>
+			<button md-icon-button (click)="login()" class="login-btn">
+				<md-icon>navigation</md-icon>
+			</button>
+		</div>
+	</form>
+
+	<!--
 	<div class="row">
 		<div class="col-lg-4 col-lg-offset-4">
         	<img src="assets/img/SB-admin.png" width="150px" height="150px" class="user-avatar" />
@@ -17,4 +59,5 @@
 			</form>
 		</div>
 	</div>
+	-->
 </div>

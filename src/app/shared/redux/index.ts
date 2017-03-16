@@ -32,18 +32,19 @@ const reducers = {
   location: locationReducer
 };
 
-export const EFFECTS = [TokenEffects].map(effect => {
+export const EFFECTS = [TokenEffects].map((effect) => {
   return EffectsModule.run(effect);
 });
 
 export interface RootState {
-  token: TokenState,
-  layout: LayoutState,
-  router: RouterStateSnapshot,
-  location: LocationState
+  token: TokenState;
+  layout: LayoutState;
+  router: RouterStateSnapshot;
+  location: LocationState;
 }
 
-const developmentReducer: ActionReducer<RootState> = compose(storeFreeze, combineReducers)(reducers);
+const developmentReducer: ActionReducer<RootState>
+  = compose(storeFreeze, combineReducers)(reducers);
 const productionReducer: ActionReducer<RootState> = combineReducers(reducers);
 
 export function reducer(state: any, action: any) {

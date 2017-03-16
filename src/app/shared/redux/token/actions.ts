@@ -25,31 +25,25 @@ export class LoginSuccessAction implements Action {
 export class LoginFailureAction implements Action {
   public type = ActionTypes.LOGIN_FAILED;
 
-  constructor(public payload: {errorCode: number | string, statusCode: number, errorMessage: string}) { }
+  constructor(
+    public payload: { errorCode: number | string, statusCode: number, errorMessage: string }
+  ) { }
 }
 
 export class LogOutAction implements Action {
   public type = ActionTypes.LOGOUT;
-
-  constructor() { }
 }
 
 export class ValidateAction implements Action {
   public type = ActionTypes.VALIDATE;
-
-  constructor() { }
 }
 
 export class ClearAction implements Action {
   public type = ActionTypes.CLEAR;
-
-  constructor() { }
 }
 
 export class LoadAction implements Action {
   public type = ActionTypes.LOAD;
-
-  constructor() { }
 }
 
 export class LoadSuccessAction implements Action {
@@ -60,8 +54,6 @@ export class LoadSuccessAction implements Action {
 
 export class LoadFailureAction implements Action {
   public type = ActionTypes.LOAD_FAILED;
-
-  constructor() { }
 }
 
 export class StoreAction implements Action {
@@ -72,8 +64,6 @@ export class StoreAction implements Action {
 
 export class StoreSuccessAction implements Action {
   public type = ActionTypes.STORE_SUCCESS;
-
-  constructor() { }
 }
 
 export type Actions =

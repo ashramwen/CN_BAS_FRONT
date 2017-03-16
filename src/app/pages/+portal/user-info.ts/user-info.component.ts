@@ -15,17 +15,14 @@ import { ConfirmModal } from '../../../shared/components/confirm-modal/confirm-m
 })
 export class UserInfoCmp {
 
-  @Output()
-  backToMain: EventEmitter<any> = new EventEmitter;
-
   constructor(
     private store: Store<RootState>,
     private dialog: MdDialog,
-    private alert: ConfirmModal
+    private confirm: ConfirmModal
   ) { }
 
   public logout() {
-    let result = this.alert.open({
+    let result = this.confirm.open({
       message: `Are you sure to logout?`,
       callback: () => {
         return new Promise((resolve, reject) => {
@@ -42,7 +39,7 @@ export class UserInfoCmp {
   }
 
   public goMain() {
-    this.store.dispatch(new GoMainAction);
+    this.store.dispatch(new GoMainAction());
   }
 
   public openChangePasswordDialog() {

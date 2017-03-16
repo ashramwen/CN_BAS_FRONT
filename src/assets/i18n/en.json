@@ -4,6 +4,11 @@
     "ok": "Ok",
     "cancel": "Cancel"
   },
+  "Login": {
+    "Username": "Username",
+    "Password": "Password",
+    "userNamePasswordNotMatch": "Username and Password Not Matching!"
+  },
   "Home": {
     "Logout": "Logout",
     "Login": "Log in",

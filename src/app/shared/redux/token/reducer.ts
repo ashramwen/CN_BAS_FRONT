@@ -1,5 +1,14 @@
 import { Location } from '../../models/location.interface';
-import { Actions, ActionTypes, LoadAction, LoadSuccessAction, LoadFailureAction, LoginFailureAction, LoginSuccessAction, ClearAction } from './actions';
+import {
+  Actions,
+  ActionTypes,
+  LoadAction,
+  LoadSuccessAction,
+  LoadFailureAction,
+  LoginFailureAction,
+  LoginSuccessAction,
+  ClearAction
+} from './actions';
 import { Action } from '@ngrx/store';
 import { Token } from '../../models/token.interface';
 
@@ -24,19 +33,19 @@ export const initialState: TokenState = {
 export function tokenReducer(state = initialState, action: Actions): TokenState {
   switch (action.type) {
     case ActionTypes.LOAD_SUCCESS: {
-      return onLoadSuccess(state, <LoadSuccessAction>action);
+      return onLoadSuccess(state, <LoadSuccessAction> action);
     }
     case ActionTypes.LOAD_FAILED: {
-      return onLoadFailed(state, <LoadFailureAction>action);
+      return onLoadFailed(state, <LoadFailureAction> action);
     }
     case ActionTypes.LOGIN_SUCCESS: {
-      return onLoginSucceeded(state, <LoginSuccessAction>action);
+      return onLoginSucceeded(state, <LoginSuccessAction> action);
     }
     case ActionTypes.LOGIN_FAILED: {
-      return onLoginFailed(state, <LoginFailureAction>action);
+      return onLoginFailed(state, <LoginFailureAction> action);
     }
     case ActionTypes.CLEAR: {
-      return onClear(state, <ClearAction>action);
+      return onClear(state, <ClearAction> action);
     }
     default: {
       return state;
@@ -85,7 +94,7 @@ function onLoginFailed(state: TokenState, action: LoginFailureAction): TokenStat
     errorCode: null,
     errorMessage: null,
     statusCode: null
-  }, action.payload)
+  }, action.payload);
 }
 
 function onClear(state: TokenState, action: ClearAction): TokenState {

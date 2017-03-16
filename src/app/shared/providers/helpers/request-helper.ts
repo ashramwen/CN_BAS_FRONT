@@ -12,7 +12,7 @@ export class RequestHelper {
   constructor(
     private store: Store<RootState>
   ) { }
-  
+
   /**
    * @description get bas fixed headers
    */
@@ -39,12 +39,12 @@ export class RequestHelper {
       .map(this.mergeHeaders);
   }
 
-  public mergeHeaders(headersArr: Array<Headers>): Headers {
+  public mergeHeaders(headersArr: Headers[]): Headers {
     let newHeaders = new Headers();
 
     headersArr.forEach((header) => {
       header.forEach((values, name) => {
-        values.forEach(value => {
+        values.forEach((value) => {
           newHeaders.append(name, value);
         });
       });

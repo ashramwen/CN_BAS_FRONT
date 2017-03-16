@@ -15,26 +15,19 @@ export const ActionTypes = {
 
 export class ShowSideNavAction implements Action {
   public type = ActionTypes.SHOW_SIDE_NAV;
-
-  constructor() { }
 }
-
 
 export class HideSideNavAction implements Action {
   public type = ActionTypes.HIDE_SIDE_NAV;
-
-  constructor() { }
 }
 
 export class ToggleSideNavAction implements Action {
   public type = ActionTypes.TOGGLE_SIDE_NAV;
 }
 
-
 export class ShowLoadingAction implements Action {
   public type = ActionTypes.SHOW_LOADING;
 }
-
 
 export class HideLoadingAction implements Action {
   public type = ActionTypes.HIDE_LOADING;

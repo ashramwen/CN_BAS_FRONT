@@ -3,7 +3,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { 
+import {
   FormGroup,
   FormControl,
   FormBuilder,
@@ -22,16 +22,13 @@ export class PasswordChangeCmp implements OnInit {
   public submitted: boolean = false;
 
   @Output()
-  close: EventEmitter<any> = new EventEmitter();
+  public close: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder
-  ) {
-    
-  }
+  ) { }
 
   public ngOnInit() {
-    
     let currentPasswordControl = new FormControl('', [Validators.required]);
     let newPasswordControl = new FormControl('', [Validators.required]);
     let confirmPasswordControl = new FormControl('', []);
@@ -44,21 +41,26 @@ export class PasswordChangeCmp implements OnInit {
       this.generatePasswordConfirmValidator(newPasswordControl, confirmPasswordControl);
 
     confirmPasswordControl.setValidators(passwordConfirmValidator);
-    
+
     this.passwordForm = this.formBuilder.group({
       currentPassword: currentPasswordControl,
       newPassword: newPasswordControl,
       confirmPassword: confirmPasswordControl
     });
   }
-  
+
   public submit() {
     this.submitted = true;
-    if (this.passwordForm.invalid) return;
+    if (this.passwordForm.invalid) {
+      return;
+    }
     this.close.emit();
   }
 
-  private generatePasswordConfirmValidator(newPasswordControl: FormControl, confirmPasswordControl: FormControl) {
+  private generatePasswordConfirmValidator(
+    newPasswordControl: FormControl,
+    confirmPasswordControl: FormControl
+  ) {
     return (control: FormControl) => {
       return newPasswordControl.value === confirmPasswordControl.value ? {
         confirmed: null

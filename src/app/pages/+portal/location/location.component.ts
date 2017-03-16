@@ -9,16 +9,16 @@ import { Observable } from 'rxjs';
   styleUrls: ['./location.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LocationCmp implements OnInit{
+export class LocationCmp implements OnInit {
 
-  public location$: Observable<Location>; 
+  public location$: Observable<Location>;
 
   constructor(
     private route: ActivatedRoute
   ) { }
 
   public ngOnInit() {
-     this.location$ = this.route.snapshot.data['locations'];
+    this.location$ = this.route.snapshot.data['locations'];
   }
 
 }

@@ -45,7 +45,8 @@ export class AppCmp implements OnInit {
     private store: Store<RootState>,
     translate: TranslateService,
   ) {
-    // this language will be used as a fallback when a translation isn't found in the current language
+    // this language will be used as a fallback
+    // when a translation isn't found in the current language
     translate.setDefaultLang('en');
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
@@ -66,26 +67,18 @@ export class AppCmp implements OnInit {
   // Shows and hides the loading spinner during RouterEvent changes
   private navigationInterceptor(event: RouterEvent): void {
     if (event instanceof NavigationStart) {
-      this.store.dispatch(new ShowLoadingAction);
+      this.store.dispatch(new ShowLoadingAction());
     }
     if (event instanceof NavigationEnd) {
-      this.store.dispatch(new HideLoadingAction);
+      this.store.dispatch(new HideLoadingAction());
     }
 
     if (event instanceof NavigationCancel) {
-      this.store.dispatch(new HideLoadingAction);
+      this.store.dispatch(new HideLoadingAction());
     }
     if (event instanceof NavigationError) {
-      this.store.dispatch(new HideLoadingAction);
+      this.store.dispatch(new HideLoadingAction());
     }
   }
 
 }
-
-/*
- * Please review the https://github.com/AngularClass/angular2-examples/ repo for
- * more angular app examples that you may copy/paste
- * (The examples may not be updated as quickly. Please open an issue on github for us to update it)
- * For help or questions please contact us at @AngularClass on twitter
- * or our chat on Slack at https://AngularClass.com/slack-join
- */

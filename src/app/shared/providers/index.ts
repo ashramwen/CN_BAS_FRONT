@@ -9,7 +9,7 @@ import { HELPER_SERVICES } from './helpers/index';
 export const SHARED_PROVIDERS = [
   // helpers
   ...HELPER_SERVICES,
-  
+
   // shared services
   SessionService,
   LocationService,

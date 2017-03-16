@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { go, replace, search, show, back, forward } from '@ngrx/router-store';
 import { Response } from '@angular/http';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { SessionService } from '../../shared/providers/session.service';
 import { RootState } from '../../shared/redux/index';
@@ -14,6 +15,7 @@ import { HttpError } from '../../shared/models/http-error.interface';
 import { TokenState } from '../../shared/redux/token/reducer';
 import { StateSelectors } from '../../shared/redux/selectors';
 import { ShowLoadingAction, HideLoadingAction } from '../../shared/redux/layout/actions';
+import { AlertModal } from '../../shared/components/alert-modal/alert-modal.service';
 
 @Component({
   selector: 'bas-login',
@@ -28,11 +30,18 @@ export class LoginCmp implements OnInit {
     permanentToken: false
   };
 
+  public loginForm: FormGroup = this.formBuilder.group({
+    userName: ['', Validators.required],
+    password: ['', Validators.required]
+  });
+
   constructor(
     private loginService: SessionService,
     private store: Store<RootState>,
-    private router: ActivatedRoute
-  ) { }
+    private router: ActivatedRoute,
+    private alert: AlertModal,
+    private formBuilder: FormBuilder
+  ) {  }
 
   public ngOnInit() {
     this.store.select(StateSelectors.token).subscribe((tokenState: TokenState) => {
@@ -43,15 +52,17 @@ export class LoginCmp implements OnInit {
   }
 
   public login(value: string) {
-    this.store.dispatch(new ShowLoadingAction);
+    this.store.dispatch(new ShowLoadingAction());
+
+    Object.assign(this.credentials, this.loginForm.value);
     this.loginService
       .login(this.credentials)
-      .map(res => {
-        return <Token>res.json();
+      .map((res) => {
+        return <Token> res.json();
       })
       .catch((err: Response) => {
-        let msg: HttpError = <any>err.json();
-        console.log(err);
+        let msg: HttpError = <any> err.json();
+        this.alert.failure('Login.userNamePasswordNotMatch');
         this.store.dispatch(new LoginFailureAction({
           statusCode: err.status,
           errorCode: msg.errorCode,
@@ -60,7 +71,7 @@ export class LoginCmp implements OnInit {
         return Observable.empty();
       })
       .finally(() => {
-        this.store.dispatch(new HideLoadingAction);
+        this.store.dispatch(new HideLoadingAction());
       })
       .subscribe((token: Token) => {
         this.store.dispatch(new LoginSuccessAction(token));

@@ -24,13 +24,14 @@ export class LocationResolver implements Resolve<Observable<Location>> {
 
   public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.locationService.fetchLocations()
-      .map(res => {
+      .map((res) => {
         let locationResponse: LocationResponse = res.json();
         let location = this.restructureLocation(locationResponse, null);
         this.store.dispatch(new AddAction(location));
-        return this.store.select(createSelector(StateSelectors.location, (state: LocationState) => {
-          return state.locations;
-        }));
+        return this.store.select(createSelector(StateSelectors.location,
+          (_state: LocationState) => {
+            return _state.locations;
+          }));
       });
   }
 
@@ -40,13 +41,14 @@ export class LocationResolver implements Resolve<Observable<Location>> {
   ) {
     let location: Location = {
       location: locationResponse.location,
-      locationName: this.removeSymbol(locationResponse.location.substr(parent ? parent.location.length - 1 : 0)),
+      locationName: this.removeSymbol(
+        locationResponse.location.substr(parent ? parent.location.length - 1 : 0)),
       subLocations: [],
       locationLevel: locationResponse.locationLevel
     };
 
     location.subLocations = Object.keys(locationResponse.subLocations)
-      .map(key => {
+      .map((key) => {
         return this.restructureLocation(locationResponse.subLocations[key], location);
       })
       .sort((a, b) => {

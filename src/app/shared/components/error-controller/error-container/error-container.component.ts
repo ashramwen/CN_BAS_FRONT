@@ -17,33 +17,36 @@ import { ErrorItemCmp } from '../error-item/error-item.component';
 })
 export class ErrorContainerCmp implements OnChanges, AfterViewInit {
 
-  @Input() control: FormControl;
-  @Input() show: boolean;
+  @Input() public control: FormControl;
+  @Input() public show: boolean;
 
   @ContentChildren(ErrorItemCmp)
   private errorItems: QueryList<ErrorItemCmp>;
 
-  ngOnChanges(changes: SimpleChanges) {
+  public ngOnChanges(changes: SimpleChanges) {
     if (
       !changes['control'] ||
       changes['control'].currentValue === changes['control'].previousValue
       || !this.errorItems
-    ) return;
+    ) {
+      return;
+    }
     this.errorItems.toArray()
-      .forEach(item => {
+      .forEach((item) => {
         item.control = changes['control'].currentValue;
       });
   }
 
-  ngAfterViewInit() {
-    if (!this.errorItems) return;
+  public ngAfterViewInit() {
+    if (!this.errorItems) {
+      return;
+    }
     this.errorItems.toArray()
-      .forEach(item => {
+      .forEach((item) => {
         // avoid change detection
         setTimeout(() => {
           item.control = this.control;
         });
       });
   }
-  
 }

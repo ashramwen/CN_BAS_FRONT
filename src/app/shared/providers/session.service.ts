@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptionsArgs, Headers} from '@angular/http';
+import { Http, RequestOptionsArgs, Headers } from '@angular/http';
 import { Credential } from '../models/credential.interface';
 import { ConfigHelper } from './helpers/config-helper';
 import { RESOURCE_URLS } from '../constants/resource-urls';

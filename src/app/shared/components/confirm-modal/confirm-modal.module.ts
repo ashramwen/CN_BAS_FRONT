@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { ConfirmModal } from './confirm-modal.service';
 import { ConfirmModalComponent } from './confirm-modal.component';
 
-
 @NgModule({
   declarations: [
     ConfirmModalComponent,

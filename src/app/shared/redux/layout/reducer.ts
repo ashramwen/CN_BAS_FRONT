@@ -28,26 +28,26 @@ export const initialState: LayoutState = {
 export function layoutReducer(state = initialState, action: Actions): LayoutState {
   switch (action.type) {
     case ActionTypes.SHOW_SIDE_NAV: {
-      return onShowSideNavAction(state, <ShowSideNavAction>action);
+      return onShowSideNavAction(state, <ShowSideNavAction> action);
     }
     case ActionTypes.HIDE_SIDE_NAV: {
-      return onHideSideNavAction(state, <HideSideNavAction>action);
+      return onHideSideNavAction(state, <HideSideNavAction> action);
     }
     case ActionTypes.TOGGLE_SIDE_NAV: {
-      return onToggleSideNavAction(state, <ToggleSideNavAction>action);
+      return onToggleSideNavAction(state, <ToggleSideNavAction> action);
     }
     case ActionTypes.SHOW_LOADING: {
-      return onShowLoading(state, <ShowLoadingAction>action);
+      return onShowLoading(state, <ShowLoadingAction> action);
     }
     case ActionTypes.HIDE_LOADING: {
-      return onHideLoading(state, <HideLoadingAction>action);
+      return onHideLoading(state, <HideLoadingAction> action);
     }
     case ActionTypes.GO_MAIN: {
-      return onGoMain(state, <GoMainAction>action);
-    }  
+      return onGoMain(state, <GoMainAction> action);
+    }
     case ActionTypes.GO_USER_INFO: {
-      return onGoUserInfo(state, <GoUserInfoAction>action);
-    }  
+      return onGoUserInfo(state, <GoUserInfoAction> action);
+    }
     default: {
       return state;
     }
@@ -77,7 +77,6 @@ function onShowLoading(state: LayoutState, action: ShowLoadingAction): LayoutSta
     loading: state.loading + 1
   });
 }
-
 
 function onHideLoading(state: LayoutState, action: HideLoadingAction): LayoutState {
   return Object.assign({}, state, {

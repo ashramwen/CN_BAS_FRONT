@@ -8,11 +8,11 @@ import { HideSideNavAction } from '../../../../shared/redux/layout/actions';
   templateUrl: './side-nav.component.html',
   styleUrls: ['./side-nav.component.scss']
 })
-export class SideNavCmp { 
+export class SideNavCmp {
 
   constructor(
     private store: Store<RootState>
-  ){}
+  ) { }
 
   public closeSidenav() {
     this.store.dispatch(new HideSideNavAction());

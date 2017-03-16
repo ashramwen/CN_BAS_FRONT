@@ -14,7 +14,7 @@ import { useLogMonitor } from '@ngrx/store-log-monitor';
 import { EFFECTS, reducer } from './redux/index';
 import { schema } from '../configs/db';
 import { HttpModule } from '@angular/http';
-
+import { AlertModal } from './components/alert-modal/alert-modal.service';
 
 @NgModule({
   imports: [
@@ -32,6 +32,6 @@ import { HttpModule } from '@angular/http';
   ],
   exports: [...SHARED_COMPONENTS, SHARED_DIRECTIVES],
   declarations: [SHARED_DIRECTIVES],
-  providers: [SHARED_PROVIDERS],
+  providers: [SHARED_PROVIDERS, AlertModal],
 })
 export class AppSharedModule { }

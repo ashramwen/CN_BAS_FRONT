@@ -16,4 +16,4 @@ export class AddAction implements Action {
 }
 
 export type Actions =
-  AddAction; 
+  AddAction;

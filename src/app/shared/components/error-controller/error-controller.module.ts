@@ -6,8 +6,6 @@ import { CommonModule } from '@angular/common';
 import { ErrorItemCmp } from './error-item/error-item.component';
 import { ErrorContainerCmp } from './error-container/error-container.component';
 
-
-
 @NgModule({
   declarations: [
     ErrorItemCmp,

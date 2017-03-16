@@ -7,11 +7,13 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./error-item.component.scss'],
 })
 export class ErrorItemCmp {
-  @Input() errorName: string;
-  @Input() control: FormControl;
+  @Input() public errorName: string;
+  @Input() public control: FormControl;
 
   get show(): boolean {
-    if (!this.control || !this.control.errors) return false;
+    if (!this.control || !this.control.errors) {
+      return false;
+    }
     return !!this.control.errors[this.errorName];
   }
 }
