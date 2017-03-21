@@ -135,3 +135,10 @@ interface ErrorConstructor extends ErrorStackTraceLimit {}
 interface NodeRequireFunction extends Es6PromiseLoader  {}
 interface NodeModule extends WebpackModule {}
 interface Global extends GlobalEnvironment  {}
+
+interface CompassControl extends L.Control {
+  getAngle: () => number;
+  setAngle: (angle: number) => void;
+  activate: () => void;
+  deactivate: () => void;
+}

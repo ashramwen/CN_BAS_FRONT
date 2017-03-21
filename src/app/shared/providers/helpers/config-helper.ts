@@ -4,9 +4,6 @@ const path = require('path');
 @Injectable()
 export class ConfigHelper {
 
-  constructor(
-  ) { }
-
   /**
    * @desc build api url
    * @param apiPath

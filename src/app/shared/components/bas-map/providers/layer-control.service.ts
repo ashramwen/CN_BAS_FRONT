@@ -50,7 +50,10 @@ export class LayerControl {
       case 'site':
         parentLocation = this._currentLocation.parent.parent.location;
         break;
-      case 'level':
+      case 'partition':
+        parentLocation = this._currentLocation.parent.parent.location;
+        break;
+      case 'floor':
         parentLocation = this._currentLocation.parent.parent.location;
         break;
       default:
@@ -64,7 +67,8 @@ export class LayerControl {
    */
   public get backButtonIsVisible(): boolean {
     return this._currentLocation.locationLevel === 'area'
-      || this._currentLocation.locationLevel === 'level'
+      || this._currentLocation.locationLevel === 'floor'
+      || this._currentLocation.locationLevel === 'partition'
       || this._currentLocation.locationLevel === 'site';
   }
 
@@ -188,7 +192,7 @@ export class LayerControl {
       opacity: 0.8
     };
     layer.setStyle(opt);
-    // this.enableLayer(layer);
+    this.enableLayer(layer);
   }
 
   private fadeAndDisableLayer(layer: L.Polygon) {

@@ -18,6 +18,11 @@ import { ViewLevel } from './view-level.type';
 import { Location } from '../../models/location.interface';
 import { LayerControl } from './providers/layer-control.service';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { BackButtonControl } from './leaflet-plugins/back-button/back-button.control';
+import 'leaflet-compass/dist/leaflet-compass.min.js';
+import {
+  SelectionButtonControl
+} from './leaflet-plugins/selection-button/selection-button.control';
 
 @Component({
   selector: 'bas-map',
@@ -43,6 +48,9 @@ export class BasMap implements AfterViewInit, OnInit {
   private featureLayers: L.Polygon[] = [];
   private currentLocation: Location;
   private mapState: EventEmitter<boolean> = new EventEmitter();
+  private backButtonControl: L.Control;
+  private selectionButtonControl: L.Control;
+  private selectionMode: boolean = false;
 
   constructor(
     private layerControl: LayerControl
@@ -74,8 +82,7 @@ export class BasMap implements AfterViewInit, OnInit {
         ], [
           bounds.top - 0.001,
           bounds.right + 0.001
-        ]);
-
+          ]);
       this.map.setMaxBounds(mapBounds);
       this.updateView();
     });
@@ -92,6 +99,17 @@ export class BasMap implements AfterViewInit, OnInit {
       minZoom: 17
     });
     window['map'] = this.map;
+    this.map.removeControl(this.map['zoomControl']);
+    let CompassControl = L.Control['Compass'];
+    this.backButtonControl = new BackButtonControl({ position: 'topleft' });
+    this.selectionButtonControl = new SelectionButtonControl({ position: 'bottomright' });
+    this.map.addControl(this.selectionButtonControl);
+    this.map.on('level-back', () => {
+      this.layerControl.goBack();
+    });
+    this.map.on('selection-mode-change', (event) => {
+      this.selectionMode = event['state'];
+    });
 
     L.tileLayer(this.tileUrl, {
       maxZoom: 18,
@@ -134,13 +152,24 @@ export class BasMap implements AfterViewInit, OnInit {
   }
 
   private onLayerClick(feature: L.Polygon) {
-    let locationID = (<AreaFeature> feature.feature).properties.tag;
-    this.layerControl.setLocation(locationID);
+    let locationID = (<AreaFeature>feature.feature).properties.tag;
+    if (this.selectionMode) {
+      
+    } else {
+      this.layerControl.setLocation(locationID);
+    }
   }
 
   private onLocationChange() {
     if (!this.currentLocation) {
       return;
+    }
+    if (this.backButtonControl) {
+      if (this.layerControl.backButtonIsVisible) {
+        this.map.addControl(this.backButtonControl);
+      } else {
+        this.map.removeControl(this.backButtonControl);
+      }
     }
     this.updateView();
   }
