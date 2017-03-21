@@ -1,24 +1,23 @@
-import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { RootState } from '../../../shared/redux/index';
-import { LogOutAction } from '../../../shared/redux/token/actions';
-import { SessionService } from '../../../shared/providers/session.service';
-import { StateSelectors } from '../../../shared/redux/selectors';
+import { Component, OnInit } from '@angular/core';
+import { Status, Thing } from './../../../shared/models/thing.interface';
+
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'bas-landing',
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
-export class LandingCmp {
+export class LandingCmp implements OnInit {
 
+  public lightings$: Observable<Thing>;
   constructor(
-    private store: Store<RootState>,
-    private session: SessionService,
+    private route: ActivatedRoute
   ) { }
 
-  public get token() {
-    return this.store.select(StateSelectors.token);
+  public ngOnInit() {
+    this.lightings$ = this.route.snapshot.data['lightings'];
   }
 
 }

@@ -37,7 +37,7 @@ import { ShowLoadingAction, HideLoadingAction } from './shared/redux/layout/acti
   templateUrl: './app.component.html'
 })
 export class AppCmp implements OnInit {
-  public url = 'https://cn.kii.com';
+  public url = 'http://cn.kii.com';
   public loading$: Observable<boolean>;
 
   constructor(

@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '../../shared/models/location.interface';
 import { Observable } from 'rxjs';
@@ -19,6 +20,7 @@ export class LocationCmp implements OnInit {
 
   public ngOnInit() {
     this.location$ = this.route.snapshot.data['locations'];
+    console.count();
   }
 
 }
