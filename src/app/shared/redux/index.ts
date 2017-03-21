@@ -1,6 +1,13 @@
 import { EffectsModule } from '@ngrx/effects';
 import { ActionReducer } from '@ngrx/store';
 import { compose } from '@ngrx/core';
+import { ModuleWithProviders } from '@angular/core';
+import { routerReducer } from '@ngrx/router-store';
+import { RouterStateSnapshot } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { useLogMonitor } from '@ngrx/store-log-monitor';
 
 /**
  * storeFreeze prevents state from being mutated. When mutation occurs, an
@@ -22,8 +29,6 @@ import { combineReducers } from '@ngrx/store';
 import { locationReducer, LocationState } from './location';
 import { LayoutState, layoutReducer } from './layout';
 import { TokenState, TokenEffects, tokenReducer } from './token';
-import { routerReducer } from '@ngrx/router-store';
-import { RouterStateSnapshot } from '@angular/router';
 
 const reducers = {
   token: tokenReducer,
@@ -32,9 +37,9 @@ const reducers = {
   location: locationReducer
 };
 
-export const EFFECTS = [TokenEffects].map((effect) => {
-  return EffectsModule.run(effect);
-});
+export const EFFECTS = [
+  EffectsModule.run(TokenEffects)
+];
 
 export interface RootState {
   token: TokenState;
@@ -54,3 +59,19 @@ export function reducer(state: any, action: any) {
     return developmentReducer(state, action);
   }
 }
+
+@NgModule()
+export class DummyModule {
+  public static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: CommonModule
+    };
+  }
+}
+
+export const instrumentation: ModuleWithProviders =
+  (ENV !== 'production') ? StoreDevtoolsModule.instrumentOnlyWithExtension({
+      maxAge: 15,
+      monitor: useLogMonitor({ visible: false, position: 'right' })
+    })
+    : DummyModule.forRoot();

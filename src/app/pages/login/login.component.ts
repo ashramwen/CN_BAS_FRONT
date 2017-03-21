@@ -51,7 +51,7 @@ export class LoginCmp implements OnInit {
     });
   }
 
-  public login(value: string) {
+  public login() {
     this.store.dispatch(new ShowLoadingAction());
 
     Object.assign(this.credentials, this.loginForm.value);

@@ -9,12 +9,12 @@
           Book Collection
         </bas-toolbar>
         <div class="content-container">
-          <router-outlet (activate)="onRouteActivated($event)"></router-outlet>
+          <router-outlet (activate)="onRouteActivated()"></router-outlet>
         </div>
       </div>
     </md-sidenav-container>
   </swipe-tab>
-  <swipe-tab [activeClass]="'user-info'">
+  <swipe-tab activeClass="user-info">
     <user-info></user-info>
   </swipe-tab>
 </swipe-wrapper>
