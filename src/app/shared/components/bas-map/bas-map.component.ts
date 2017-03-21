@@ -5,13 +5,19 @@ import {
   OnInit,
   AfterViewInit,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  ViewEncapsulation,
+  Input,
+  EventEmitter,
 } from '@angular/core';
-import { ViewEncapsulation, Input } from '@angular/core';
 import * as L from 'leaflet';
-import { AreaFeature } from '../../models/building.interface';
+import { AreaFeature, Building } from '../../models/building.interface';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs';
+import { ViewLevel } from './view-level.type';
+import { Location } from '../../models/location.interface';
+import { LayerControl } from './providers/layer-control.service';
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'bas-map',
@@ -19,34 +25,60 @@ import { Subscriber } from 'rxjs';
   styleUrls: [
     './bas-map.component.scss'
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [LayerControl],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BasMap implements AfterViewInit, OnChanges {
+export class BasMap implements AfterViewInit, OnInit {
 
   @ViewChild('mapTarget')
   public mapTarget: ElementRef;
   @Input()
-  public geoData: AreaFeature[];
+  public geoData: Building[];
+  @Input()
+  public locationTree: Location;
 
+  private mapReady: boolean = false;
   private map: L.Map;
-  private mapStateSender: Subscriber<boolean>;
-  private mapState: Observable<boolean> =
-    new Observable((subscriber: Subscriber<any>) => {
-      this.mapStateSender = subscriber;
-  });
+  private featureLayers: L.Polygon[] = [];
+  private currentLocation: Location;
+  private mapState: EventEmitter<boolean> = new EventEmitter();
+
+  constructor(
+    private layerControl: LayerControl
+  ) { }
+
+  public ngOnInit() {
+    this.layerControl.locationChangeEvent.subscribe((location) => {
+      this.currentLocation = location;
+      this.onLocationChange();
+    });
+  }
 
   public ngAfterViewInit() {
     this.initMap();
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
-    if (changes['geoData']
-      && changes['geoData'].previousValue !== changes['geoData'].currentValue
-    ) {
-      this.mapState.subscribe(() => {
-        this.loadBuildingFeatures();
-      });
-    }
+  public init(locationTree: Location, geoData: Building[]) {
+    this.locationTree = locationTree;
+    this.geoData = geoData;
+    this.currentLocation = this.locationTree;
+    this.mapState.subscribe(() => {
+      this.loadBuildingFeatures();
+      this.layerControl.init(this.geoData, this.locationTree, this.featureLayers);
+      let bounds = this.findBounds();
+      let mapBounds
+        = new L.LatLngBounds([
+          bounds.bottom + 0.001,
+          bounds.left - 0.001
+        ], [
+          bounds.top - 0.001,
+          bounds.right + 0.001
+        ]);
+
+      this.map.setMaxBounds(mapBounds);
+      this.updateView();
+    });
   }
 
   private initMap() {
@@ -56,38 +88,70 @@ export class BasMap implements AfterViewInit, OnChanges {
         120.02401130217
       ],
       zoom: 18,
-      maxZoom: 30,
-      minZoom: 16
+      maxZoom: 23,
+      minZoom: 17
     });
+    window['map'] = this.map;
 
     L.tileLayer(this.tileUrl, {
       maxZoom: 18,
       attribution: '',
       id: 'mapbox.streets'
     }).addTo(this.map);
-    this.mapStateSender.next(true);
+    this.mapReady = true;
+    this.mapState.next(true);
   }
 
   private loadBuildingFeatures() {
-    this.geoData.map((d) => {
-      let layerOptions: L.PolylineOptions = {
-        fillColor: 'black'
-      };
+    this.featureLayers = this.geoData
+      .reduce((s: AreaFeature[], d) => {
+        return s.concat(d.data);
+      }, [])
+      .map((d) => {
+        let layerOptions: L.PolylineOptions = {
+          fillColor: 'grey'
+        };
 
-      let feature = L.polygon(d.geometry.coordinates[0], layerOptions)
-        .addTo(this.map)
-        .on('mouseover', (event) => {
-          feature.setStyle({
-            fill: true,
-            fillColor: 'red'
+        let feature = L.polygon(d.geometry.coordinates[0], layerOptions)
+          .addTo(this.map)
+          .on('click', (event) => {
+            this.onLayerClick(feature);
+          })
+          .on('mouseover', (event) => {
+            feature.setStyle({
+              fillColor: 'red'
+            });
+          })
+          .on('mouseout', (event) => {
+            feature.setStyle({
+              fillColor: 'grey'
+            });
           });
-        })
-        .on('mouseout', (event) => {
-          feature.setStyle({
-            fill: true,
-            fillColor: 'grey'
-          });
-        });
+
+        feature.feature = d;
+        return feature;
+      });
+  }
+
+  private onLayerClick(feature: L.Polygon) {
+    let locationID = (<AreaFeature> feature.feature).properties.tag;
+    this.layerControl.setLocation(locationID);
+  }
+
+  private onLocationChange() {
+    if (!this.currentLocation) {
+      return;
+    }
+    this.updateView();
+  }
+
+  private updateView() {
+    let bounds = this.findBounds();
+    let center: L.LatLngExpression =
+      [(bounds.top + bounds.bottom) / 2, (bounds.left + bounds.right) / 2];
+    let zoom = this.findZoom();
+    this.map.setView(center, zoom, {
+      animate: true
     });
   }
 
@@ -96,4 +160,73 @@ export class BasMap implements AfterViewInit, OnChanges {
       + 'access_token=pk.eyJ1IjoieXR5c3p4ZiIsImEiOiJjaXo'
       + '1OHN3OTcwNmJpMzNwaHVycmo5djllIn0.aBzti__T5lS8LDQhjyYsGA';
   }
+
+  private findZoom() {
+    if (!this.currentLocation) {
+      return 18;
+    }
+    switch (this.currentLocation.locationLevel) {
+      case 'floor':
+        return 19;
+      case 'partition':
+        return 20;
+      case 'site':
+      case 'area':
+        return 22;
+      default:
+        return 18;
+    }
+  }
+
+  private findBounds() {
+    let left = null;
+    let right = null;
+    let top = null;
+    let bottom = null;
+
+    this.currentLocation.subLocations.forEach((l) => {
+      let child = this.featureLayers
+        .find((f) => (<AreaFeature> f.feature).properties.tag === l.location);
+      if (!child) {
+        return;
+      }
+      if (left === null) {
+        left = child.getBounds().getWest();
+      } else if (left > child.getBounds().getWest()) {
+        left = child.getBounds().getWest();
+      }
+      if (right === null) {
+        right = child.getBounds().getEast();
+      } else if (right < child.getBounds().getEast()) {
+        right = child.getBounds().getEast();
+      }
+      if (top === null) {
+        top = child.getBounds().getNorth();
+      } else if (top > child.getBounds().getNorth()) {
+        top = child.getBounds().getNorth();
+      }
+      if (bottom === null) {
+        bottom = child.getBounds().getSouth();
+      } else if (bottom < child.getBounds().getSouth()) {
+        bottom = child.getBounds().getSouth();
+      }
+    });
+
+    // no child layer found
+    if (left === null) {
+      let layer = this.featureLayers.find((f) => {
+        return (<AreaFeature> f.feature).properties.tag === this.currentLocation.location;
+      });
+      let bounds = layer.getBounds();
+      left = bounds.getWest();
+      top = bounds.getNorth();
+      bottom = bounds.getSouth();
+      right = bounds.getEast();
+    }
+
+    return {
+      left, right, top, bottom
+    };
+  }
+
 }

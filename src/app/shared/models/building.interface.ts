@@ -62,6 +62,6 @@ interface BuildingGeoJSON extends GeoJSON {
 
 export interface Building {
   id: string;
-  data: BuildingGeoJSON;
-  levels: Array<{ name: string }>; // from bottom to top
+  data: AreaFeature[];
+  levels: Array<{ name: string, id: string }>; // from bottom to top
 }

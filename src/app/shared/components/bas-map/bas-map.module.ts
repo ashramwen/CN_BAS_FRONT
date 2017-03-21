@@ -7,6 +7,4 @@ import { BasMap } from './bas-map.component';
   providers: [],
   exports: [BasMap]
 })
-export class BasMapModule {
-
-}
+export class BasMapModule { }

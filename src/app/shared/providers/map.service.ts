@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AreaFeature } from '../models/building.interface';
+import { AreaFeature, Building } from '../models/building.interface';
 
 @Injectable()
 export class MapService {
 
-  public getBuildingGeo(): Observable<AreaFeature[]> {
+  public getBuildingsGeo(): Observable<Building[]> {
     return Observable
       .of(require('../../../assets/mock-data/new.geojson'))
       .map((r: AreaFeature[]) => {
@@ -17,7 +17,14 @@ export class MapService {
               point[0] = temp;
             });
         });
-        return r;
+        return [{
+          id: '08',
+          data: r,
+          levels: [{
+            name: '7',
+            id: '0807'
+          }]
+        }];
       });
   }
 }
