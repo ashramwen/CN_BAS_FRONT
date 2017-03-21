@@ -1,3 +1,4 @@
+import { BuildingResolver } from '../../shared/providers/resolvers/building-resolver.service';
 import { LandingCmp } from './landing/landing.component';
 import { LocationCmp } from './location/location.component';
 import { LocationResolver } from '../../shared/providers/resolvers/location-resolver.service';
@@ -26,7 +27,11 @@ export const routes = [
       },
       {
         path: 'map-view',
-        component: MapViewCmp
+        component: MapViewCmp,
+        resolve: {
+          locations: LocationResolver,
+          buildings: BuildingResolver
+        }
       },
       {
         path: '',

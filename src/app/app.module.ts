@@ -34,8 +34,8 @@ import { LoginCmp } from './pages/login/login.component';
 import '../styles/styles.scss';
 import '../styles/headings.css';
 import { AppSharedModule } from './shared/shared.module';
-import { BASE_CONFIG, AppConfigToken } from './app.config';
 import { PortalModule } from './pages/+portal/portal.module';
+import { instrumentation } from './shared/redux/index';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: Http) {
@@ -63,8 +63,10 @@ const APP_PROVIDERS = [
     HttpModule,
     AppSharedModule,
     MaterialRootModule,
-    StoreLogMonitorModule,
     ReactiveFormsModule,
+    // have to comment this line when build:aot:prod
+    // instrumentation,
+    // StoreLogMonitorModule,
     LocalStorageModule.withConfig({
       prefix: 'bas',
       storageType: 'localStorage'
@@ -84,10 +86,6 @@ const APP_PROVIDERS = [
     PortalModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
-    {
-      provide: AppConfigToken,
-      useValue: BASE_CONFIG[ENV]
-    },
     ENV_PROVIDERS,
     APP_PROVIDERS
   ]

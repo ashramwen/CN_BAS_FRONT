@@ -22,6 +22,13 @@ const OptimizeJsPlugin = require('optimize-js-plugin');
  * Webpack Constants
  */
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
+const BASE_CONFIG = process.env.BASE_CONFIG = {
+  "cloudUrl": "http://api-development-beehivecn3.internal.kii.com",
+  "wsUrl": "ws://114.215.178.24:8080/beehive-portal/websocket/stomp",
+  "siteUrl": "http://114.215.178.24:8080/beehive-portal",
+  "kiiAppID": "493e83c9",
+  "thirdPartyAPIUrl": "http://114.215.178.24:9081/index.html"
+};
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
 const METADATA = webpackMerge(commonConfig({
@@ -30,7 +37,8 @@ const METADATA = webpackMerge(commonConfig({
   host: HOST,
   port: PORT,
   ENV: ENV,
-  HMR: false
+  HMR: false,
+  BASE_CONFIG: JSON.stringify(BASE_CONFIG)
 });
 
 module.exports = function (env) {
@@ -157,10 +165,12 @@ module.exports = function (env) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
+        'BASE_CONFIG': METADATA.BASE_CONFIG,
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
+          'BASE_CONFIG': METADATA.BASE_CONFIG,
         }
       }),
 

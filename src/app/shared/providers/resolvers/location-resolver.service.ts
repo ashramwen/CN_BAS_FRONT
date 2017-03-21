@@ -44,7 +44,8 @@ export class LocationResolver implements Resolve<Observable<Location>> {
       locationName: this.removeSymbol(
         locationResponse.location.substr(parent ? parent.location.length - 1 : 0)),
       subLocations: [],
-      locationLevel: locationResponse.locationLevel
+      locationLevel: locationResponse.locationLevel,
+      parent: parent
     };
 
     location.subLocations = Object.keys(locationResponse.subLocations)

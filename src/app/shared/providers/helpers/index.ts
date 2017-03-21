@@ -5,6 +5,10 @@ import { XHRBackend, RequestOptions,  } from '@angular/http';
 import { Store } from '@ngrx/store';
 import { RootState } from '../../redux/index';
 
+export function beehiveClientFactory(backend, options, store, requestHelper) {
+  return new BeehiveClient(backend, options, store, requestHelper);
+}
+
 export const HELPER_SERVICES = [
   {
     provide: BeehiveClient,
@@ -14,9 +18,7 @@ export const HELPER_SERVICES = [
       Store,
       RequestHelper
     ],
-    useFactory: (backend, options, store, requestHelper) => {
-      return new BeehiveClient(backend, options, store, requestHelper);
-    }
+    useFactory: beehiveClientFactory
   },
   ConfigHelper,
   RequestHelper

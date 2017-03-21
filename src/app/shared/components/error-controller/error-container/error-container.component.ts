@@ -21,7 +21,7 @@ export class ErrorContainerCmp implements OnChanges, AfterViewInit {
   @Input() public show: boolean;
 
   @ContentChildren(ErrorItemCmp)
-  private errorItems: QueryList<ErrorItemCmp>;
+  public errorItems: QueryList<ErrorItemCmp>;
 
   public ngOnChanges(changes: SimpleChanges) {
     if (

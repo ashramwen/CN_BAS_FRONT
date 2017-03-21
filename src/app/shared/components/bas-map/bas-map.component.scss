@@ -8,3 +8,7 @@
     height: 100%;
   }
 }
+
+path.leaflet-interactive.disabled {
+  pointer-events: none !important;
+}

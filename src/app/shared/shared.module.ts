@@ -9,12 +9,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { DBModule } from '@ngrx/db';
 import { RouterStoreModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { useLogMonitor } from '@ngrx/store-log-monitor';
+import { useLogMonitor, StoreLogMonitorModule } from '@ngrx/store-log-monitor';
 
-import { EFFECTS, reducer } from './redux/index';
+import { reducer, EFFECTS, instrumentation } from './redux/index';
 import { schema } from '../configs/db';
 import { HttpModule } from '@angular/http';
 import { AlertModal } from './components/alert-modal/alert-modal.service';
+import { TokenEffects } from './redux/token/effects';
 
 @NgModule({
   imports: [
@@ -23,14 +24,10 @@ import { AlertModal } from './components/alert-modal/alert-modal.service';
     DBModule.provideDB(schema),
     StoreModule.provideStore(reducer),
     HttpModule,
-    StoreDevtoolsModule.instrumentOnlyWithExtension({
-      maxAge: 15,
-      monitor: useLogMonitor({ visible: false, position: 'right' })
-    }),
     RouterStoreModule.connectRouter(),
-    ...SHARED_COMPONENTS
+    SHARED_COMPONENTS
   ],
-  exports: [...SHARED_COMPONENTS, SHARED_DIRECTIVES],
+  exports: [SHARED_COMPONENTS, SHARED_DIRECTIVES],
   declarations: [SHARED_DIRECTIVES],
   providers: [SHARED_PROVIDERS, AlertModal],
 })
