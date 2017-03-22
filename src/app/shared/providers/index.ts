@@ -6,6 +6,7 @@ import { LocationService } from './location.service';
 import { RESOLVERS } from './resolvers/index';
 import { HELPER_SERVICES } from './helpers/index';
 import { MapService } from './map.service';
+import { DeviceService } from './device.service';
 
 export const SHARED_PROVIDERS = [
   // helpers
@@ -15,6 +16,7 @@ export const SHARED_PROVIDERS = [
   SessionService,
   LocationService,
   MapService,
+  DeviceService,
 
   // Route Guard services
   ...GUARD_SERVICES,
