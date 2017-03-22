@@ -7,7 +7,7 @@ import { Response } from '@angular/http';
 import { Thing } from './../../models/thing.interface';
 
 @Injectable()
-export class LightResolver implements Resolve<any> {
+export class LightsResolver implements Resolve<any> {
 
   constructor(private deviceService: DeviceService) { }
 
