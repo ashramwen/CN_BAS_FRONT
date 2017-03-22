@@ -4,6 +4,8 @@ import { LocationCmp } from './location/location.component';
 import { LocationResolver } from '../../shared/providers/resolvers/location-resolver.service';
 import { MapViewCmp } from './map-view/map-view.component';
 import { BuildingResolver } from '../../shared/providers/resolvers/building-resolver.service';
+import { DeviceListCmp } from './device-list/device-list.component';
+import { DeviceDetailCmp } from './device-list/device-detail/device-detail.component';
 
 export const routes = [
   {
@@ -34,6 +36,18 @@ export const routes = [
         redirectTo: 'landing',
         pathMatch: 'prefix',
       },
+      {
+        path: 'device-list',
+        children: [
+          {
+            path: '',
+            component: DeviceListCmp
+          }, {
+            path: ':id',
+            component: DeviceDetailCmp
+          }
+        ]
+      }
     ]
   },
 ];
