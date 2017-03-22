@@ -24,10 +24,10 @@ const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 const BASE_CONFIG = process.env.BASE_CONFIG = {
   "cloudUrl": "http://api-development-beehivecn3.internal.kii.com",
-  "wsUrl": "ws://114.215.196.178:8080/beehive-portal/websocket/stomp",
-  "siteUrl": "http://114.215.196.178:8080/beehive-portal",
-  "kiiAppID": "192b49ce",
-  "thirdPartyAPIUrl": "http://114.215.196.178:8081/3rdpartyapiserver/app/api_inquiry/apilist.html?vendor=Beehive"
+  "wsUrl": "ws://114.215.178.24:8080/beehive-portal/websocket/stomp",
+  "siteUrl": "http://114.215.178.24:8080/beehive-portal",
+  "kiiAppID": "493e83c9",
+  "thirdPartyAPIUrl": "http://114.215.178.24:9081/index.html"
 };
 const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   host: HOST,

@@ -1,5 +1,5 @@
 import { BuildingResolver } from './building-resolver.service';
+import { LightResolver } from './light-resolver.service';
 import { LocationResolver } from './location-resolver.service';
-import { ThingResolver } from './thing-resolver.service';
 
-export const RESOLVERS = [LocationResolver, ThingResolver, BuildingResolver];
+export const RESOLVERS = [LocationResolver, LightResolver, BuildingResolver];
