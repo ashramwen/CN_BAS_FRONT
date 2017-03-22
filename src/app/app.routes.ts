@@ -17,7 +17,10 @@ export const ROUTES: Routes = [
   {
     path: 'portal',
     loadChildren: './pages/+portal#PortalModule',
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: {
+      location: LocationResolver
+    }
   },
   { path: '**', redirectTo: 'login' }
 ];

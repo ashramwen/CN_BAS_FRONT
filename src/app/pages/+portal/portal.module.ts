@@ -8,7 +8,6 @@ import { LandingCmp } from './landing/landing.component';
 import { CommonModule } from '@angular/common';
 import { LAYOUT_CMP } from './components/index';
 import { TranslateModule } from '@ngx-translate/core';
-import { LocationCmp } from './location/location.component';
 import { UserInfoCmp } from './user-info.ts/user-info.component';
 import { PasswordChangeCmp } from './user-info.ts/password-change/password-change.component';
 import { AppSharedModule } from '../../shared/shared.module';
@@ -23,7 +22,6 @@ import { BasMapModule } from '../../shared/components/bas-map/bas-map.module';
   declarations: [
     PortalCmp,
     LandingCmp,
-    LocationCmp,
     UserInfoCmp,
     PasswordChangeCmp,
     MapViewCmp,

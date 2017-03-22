@@ -9,20 +9,27 @@ import {
   ViewEncapsulation,
   Input,
   EventEmitter,
+  ChangeDetectionStrategy,
+  NgZone
 } from '@angular/core';
 import * as L from 'leaflet';
-import { AreaFeature, Building } from '../../models/building.interface';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs';
-import { ViewLevel } from './view-level.type';
-import { Location } from '../../models/location.interface';
-import { LayerControl } from './providers/layer-control.service';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { BackButtonControl } from './leaflet-plugins/back-button/back-button.control';
-import 'leaflet-compass/dist/leaflet-compass.min.js';
+import { MdSidenav } from '@angular/material';
+import { Store } from '@ngrx/store';
+
 import {
   SelectionButtonControl
 } from './leaflet-plugins/selection-button/selection-button.control';
+import { AreaFeature, Building } from '../../models/building.interface';
+import { ViewLevel } from './view-level.type';
+import { Location } from '../../models/location.interface';
+import { LayerControl } from './providers/layer-control.service';
+import { BackButtonControl } from './leaflet-plugins/back-button/back-button.control';
+import 'leaflet-compass/dist/leaflet-compass.min.js';
+import { LayerSelector } from './providers/layer-selector.service';
+import { RootState } from '../../redux/index';
+import { StateSelectors } from '../../redux/selectors';
 
 @Component({
   selector: 'bas-map',
@@ -31,8 +38,7 @@ import {
     './bas-map.component.scss'
   ],
   encapsulation: ViewEncapsulation.None,
-  providers: [LayerControl],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  providers: [LayerControl, LayerSelector],
 })
 export class BasMap implements AfterViewInit, OnInit {
 
@@ -42,6 +48,8 @@ export class BasMap implements AfterViewInit, OnInit {
   public geoData: Building[];
   @Input()
   public locationTree: Location;
+  @ViewChild('sidenav')
+  public sidenav: MdSidenav;
 
   private mapReady: boolean = false;
   private map: L.Map;
@@ -52,11 +60,22 @@ export class BasMap implements AfterViewInit, OnInit {
   private selectionButtonControl: L.Control;
   private selectionMode: boolean = false;
 
+  public get selectedLocations() {
+    return this.layerSelector.selectedLocations;
+  }
+
   constructor(
-    private layerControl: LayerControl
+    private layerControl: LayerControl,
+    private layerSelector: LayerSelector,
+    private zone: NgZone,
+    private store: Store< RootState>
   ) { }
 
   public ngOnInit() {
+    this.store.select(StateSelectors.location)
+      .subscribe((locationState) => {
+        this.locationTree = locationState.locations;
+      });
     this.layerControl.locationChangeEvent.subscribe((location) => {
       this.currentLocation = location;
       this.onLocationChange();
@@ -67,8 +86,7 @@ export class BasMap implements AfterViewInit, OnInit {
     this.initMap();
   }
 
-  public init(locationTree: Location, geoData: Building[]) {
-    this.locationTree = locationTree;
+  public init(geoData: Building[]) {
     this.geoData = geoData;
     this.currentLocation = this.locationTree;
     this.mapState.subscribe(() => {
@@ -82,11 +100,18 @@ export class BasMap implements AfterViewInit, OnInit {
         ], [
           bounds.top - 0.001,
           bounds.right + 0.001
-          ]);
+        ]);
       this.map.setMaxBounds(mapBounds);
       this.updateView();
     });
   }
+
+  public resizeMap() {
+    let opt: L.ZoomPanOptions = {
+      animate: true
+    };
+    this.map.invalidateSize(opt);
+  }  
 
   private initMap() {
     this.map = L.map(this.mapTarget.nativeElement, {
@@ -108,7 +133,19 @@ export class BasMap implements AfterViewInit, OnInit {
       this.layerControl.goBack();
     });
     this.map.on('selection-mode-change', (event) => {
-      this.selectionMode = event['state'];
+      this.zone.run(() => {
+        this.selectionMode = event['state'];
+        this.layerSelector.clear();
+        if (this.selectionMode) {
+          this.sidenav.open().then(() => {
+            this.resizeMap();
+          });
+        } else {
+          this.sidenav.close().then(() => {
+            this.resizeMap();
+          });
+        }
+      });
     });
 
     L.tileLayer(this.tileUrl, {
@@ -125,36 +162,16 @@ export class BasMap implements AfterViewInit, OnInit {
       .reduce((s: AreaFeature[], d) => {
         return s.concat(d.data);
       }, [])
-      .map((d) => {
-        let layerOptions: L.PolylineOptions = {
-          fillColor: 'grey'
-        };
-
-        let feature = L.polygon(d.geometry.coordinates[0], layerOptions)
-          .addTo(this.map)
-          .on('click', (event) => {
-            this.onLayerClick(feature);
-          })
-          .on('mouseover', (event) => {
-            feature.setStyle({
-              fillColor: 'red'
-            });
-          })
-          .on('mouseout', (event) => {
-            feature.setStyle({
-              fillColor: 'grey'
-            });
-          });
-
-        feature.feature = d;
-        return feature;
-      });
+      .map((l) => this.initFeature(l));
+    this.featureLayers.forEach((f) => {
+      f.addTo(this.map);
+    });
   }
 
   private onLayerClick(feature: L.Polygon) {
-    let locationID = (<AreaFeature>feature.feature).properties.tag;
+    let locationID = (<AreaFeature> feature.feature).properties.tag;
     if (this.selectionMode) {
-      
+      this.layerSelector.toggleLayer(feature);
     } else {
       this.layerControl.setLocation(locationID);
     }
@@ -172,6 +189,20 @@ export class BasMap implements AfterViewInit, OnInit {
       }
     }
     this.updateView();
+  }
+
+  private initFeature(d: AreaFeature) {
+    let layerOptions: L.PolylineOptions = {
+      className: 'loc-layer'
+    };
+
+    let feature = L.polygon(d.geometry.coordinates[0], layerOptions)
+      .on('click', (event) => {
+        this.onLayerClick(feature);
+      });
+    
+    feature.feature = d;
+    return feature;
   }
 
   private updateView() {

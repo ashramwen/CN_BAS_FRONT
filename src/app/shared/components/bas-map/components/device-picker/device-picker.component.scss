@@ -1,0 +1,12 @@
+.device-picker-conaienr{
+  width: 300px;
+
+  .location-list {
+    md-list-item{
+      background: #ccc;
+      & > div.mat-list-item-content{
+        height: auto;
+      }
+    }
+  }
+}

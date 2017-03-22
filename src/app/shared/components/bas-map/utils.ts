@@ -1,0 +1,32 @@
+import { Location } from '../../models/location.interface';
+
+export class MapUtils {
+  public static addClass(layer: L.Polygon, name: string) {
+    let ele = layer.getElement();
+    if (!ele.classList.contains(name)) {
+      ele.classList.add(name);
+    }
+  }
+
+  public static removeClass(layer: L.Polygon, name: string) {
+    let ele = layer.getElement();
+    if (ele.classList.contains(name)) {
+      ele.classList.remove(name);
+    }
+  }
+
+  public static findLocation(
+    location: string,
+    locationNode: Location,
+  ): Location {
+    if (locationNode.location === location) {
+      return locationNode;
+    }
+    for (let subNode of locationNode.subLocations) {
+      let result = MapUtils.findLocation(location, subNode);
+      if (result) {
+        return result;
+      }
+    }
+  }
+}

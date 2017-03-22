@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Location } from '../../../models/location.interface';
 import { AreaFeature, Building } from '../../../models/building.interface';
+import { MapUtils } from '../utils';
 
 interface LocationWithPath {
   location: Location;
@@ -186,12 +187,8 @@ export class LayerControl {
   }
 
   private hightlightLayer(layer: L.Polygon) {
-    let opt: L.PathOptions = {
-      fill: true,
-      stroke: true,
-      opacity: 0.8
-    };
-    layer.setStyle(opt);
+    MapUtils.removeClass(layer, 'fade');
+    MapUtils.removeClass(layer, 'hide');
     this.enableLayer(layer);
   }
 
@@ -206,36 +203,18 @@ export class LayerControl {
   }
 
   private fadeLayer(layer: L.Polygon) {
-    let opt: L.PathOptions = {
-      fill: true,
-      stroke: true,
-      opacity: 0.3
-    };
-    layer.setStyle(opt);
+    MapUtils.addClass(layer, 'fade');
   }
 
   private hideLayer(layer: L.Polygon) {
-    let opt: L.PathOptions = {
-      fill: false,
-      stroke: false,
-      opacity: 0.3
-    };
-    layer.setStyle(opt);
+    MapUtils.addClass(layer, 'hide');
   }
 
   private disableLayer(layer: L.Polygon) {
-    // let opt: L.InteractiveLayerOptions = {
-    //   interactive: false
-    // };
-    // layer.setStyle(opt);
-    layer.getElement().classList.add('disabled');
+    MapUtils.addClass(layer, 'disabled');
   }
 
   private enableLayer(layer: L.Polygon) {
-    // let opt: L.InteractiveLayerOptions = {
-    //   interactive: true
-    // };
-    // layer.setStyle(opt);
-    layer.getElement().classList.remove('disabled');
+    MapUtils.removeClass(layer, 'disabled');
   }
 }

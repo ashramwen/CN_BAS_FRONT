@@ -15,17 +15,9 @@ export const routes = [
         component: LandingCmp
       },
       {
-        path: 'location',
-        component: LocationCmp,
-        resolve: {
-          locations: LocationResolver
-        }
-      },
-      {
         path: 'map-view',
         component: MapViewCmp,
         resolve: {
-          locations: LocationResolver,
           buildings: BuildingResolver
         }
       },

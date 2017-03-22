@@ -1,4 +1,12 @@
 {
+  "location": {
+    "area": "Room{{value}}",
+    "floor": "F{{value}}",
+    "building": "B{{value}}",
+    "partition": "P{{value}}",
+    "empty": "",
+    "position": "p{{value}}"
+  },
   "controls": {
     "submit": "Submit",
     "ok": "Ok",

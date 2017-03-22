@@ -10,6 +10,7 @@ import { AddAction } from '../../redux/location/actions';
 import { StateSelectors } from '../../redux/selectors';
 import { createSelector } from 'reselect';
 import { LocationState } from '../../redux/location/reducer';
+import { TranslateService } from '@ngx-translate/core';
 
 interface LocationResponse {
   location: string;
@@ -20,7 +21,11 @@ interface LocationResponse {
 @Injectable()
 export class LocationResolver implements Resolve<Observable<Location>> {
 
-  constructor(private locationService: LocationService, private store: Store<RootState>) {}
+  constructor(
+    private locationService: LocationService,
+    private store: Store<RootState>,
+    private translate: TranslateService
+  ) { }
 
   public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.locationService.fetchLocations()
@@ -42,11 +47,21 @@ export class LocationResolver implements Resolve<Observable<Location>> {
     let location: Location = {
       location: locationResponse.location,
       locationName: this.removeSymbol(
-        locationResponse.location.substr(parent ? parent.location.length - 1 : 0)),
+        locationResponse.location.substr(parent ?
+          ((!parent.locationLevel) ? parent.location.length - 1 : parent.location.length)
+          : 0)),
       subLocations: [],
       locationLevel: locationResponse.locationLevel,
-      parent: parent
+      parent: parent,
+      fullName: parent ? parent.fullName : ''
     };
+
+    this.translate.get('location.' + (location.locationLevel || 'empty'), {
+      value: location.locationName
+    }).subscribe((name) => {
+      location.fullName = (!parent || !parent.fullName) ?
+        `${name}` : parent.fullName + ` ${name}`;
+    });
 
     location.subLocations = Object.keys(locationResponse.subLocations)
       .map((key) => {

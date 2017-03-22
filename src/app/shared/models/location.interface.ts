@@ -5,5 +5,6 @@ export interface Location {
   locationName: string
   locationLevel: string;
   parent: Location;
+  fullName: string;
   subLocations: Location[];
 }
