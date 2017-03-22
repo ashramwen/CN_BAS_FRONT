@@ -1,0 +1,18 @@
+<div class="device-detail">
+  <table>
+    <thead>
+      <th>device ID</th>
+      <th>device location</th>
+      <th>connectivity</th>
+      <th>lastest status</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ device.id }}</td>
+        <td>{{ device.vendorThingID }}</td>
+        <td>{{ device.connectivity }}</td>
+        <td>{{ device.status? device.status.Power:0 }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -5,7 +5,9 @@ const path = require('path');
 export class ConfigHelper {
 
   constructor(
-  ) { }
+  ) {
+    //
+  }
 
   /**
    * @desc build api url

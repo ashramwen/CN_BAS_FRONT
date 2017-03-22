@@ -1,0 +1,25 @@
+<div class="device-list">
+  <div class="search">
+  </div>
+  <div>
+    <div class="title">
+    </div>
+    <table>
+      <thead>
+        <th>device ID</th>
+        <th>device location</th>
+        <th>connectivity</th>
+        <th>lastest status</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of deviceList" (click)="deviceDetail(item)">
+          <td>{{ item.id }}</td>
+          <td>{{ item.vendorThingID }}</td>
+          <td>{{ item.connectivity }}</td>
+          <td>{{ item.status? item.status.Power:0 }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<router-outlet></router-outlet>

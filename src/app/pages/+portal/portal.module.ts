@@ -18,6 +18,8 @@ import {
 import { ConfirmModalModule } from '../../shared/components/confirm-modal/confirm-modal.module';
 import { MapViewCmp } from './map-view/map-view.component';
 import { BasMapModule } from '../../shared/components/bas-map/bas-map.module';
+import { DeviceListCmp } from './device-list/device-list.component';
+import { DeviceDetailCmp } from './device-list/device-detail/device-detail.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { BasMapModule } from '../../shared/components/bas-map/bas-map.module';
     UserInfoCmp,
     PasswordChangeCmp,
     MapViewCmp,
-    LAYOUT_CMP
+    LAYOUT_CMP,
+    DeviceListCmp,
+    DeviceDetailCmp
   ],
   imports: [
     TranslateModule,
