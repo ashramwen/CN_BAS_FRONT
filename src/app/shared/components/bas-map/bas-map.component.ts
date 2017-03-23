@@ -30,6 +30,7 @@ import 'leaflet-compass/dist/leaflet-compass.min.js';
 import { LayerSelector } from './providers/layer-selector.service';
 import { RootState } from '../../redux/index';
 import { StateSelectors } from '../../redux/selectors';
+import { StateService } from './providers/state.service';
 
 @Component({
   selector: 'bas-map',
@@ -38,33 +39,36 @@ import { StateSelectors } from '../../redux/selectors';
     './bas-map.component.scss'
   ],
   encapsulation: ViewEncapsulation.None,
-  providers: [LayerControl, LayerSelector],
+  providers: [LayerControl, LayerSelector, StateService],
 })
 export class BasMap implements AfterViewInit, OnInit {
 
   @ViewChild('mapTarget')
   public mapTarget: ElementRef;
-  @Input()
-  public geoData: Building[];
-  @Input()
-  public locationTree: Location;
   @ViewChild('sidenav')
   public sidenav: MdSidenav;
 
-  private mapReady: boolean = false;
   private map: L.Map;
-  private featureLayers: L.Polygon[] = [];
-  private currentLocation: Location;
-  private mapState: EventEmitter<boolean> = new EventEmitter();
   private backButtonControl: L.Control;
   private selectionButtonControl: L.Control;
-  private selectionMode: boolean = false;
 
   public get selectedLocations() {
     return this.layerSelector.selectedLocations;
   }
 
+  /**
+   * @description back button is visible or not
+   */
+  public get backButtonIsVisible(): boolean {
+    return (this.myState.currentLocation.locationLevel === 'area'
+      || this.myState.currentLocation.locationLevel === 'floor'
+      || this.myState.currentLocation.locationLevel === 'partition'
+      || this.myState.currentLocation.locationLevel === 'site')
+      && !this.myState.selectionMode;
+  }
+
   constructor(
+    private myState: StateService,
     private layerControl: LayerControl,
     private layerSelector: LayerSelector,
     private zone: NgZone,
@@ -72,13 +76,23 @@ export class BasMap implements AfterViewInit, OnInit {
   ) { }
 
   public ngOnInit() {
-    this.store.select(StateSelectors.location)
-      .subscribe((locationState) => {
-        this.locationTree = locationState.locations;
-      });
-    this.layerControl.locationChangeEvent.subscribe((location) => {
-      this.currentLocation = location;
+    this.myState.onCurrentLocationChange.subscribe((location) => {
       this.onLocationChange();
+    });
+    this.myState.onLayerLoad.subscribe(() => {
+      this.layerControl.init();
+    });
+    this.myState.onSelectionModeChange.subscribe(() => {
+      this.layerSelector.clear();
+      if (this.myState.selectionMode) {
+        this.sidenav.open().then(() => {
+          this.resizeMap();
+        });
+      } else {
+        this.sidenav.close().then(() => {
+          this.resizeMap();
+        });
+      }
     });
   }
 
@@ -86,12 +100,13 @@ export class BasMap implements AfterViewInit, OnInit {
     this.initMap();
   }
 
-  public init(geoData: Building[]) {
-    this.geoData = geoData;
-    this.currentLocation = this.locationTree;
-    this.mapState.subscribe(() => {
-      this.loadBuildingFeatures();
-      this.layerControl.init(this.geoData, this.locationTree, this.featureLayers);
+  public init(geoData: Building[], locationTree: Location) {
+    this.myState.init(locationTree, geoData);
+    this.myState.onMapReady.subscribe((state) => {
+      if (!state) return;
+      let layers = this.loadBuildingFeatures();
+      this.myState.loadLayer(layers);
+      
       let bounds = this.findBounds();
       let mapBounds
         = new L.LatLngBounds([
@@ -102,7 +117,6 @@ export class BasMap implements AfterViewInit, OnInit {
           bounds.right + 0.001
         ]);
       this.map.setMaxBounds(mapBounds);
-      this.updateView();
     });
   }
 
@@ -133,19 +147,7 @@ export class BasMap implements AfterViewInit, OnInit {
       this.layerControl.goBack();
     });
     this.map.on('selection-mode-change', (event) => {
-      this.zone.run(() => {
-        this.selectionMode = event['state'];
-        this.layerSelector.clear();
-        if (this.selectionMode) {
-          this.sidenav.open().then(() => {
-            this.resizeMap();
-          });
-        } else {
-          this.sidenav.close().then(() => {
-            this.resizeMap();
-          });
-        }
-      });
+      this.myState.setSelectionMode(event['state']);
     });
 
     L.tileLayer(this.tileUrl, {
@@ -153,24 +155,26 @@ export class BasMap implements AfterViewInit, OnInit {
       attribution: '',
       id: 'mapbox.streets'
     }).addTo(this.map);
-    this.mapReady = true;
-    this.mapState.next(true);
+    this.myState.setMapState(true);
   }
 
   private loadBuildingFeatures() {
-    this.featureLayers = this.geoData
+    let featureLayers = this.myState.geoData
       .reduce((s: AreaFeature[], d) => {
         return s.concat(d.data);
       }, [])
       .map((l) => this.initFeature(l));
-    this.featureLayers.forEach((f) => {
+    
+    featureLayers.forEach((f) => {
       f.addTo(this.map);
     });
+
+    return featureLayers;
   }
 
   private onLayerClick(feature: L.Polygon) {
     let locationID = (<AreaFeature> feature.feature).properties.tag;
-    if (this.selectionMode) {
+    if (this.myState.selectionMode) {
       this.layerSelector.toggleLayer(feature);
     } else {
       this.layerControl.setLocation(locationID);
@@ -178,11 +182,11 @@ export class BasMap implements AfterViewInit, OnInit {
   }
 
   private onLocationChange() {
-    if (!this.currentLocation) {
+    if (!this.myState.currentLocation) {
       return;
     }
     if (this.backButtonControl) {
-      if (this.layerControl.backButtonIsVisible) {
+      if (this.backButtonIsVisible) {
         this.map.addControl(this.backButtonControl);
       } else {
         this.map.removeControl(this.backButtonControl);
@@ -222,10 +226,10 @@ export class BasMap implements AfterViewInit, OnInit {
   }
 
   private findZoom() {
-    if (!this.currentLocation) {
+    if (!this.myState.currentLocation) {
       return 18;
     }
-    switch (this.currentLocation.locationLevel) {
+    switch (this.myState.currentLocation.locationLevel) {
       case 'floor':
         return 19;
       case 'partition':
@@ -244,8 +248,8 @@ export class BasMap implements AfterViewInit, OnInit {
     let top = null;
     let bottom = null;
 
-    this.currentLocation.subLocations.forEach((l) => {
-      let child = this.featureLayers
+    this.myState.currentLocation.subLocations.forEach((l) => {
+      let child = this.myState.layers
         .find((f) => (<AreaFeature> f.feature).properties.tag === l.location);
       if (!child) {
         return;
@@ -274,8 +278,8 @@ export class BasMap implements AfterViewInit, OnInit {
 
     // no child layer found
     if (left === null) {
-      let layer = this.featureLayers.find((f) => {
-        return (<AreaFeature> f.feature).properties.tag === this.currentLocation.location;
+      let layer = this.myState.layers.find((f) => {
+        return (<AreaFeature> f.feature).properties.tag === this.myState.currentLocation.location;
       });
       let bounds = layer.getBounds();
       left = bounds.getWest();

@@ -38,6 +38,7 @@ svg{
     }
     &.selected{
       fill: green;
+      opacity: 0.8 !important;
     }
     &.hide{
       display: none;

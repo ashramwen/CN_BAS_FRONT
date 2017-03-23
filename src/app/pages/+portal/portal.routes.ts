@@ -21,11 +21,6 @@ export const routes = [
           buildings: BuildingResolver
         }
       },
-      {
-        path: '',
-        redirectTo: 'landing',
-        pathMatch: 'prefix',
-      },
     ]
   },
 ];

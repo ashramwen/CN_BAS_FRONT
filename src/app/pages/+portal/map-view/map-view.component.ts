@@ -32,7 +32,12 @@ export class MapViewCmp implements OnInit {
   ) { }
 
   public ngOnInit() {
-    let buildings = this.route.snapshot.data['buildings'];
-    this.map.init(buildings);
+
+    this.store.select(StateSelectors.location)
+      .subscribe((locationState) => {
+        let buildings = this.route.snapshot.data['buildings'];
+        let locationTree = locationState.locations;
+        this.map.init(buildings, locationTree);
+      });
   }
 }

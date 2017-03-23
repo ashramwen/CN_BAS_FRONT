@@ -1,4 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { StateService } from '../../providers/state.service';
 
 @Component({
   selector: 'bm-device-picker',
@@ -11,6 +12,6 @@ export class DevicePickerCmp {
   @Input() locations: Location[];  
   
   constructor(
-
+    private myState: StateService
   ) { }
 }
