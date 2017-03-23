@@ -1,5 +1,6 @@
 import { ConfigHelper } from './helpers/config-helper';
 import { DeviceService } from './device.service';
+import { EsQueryService } from './es-query.service';
 import { GUARD_SERVICES } from './guards/index';
 import { HELPER_SERVICES } from './helpers/index';
 import { LocationService } from './location.service';
@@ -17,6 +18,7 @@ export const SHARED_PROVIDERS = [
   LocationService,
   MapService,
   DeviceService,
+  EsQueryService,
 
   // Route Guard services
   ...GUARD_SERVICES,

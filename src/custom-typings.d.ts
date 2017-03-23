@@ -64,6 +64,7 @@ declare var BASE_CONFIG: {
     siteUrl: string;
     kiiAppID: string;
     thirdPartyAPIUrl: string;
+    esUrl: string;
 };
 declare var HMR: boolean;
 declare var System: SystemJS;

@@ -27,7 +27,8 @@ const BASE_CONFIG = process.env.BASE_CONFIG = {
   "wsUrl": "ws://114.215.196.178:8080/beehive-portal/websocket/stomp",
   "siteUrl": "http://114.215.196.178:8080/beehive-portal",
   "kiiAppID": "192b49ce",
-  "thirdPartyAPIUrl": "http://114.215.196.178:8081/3rdpartyapiserver/app/api_inquiry/apilist.html?vendor=Beehive"
+  "thirdPartyAPIUrl": "http://114.215.196.178:8081/3rdpartyapiserver/app/api_inquiry/apilist.html?vendor=Beehive",
+  "esUrl":"http://121.199.7.69:9200/"
 };
 const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   host: HOST,
