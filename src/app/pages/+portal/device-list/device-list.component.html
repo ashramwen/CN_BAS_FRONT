@@ -6,13 +6,13 @@
     </div>
     <table>
       <thead>
-        <th>device ID</th>
-        <th>device location</th>
-        <th>connectivity</th>
-        <th>lastest status</th>
+        <th>{{'DeviceList.DeviceID' | translate}}</th>
+        <th>{{'DeviceList.Location' | translate}}</th>
+        <th>{{'DeviceList.Connectivity' | translate}}</th>
+        <th>{{'DeviceList.LastestStatus' | translate}}</th>
       </thead>
       <tbody>
-        <tr *ngFor="let item of deviceList" (click)="deviceDetail(item)">
+        <tr *ngFor="let item of lightings$" (click)="deviceDetail(item)">
           <td>{{ item.id }}</td>
           <td>{{ item.vendorThingID }}</td>
           <td>{{ item.connectivity }}</td>

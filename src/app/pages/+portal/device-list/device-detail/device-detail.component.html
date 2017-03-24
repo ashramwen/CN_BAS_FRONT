@@ -1,18 +1,73 @@
 <div class="device-detail">
+
   <table>
     <thead>
-      <th>device ID</th>
-      <th>device location</th>
-      <th>connectivity</th>
-      <th>lastest status</th>
+      <th>{{'DeviceList.DeviceID' | translate}}</th>
+      <th>{{'DeviceList.Location' | translate}}</th>
+      <th>{{'DeviceList.Connectivity' | translate}}</th>
+      <th>{{'DeviceList.LastestStatus' | translate}}</th>
     </thead>
     <tbody>
       <tr>
-        <td>{{ device.id }}</td>
-        <td>{{ device.vendorThingID }}</td>
-        <td>{{ device.connectivity }}</td>
-        <td>{{ device.status? device.status.Power:0 }}</td>
+        <td>{{ Lighting$.id }}</td>
+        <td>{{ Lighting$.vendorThingID }}</td>
+        <td>{{ Lighting$.connectivity }}</td>
+        <td>{{ Lighting$.status? Lighting$.status.Power:0 }}</td>
       </tr>
     </tbody>
   </table>
+
+  <table>
+    <thead>
+      <th>Profile ID</th>
+      <th>Profile Name</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <md-tab-group>
+    <md-tab (click)="getCommandHistory()" label="{{'DeviceList.DeviceDetail.CommandHistory' | translate}}">
+      <table>
+        <thead>
+          <th>action</th>
+          <th>state</th>
+          <th>time</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </md-tab>
+    <md-tab (click)="getStateHistory()" label="{{'DeviceList.DeviceDetail.StateHistory' | translate}}">
+      <table>
+        <thead>
+          <th>action</th>
+          <th>state</th>
+          <th>time</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </md-tab>
+  </md-tab-group>
+  <!--<div>
+    <ul>
+      <li >{{"DeviceList.DeviceDetail.CommandHistory" | translate}}</li>
+      <li >{{"DeviceList.DeviceDetail.StateHistory" | translate}}</li>
+    </ul>
+  </div>-->
 </div>

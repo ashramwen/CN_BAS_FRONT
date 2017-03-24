@@ -25,5 +25,15 @@
       "newPasswordRequired": "New Password cannot be empty.",
       "passwordConfirm": "New Password not match!"
     }
+  },
+  "DeviceList": {
+    "DeviceID": "Device ID",
+    "Location": "Location",
+    "Connectivity": "Connectivity",
+    "LastestStatus": "Lastest Status",
+    "DeviceDetail": {
+      "CommandHistory": "Command History",
+      "StateHistory": "State History"
+    }
   }
 }
