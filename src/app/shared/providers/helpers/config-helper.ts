@@ -3,7 +3,6 @@ const path = require('path');
 
 @Injectable()
 export class ConfigHelper {
-
   /**
    * @desc build api url
    * @param apiPath

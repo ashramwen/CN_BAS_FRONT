@@ -27,7 +27,8 @@ const BASE_CONFIG = process.env.BASE_CONFIG = {
   "wsUrl": "ws://114.215.178.24:8080/beehive-portal/websocket/stomp",
   "siteUrl": "http://114.215.178.24:8080/beehive-portal",
   "kiiAppID": "493e83c9",
-  "thirdPartyAPIUrl": "http://114.215.178.24:9081/index.html"
+  "thirdPartyAPIUrl": "http://114.215.178.24:9081/index.html",
+  "esUrl":"http://121.199.7.69:9200/"
 };
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;

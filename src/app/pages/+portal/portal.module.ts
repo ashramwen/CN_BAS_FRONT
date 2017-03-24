@@ -1,22 +1,26 @@
-import { NgModule } from '@angular/core';
-import { PortalCmp } from './portal.component';
-import { MaterialModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { routes } from './portal.routes';
-import { LandingCmp } from './landing/landing.component';
+import { AppSharedModule } from '../../shared/shared.module';
+import { BasMapModule } from '../../shared/components/bas-map/bas-map.module';
 import { CommonModule } from '@angular/common';
+import { ConfirmModalModule } from '../../shared/components/confirm-modal/confirm-modal.module';
+import { DeviceDetailCmp } from './device-list/device-detail/device-detail.component';
+import { DeviceListCmp } from './device-list/device-list.component';
+import {
+  ErrorControllerModule,
+} from '../../shared/components/error-controller/error-controller.module';
 import { LAYOUT_CMP } from './components/index';
+import { LandingCmp } from './landing/landing.component';
+import { LandingService } from './landing/landing.service';
+import { LocationCmp } from './location/location.component';
+import { MapViewCmp } from './map-view/map-view.component';
+import { MaterialModule } from '@angular/material';
+import { NgModule } from '@angular/core';
+import { PasswordChangeCmp } from './user-info.ts/password-change/password-change.component';
+import { PortalCmp } from './portal.component';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { UserInfoCmp } from './user-info.ts/user-info.component';
-import { PasswordChangeCmp } from './user-info.ts/password-change/password-change.component';
-import { AppSharedModule } from '../../shared/shared.module';
-import {
-  ErrorControllerModule
-} from '../../shared/components/error-controller/error-controller.module';
-import { ConfirmModalModule } from '../../shared/components/confirm-modal/confirm-modal.module';
-import { MapViewCmp } from './map-view/map-view.component';
-import { BasMapModule } from '../../shared/components/bas-map/bas-map.module';
+import { routes } from './portal.routes';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,9 @@ import { BasMapModule } from '../../shared/components/bas-map/bas-map.module';
     UserInfoCmp,
     PasswordChangeCmp,
     MapViewCmp,
-    LAYOUT_CMP
+    LAYOUT_CMP,
+    DeviceListCmp,
+    DeviceDetailCmp
   ],
   imports: [
     TranslateModule,
@@ -40,7 +46,7 @@ import { BasMapModule } from '../../shared/components/bas-map/bas-map.module';
   ],
   entryComponents: [PasswordChangeCmp],
   exports: [PortalCmp],
-  providers: []
+  providers: [LandingService]
 })
 export class PortalModule {
 

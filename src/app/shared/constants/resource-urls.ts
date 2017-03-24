@@ -1,5 +1,6 @@
 export const RESOURCE_URLS = {
   AUTH: '/oauth2',
+  ES: '/es',
   LOCATION_TAGS: '/locationTags',
   ONBOARDING: '/onboardinghelper',
   PERMISSION: '/permission',
@@ -15,6 +16,5 @@ export const RESOURCE_URLS = {
   USER: '/users',
   USER_GROUP: '/usergroup',
   USER_MANAGER: '/usermanager',
-  USER_SYNC: '/usersync',
-  ES: '/es'
+  USER_SYNC: '/usersync'
 };
