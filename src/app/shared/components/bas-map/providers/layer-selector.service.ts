@@ -29,7 +29,7 @@ export class LayerSelector {
   public selectLayer(layer: L.Polygon) {
     this._selectedLayers.push(layer);
     this.highlight(layer);
-    let location = (<AreaFeature>layer.feature).properties.tag;
+    let location = (<AreaFeature> layer.feature).properties.tag;
     this._selectedLocation.push(MapUtils.findLocation(location, this.myState.locationTree));
   }
 

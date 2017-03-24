@@ -7,6 +7,11 @@ import { LocationWithPath } from '../models/location-width-path.interface';
 
 @Injectable()
 export class StateService {
+  public onLayerLoad: Subject<L.Polygon[]>;
+  public onMapReady: Subject<boolean>;
+  public onSelectionModeChange: Subject<boolean>;
+  public onCurrentLocationChange: Subject<LocationWithPath>;
+
   private _selectionMode: boolean = false;
   private _currentLocation: Location;
   private _locationTree: Location;
@@ -14,10 +19,12 @@ export class StateService {
   private _mapState: boolean = false;
   private _layers: L.Polygon[];
 
-  public onLayerLoad: Subject<L.Polygon[]> = new Subject<L.Polygon[]>();
-  public onMapReady: Subject<boolean> = new Subject<boolean>();
-  public onSelectionModeChange: Subject<boolean> = new Subject<boolean>();
-  public onCurrentLocationChange: Subject<LocationWithPath> = new Subject<LocationWithPath>();
+  constructor() {
+    this.onLayerLoad = new Subject<L.Polygon[]>();
+    this.onMapReady = new Subject<boolean>();
+    this.onSelectionModeChange = new Subject<boolean>();
+    this.onCurrentLocationChange = new Subject<LocationWithPath>();
+  }
 
   public init(
     locationTree: Location,

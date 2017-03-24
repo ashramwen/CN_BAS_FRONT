@@ -9,8 +9,7 @@ import { StateService } from '../../providers/state.service';
 })
 export class DevicePickerCmp {
 
-  @Input() locations: Location[];  
-  
+  @Input() public locations: Location[];
   constructor(
     private myState: StateService
   ) { }

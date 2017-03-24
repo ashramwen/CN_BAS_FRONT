@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Location } from '../../../../models/location.interface';
 
-export interface DeviceCheck{
+export interface DeviceCheck {
   deviceID: string;
-  checked: boolean
+  checked: boolean;
 }
 
 @Component({
@@ -32,14 +32,12 @@ export interface DeviceCheck{
 export class LocationCardCmp {
   @Input() public location: Location;
 
-  constructor(
-    
-  ){}
+  public checked: boolean;
 
   public deviceList: DeviceCheck[] = [{
     deviceID: '0807W-W01001',
     checked: false
-  },{
+  }, {
     deviceID: '0807W-W01002',
     checked: false
   }];

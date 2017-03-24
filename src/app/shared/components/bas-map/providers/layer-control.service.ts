@@ -15,7 +15,7 @@ export class LayerControl {
 
   constructor(
     private myState: StateService
-  ){}
+  ) { }
 
   public init() {
     this.myState.onCurrentLocationChange.subscribe((result) => {
@@ -49,7 +49,6 @@ export class LayerControl {
     }
 
     this.myState.setCurrentLocation(result.location, result.path);
-    
   }
 
   public goBack() {
@@ -110,7 +109,8 @@ export class LayerControl {
     //  and fade other partitions in the same level
     if (!this.myState.currentLocation.locationLevel) {
       this.myState.layers.forEach((l) => {
-        if ((<AreaFeature> l.feature).properties.parentID === this.myState.currentLocation.location) {
+        if ((<AreaFeature> l.feature).properties.parentID
+          === this.myState.currentLocation.location) {
           this.hightlightLayer(l);
         } else {
           this.hideLayer(l);
@@ -129,10 +129,12 @@ export class LayerControl {
       });
     } else if (this.myState.currentLocation.locationLevel === 'partition') {
       this.myState.layers.forEach((l) => {
-        if ((<AreaFeature> l.feature).properties.parentID === this.myState.currentLocation.location) {
+        if ((<AreaFeature> l.feature).properties.parentID
+            === this.myState.currentLocation.location) {
           this.hightlightLayer(l);
         } else if ((<AreaFeature> l.feature).properties.role === 'partition'
-          && (<AreaFeature> l.feature).properties.parentID === this.myState.currentLocation.parent.location
+          && (<AreaFeature> l.feature).properties.parentID
+          === this.myState.currentLocation.parent.location
         ) {
           if ((<AreaFeature> l.feature).properties.tag === this.myState.currentLocation.location) {
             this.fadeAndDisableLayer(l);

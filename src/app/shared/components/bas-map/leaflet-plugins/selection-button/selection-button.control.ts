@@ -3,7 +3,7 @@ import * as template from './selection-button.control.html';
 
 export const SelectionButtonControl: typeof L.Control = L.Control.extend({
   onAdd: function (map: L.Map) {
-    let container: HTMLDivElement = <HTMLDivElement>L.DomUtil.create('div');
+    let container: HTMLDivElement = <HTMLDivElement> L.DomUtil.create('div');
     let state: boolean = false;
     container.innerHTML = template;
     let myButton = container.querySelector('button.bm-selection-button');

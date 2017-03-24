@@ -103,10 +103,11 @@ export class BasMap implements AfterViewInit, OnInit {
   public init(geoData: Building[], locationTree: Location) {
     this.myState.init(locationTree, geoData);
     this.myState.onMapReady.subscribe((state) => {
-      if (!state) return;
+      if (!state) {
+        return;
+      }
       let layers = this.loadBuildingFeatures();
       this.myState.loadLayer(layers);
-      
       let bounds = this.findBounds();
       let mapBounds
         = new L.LatLngBounds([
@@ -125,7 +126,7 @@ export class BasMap implements AfterViewInit, OnInit {
       animate: true
     };
     this.map.invalidateSize(opt);
-  }  
+  }
 
   private initMap() {
     this.map = L.map(this.mapTarget.nativeElement, {
@@ -164,7 +165,6 @@ export class BasMap implements AfterViewInit, OnInit {
         return s.concat(d.data);
       }, [])
       .map((l) => this.initFeature(l));
-    
     featureLayers.forEach((f) => {
       f.addTo(this.map);
     });
@@ -204,7 +204,6 @@ export class BasMap implements AfterViewInit, OnInit {
       .on('click', (event) => {
         this.onLayerClick(feature);
       });
-    
     feature.feature = d;
     return feature;
   }
