@@ -21,30 +21,11 @@ export class EsQueryService {
   }
 
   public queryLight(
-    option: ESQueryOption
+    esQueryOption: ESQueryOption
   ) {
     let esObject = new ESObject();
+    esObject.setOption(esQueryOption);
 
-    let must = new Must();
-    must.terms = new Terms();
-    must.terms['state.Power'] = [option.power ? 1 : 0];
-    esObject.query.filtered.filter.bool.must.push(must);
-
-    must = new Must();
-    must.terms = new Terms();
-    must.terms['state.target'] = option.target;
-    esObject.query.filtered.filter.bool.must.push(must);
-
-    must = new Must();
-    must.range = new Range(option.startTime, option.endTime);
-    esObject.query.filtered.filter.bool.must.push(must);
-
-    esObject.aggs.byTime.date_histogram.interval = option.interval;
-
-    if (option.groupByTarget) {
-      esObject.aggs.byTarget = new ByTarget();
-    }
-
-    // console.log('es', JSON.stringify(esObject));
+    console.log('es', JSON.stringify(esObject));
   }
 }

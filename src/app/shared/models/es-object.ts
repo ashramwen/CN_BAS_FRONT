@@ -102,6 +102,12 @@ export class Aggs {
   }
 }
 
+/**
+ * ES Query Object
+ *
+ * @export
+ * @class ESObject
+ */
 export class ESObject {
   public aggs: Aggs;
   public query: Query;
@@ -111,6 +117,77 @@ export class ESObject {
     this.aggs = new Aggs();
     this.query = new Query();
     this.size = 0;
+  }
+
+  /**
+   * set power query option
+   *
+   * @param {boolean} power
+   *
+   * @memberOf ESObject
+   */
+  public setPower(power: boolean) {
+    let must = new Must();
+    must.terms = new Terms();
+    must.terms['state.Power'] = [power ? 1 : 0];
+    this.query.filtered.filter.bool.must.push(must);
+  }
+
+  /**
+   * set query targets
+   *
+   * @param {string[]} targets(kiiThingID)
+   *
+   * @memberOf ESObject
+   */
+  public setTarget(targets: string[]) {
+    let must = new Must();
+    must.terms = new Terms();
+    must.terms['state.target'] = targets;
+    this.query.filtered.filter.bool.must.push(must);
+  }
+
+  /**
+   * set query time range and interval
+   *
+   * @param {number} startTime
+   * @param {number} endTime
+   * @param {string} interval
+   *
+   * @memberOf ESObject
+   */
+  public setTimeRange(startTime: number, endTime: number, interval: string) {
+    let must = new Must();
+    must.range = new Range(startTime, endTime);
+    this.query.filtered.filter.bool.must.push(must);
+    this.aggs.byTime.date_histogram.interval = interval;
+  }
+
+  /**
+   * let the query is grouped by target
+   *
+   *
+   * @memberOf ESObject
+   */
+  public setGroupByTarget() {
+    this.aggs.byTarget = new ByTarget();
+  }
+
+  /**
+   * set query option
+   *
+   * @param {ESQueryOption} esQueryOption
+   *
+   * @memberOf ESObject
+   */
+  public setOption(esQueryOption: ESQueryOption) {
+    this.setPower(esQueryOption.power);
+    this.setTarget(esQueryOption.target);
+    this.setTimeRange(esQueryOption.startTime, esQueryOption.endTime, esQueryOption.interval);
+
+    if (esQueryOption.groupByTarget) {
+      this.setGroupByTarget();
+    }
   }
 }
 
