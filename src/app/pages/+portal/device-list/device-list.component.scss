@@ -1,14 +1,25 @@
 .device-list {
   margin-top: 30px;
+  margin: 0 auto;
+  width: 1000px;
   table {
-    margin: 0 auto;
-    width: 1000px;
+    width: 100%;
+    margin-top: 30px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+    thead {
+      border-bottom: 1px solid rgba(0, 0, 0, .12);
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: rgba(0, 0, 0, 0.117647);
+    }
     th {
-      font-size: 20px;
+      font-size: 16px;
+      padding: .85rem 1.2rem;
     }
     td {
-      font-size: 18px;
+      font-size: 14px;
       text-align: center;
+      padding: .85rem 1.2rem;
     }
   }
 }

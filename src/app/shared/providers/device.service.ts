@@ -90,7 +90,7 @@ export class DeviceService {
    *
    * @memberOf DeviceService
    */
-  public fetchCommendHistoryByGlobalThingID(globalThingID: string): Observable<Response> {
+  public fetchCommandHistoryByGlobalThingID(globalThingID: Number): Observable<Response> {
     let headers: Headers;
     let url = this.configHelper.buildUrl(RESOURCE_URLS.THING_IF, ['command', 'list']);
     let requestOptions = {
