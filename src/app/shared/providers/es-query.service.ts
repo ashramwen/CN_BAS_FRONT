@@ -1,6 +1,7 @@
 import { ByTarget, ESObject, ESQueryOption, Must, Range, Terms } from './../models/es-object';
 import { Headers, Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 
+import { ESResponse } from './../models/es-response.interface';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
@@ -15,19 +16,18 @@ export class EsQueryService {
   ) {
     this.url = `${BASE_CONFIG.esUrl}${BASE_CONFIG.kiiAppID}/_search?pretty`;
     let headers = new Headers({ Authorization: 'Bearer super_token' });
-    // this.options = new RequestOptions({ headers: headers });
+    this.options = new RequestOptions({ headers: headers });
   }
 
   public query(esObject: ESObject): Observable<any> {
-    console.log('queryLight');
-    return this.http.post(this.url, esObject)
-      .map((r: Response) => r.json())
+    return this.http.post(this.url, esObject, this.options)
+      .map((r: Response) => r.json() as ESResponse)
       .catch(this.handleError);
   }
 
   public queryLight(
     esQueryOption: ESQueryOption
-  ): Observable<any> {
+  ): Observable<ESResponse> {
     let esObject = new ESObject();
     esObject.setOption(esQueryOption);
 

@@ -4,25 +4,26 @@
 import {
   Component,
   OnInit,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
+import { HideLoadingAction, ShowLoadingAction } from './shared/redux/layout/actions';
 import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
   Router,
   Event as RouterEvent,
-  NavigationStart,
-  NavigationEnd,
-  NavigationCancel,
-  NavigationError
 } from '@angular/router';
+
 import { AppState } from './app.service';
-import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { RootState } from './shared/redux/index';
-import { createSelector } from 'reselect';
-import { StateSelectors } from './shared/redux/selectors';
 import { LayoutState } from './shared/redux/layout/reducer';
-import { ShowLoadingAction, HideLoadingAction } from './shared/redux/layout/actions';
+import { Observable } from 'rxjs';
+import { RootState } from './shared/redux/index';
+import { StateSelectors } from './shared/redux/selectors';
+import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
+import { createSelector } from 'reselect';
 
 /*
  * App Component
@@ -50,7 +51,7 @@ export class AppCmp implements OnInit {
     translate.setDefaultLang('en');
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
-    translate.use('en');
+    // translate.use('en');
 
     this.loading$ = store.select(createSelector(
       StateSelectors.layout,

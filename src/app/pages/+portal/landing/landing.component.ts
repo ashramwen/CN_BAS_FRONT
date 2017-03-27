@@ -5,6 +5,7 @@ import { Status, Thing } from './../../../shared/models/thing.interface';
 
 import { ActivatedRoute } from '@angular/router';
 import { ESQueryOption } from './../../../shared/models/es-object';
+import { ESResponse } from './../../../shared/models/es-response.interface';
 import { EsQueryService } from './../../../shared/providers/es-query.service';
 import { Observable } from 'rxjs';
 
@@ -33,7 +34,15 @@ export class LandingCmp implements OnInit {
    * @memberOf LandingCmp
    */
   public numberOfConnected: number;
+
+  /**
+   * array of thingID
+   *
+   * @type {string[]}
+   * @memberOf LandingCmp
+   */
   public thingIDs: string[];
+  public punchData: number[];
 
   private light$: Observable<any>;
 
@@ -51,25 +60,18 @@ export class LandingCmp implements OnInit {
     this.lights = this.route.snapshot.data['lightings'];
     this.parseData();
 
-    let option = {
-      startTime: 1490025600000,
-      endTime: 1490111999999,
-      groupByTarget: true,
-      interval: '1d',
+    this.light$ = this.esQuery.queryLight({
+      startTime: moment().day(-7).startOf('day').valueOf(),
+      endTime: moment().day(-1).endOf('day').valueOf(),
+      groupByTarget: false,
+      interval: '1h',
       power: true,
       target: this.thingIDs
-    };
+    });
 
-    this.light$ = this.esQuery.queryLight(option);
-
-    // this.light$ = this.esQuery.queryLight({
-    //   startTime: moment().day(-7).startOf('day').valueOf(),
-    //   endTime: moment().day(-1).endOf('day').valueOf(),
-    //   groupByTarget: false,
-    //   interval: '1d',
-    //   power: true,
-    //   target: this.thingIDs
-    // });
+    this.light$.subscribe((r: ESResponse) => {
+      this.punchData = r.aggregations.byTime.buckets.map((o) => o.doc_count);
+    });
   }
 
   private parseData() {

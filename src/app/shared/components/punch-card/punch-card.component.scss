@@ -1,0 +1,16 @@
+#punch-card {
+  width: 980px;
+  height: 520px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #333;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: 0.875em;
+}
