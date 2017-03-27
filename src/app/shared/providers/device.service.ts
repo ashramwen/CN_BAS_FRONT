@@ -7,12 +7,13 @@ import { Observable } from 'rxjs';
 import { RESOURCE_URLS } from '../constants/resource-urls';
 import { RequestHelper } from './helpers/request-helper';
 import { Thing } from './../models/thing.interface';
+import { AppUtils } from '../utils/app-utils';
 
 @Injectable()
 export class DeviceService {
 
   constructor(
-    private http: BeehiveClient,
+    private beehiveClient: BeehiveClient,
     private configHelper: ConfigHelper,
     private requestHelper: RequestHelper) { }
 
@@ -27,7 +28,7 @@ export class DeviceService {
   public fetchDevicesByType(type: string): Observable<Thing[]> {
     let url = this.configHelper.buildUrl(RESOURCE_URLS.TYPE, [type]);
     let requestOptions: RequestOptionsArgs = {};
-    return this.http.get(url, requestOptions).map((res: Response) => res.json());
+    return this.beehiveClient.get(url, requestOptions).map((res: Response) => res.json());
   }
 
   /**
@@ -53,7 +54,7 @@ export class DeviceService {
     let headers: Headers;
     let url = this.configHelper.buildUrl(RESOURCE_URLS.THING, ['vendorThingID', vendorThingID]);
     let requestOptions: RequestOptionsArgs = {};
-    return this.http.get(url, requestOptions).map((res) => res.json());
+    return this.beehiveClient.get(url, requestOptions).map((res) => res.json());
   }
 
   /**
@@ -71,14 +72,14 @@ export class DeviceService {
       dateField: 'state.date',
       orderField: 'state.date',
       startDate: 0,
-      endDate: this.today,
+      endDate: AppUtils.now(),
       from: 0,
       order: 'desc',
       size: 20,
       indexType: '192b49ce',
       vendorThingID: vendorThingID
     };
-    return this.http.post(url, requestOptions).map((res) => res.json());
+    return this.beehiveClient.post(url, requestOptions).map((res) => res.json());
   }
 
   /**
@@ -89,19 +90,14 @@ export class DeviceService {
    *
    * @memberOf DeviceService
    */
-  public fetchCommendHistoryByGlobalThingID(globalThingID: string): Observable<Response> {
+  public fetchCommandHistoryByGlobalThingID(globalThingID: Number): Observable<Response> {
     let headers: Headers;
     let url = this.configHelper.buildUrl(RESOURCE_URLS.THING_IF, ['command', 'list']);
-    let today = new Date().getTime();
     let requestOptions = {
       globalThingID: globalThingID,
       start: 0,
-      end: this.today
+      end: AppUtils.now()
     };
-    return this.http.post(url, requestOptions).map((res) => res.json());
-  }
-
-  private get today() {
-    return new Date().getTime();
+    return this.beehiveClient.post(url, requestOptions).map((res) => res.json());
   }
 }

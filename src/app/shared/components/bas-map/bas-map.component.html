@@ -1,3 +1,12 @@
 <div class="bas-map-container">
-  <div class="bas-map-target" #mapTarget></div>
+  <md-sidenav-container>
+    <md-sidenav #sidenav 
+      mode="side" 
+      align="end"
+    >
+      <bm-device-picker [locations]="selectedLocations || []"></bm-device-picker>
+    </md-sidenav>
+
+    <div class="bas-map-target" #mapTarget></div>
+  </md-sidenav-container>
 </div>

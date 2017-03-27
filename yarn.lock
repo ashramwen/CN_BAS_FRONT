@@ -3021,7 +3021,13 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-leaflet@^1.0.3:
+leaflet-compass@^1.4.1:
+  version "1.4.1"
+  resolved "http://registry.npm.taobao.org/leaflet-compass/download/leaflet-compass-1.4.1.tgz#d94081906aa415bbc8f9fe89b1fc1a5d7df08adc"
+  dependencies:
+    leaflet "*"
+
+leaflet@*, leaflet@^1.0.3:
   version "1.0.3"
   resolved "http://registry.npm.taobao.org/leaflet/download/leaflet-1.0.3.tgz#1f401b98b45c8192134c6c8d69686253805007c8"
 

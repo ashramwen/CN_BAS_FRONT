@@ -1,4 +1,12 @@
 {
+  "location": {
+    "area": "Room{{value}}",
+    "floor": "F{{value}}",
+    "building": "B{{value}}",
+    "partition": "P{{value}}",
+    "empty": "",
+    "position": "p{{value}}"
+  },
   "controls": {
     "submit": "Submit",
     "ok": "Ok",
@@ -24,6 +32,16 @@
       "passwordRequired": "Password cannot be empty.",
       "newPasswordRequired": "New Password cannot be empty.",
       "passwordConfirm": "New Password not match!"
+    }
+  },
+  "DeviceList": {
+    "DeviceID": "Device ID",
+    "Location": "Location",
+    "Connectivity": "Connectivity",
+    "LastestStatus": "Lastest Status",
+    "DeviceDetail": {
+      "CommandHistory": "Command History",
+      "StateHistory": "State History"
     }
   }
 }

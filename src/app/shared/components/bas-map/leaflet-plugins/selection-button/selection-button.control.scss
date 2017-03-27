@@ -1,4 +1,7 @@
-.bm-back-button{
+
+$active-color: red;
+
+.bm-selection-button{
   background: transparent;
   outline: none;
   margin: 0px;
@@ -14,6 +17,12 @@
   cursor: pointer;
   opacity: 0.7;
   transition: all 0.2s;
+  &.active{
+    border-color: $active-color;
+    .md-icon{
+      color: $active-color;
+    }
+  }
   &:hover{
     opacity: 1;
   }

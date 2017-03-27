@@ -1,5 +1,4 @@
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { AppSharedModule } from '../../shared/shared.module';
 import { BasMapModule } from '../../shared/components/bas-map/bas-map.module';
 import { CommonModule } from '@angular/common';
@@ -27,7 +26,6 @@ import { routes } from './portal.routes';
   declarations: [
     PortalCmp,
     LandingCmp,
-    LocationCmp,
     UserInfoCmp,
     PasswordChangeCmp,
     MapViewCmp,
