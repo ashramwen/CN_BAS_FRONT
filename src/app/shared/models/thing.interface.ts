@@ -18,7 +18,7 @@ export interface Thing {
 
 export interface Status {
   date: number;
-  Bri: number;
-  Power: number;
+  Bri?: number;
+  Power?: number;
   target: string;
 }
