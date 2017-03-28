@@ -8,6 +8,7 @@ import { MapService } from './map.service';
 import { RESOLVERS } from './resolvers/index';
 import { RequestHelper } from './helpers/request-helper';
 import { SessionService } from './session.service';
+import { StompService } from './stomp.service';
 
 export const SHARED_PROVIDERS = [
   // helpers
@@ -19,6 +20,7 @@ export const SHARED_PROVIDERS = [
   MapService,
   DeviceService,
   EsQueryService,
+  StompService,
 
   // Route Guard services
   ...GUARD_SERVICES,

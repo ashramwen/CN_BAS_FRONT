@@ -1,3 +1,4 @@
+import { ThingState } from './thing-state.interface';
 export interface Thing {
   id: number;
   createDate: number;
@@ -7,18 +8,11 @@ export interface Thing {
   vendorThingID: string;
   kiiAppID: string;
   type: string;
-  status?: Status;
+  status?: ThingState;
   fullKiiThingID: string;
   schemaName: string;
   schemaVersion: string;
   kiiThingID: string;
   tags?: any[];
   globalThingID: number;
-}
-
-export interface Status {
-  date: number;
-  Bri?: number;
-  Power?: number;
-  target: string;
 }

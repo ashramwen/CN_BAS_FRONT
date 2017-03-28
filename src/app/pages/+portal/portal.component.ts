@@ -1,19 +1,20 @@
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { createSelector } from 'reselect';
-import { MdDialog, MdDialogConfig } from '@angular/material';
-
-import { RootState } from '../../shared/redux/index';
-import { StateSelectors } from '../../shared/redux/selectors';
-import { LayoutState } from '../../shared/redux/layout/reducer';
-import { LocationCmp } from './location/location.component';
-import { GoUserInfoAction } from '../../shared/redux/layout/actions';
 import {
   HideSideNavAction,
   ShowSideNavAction,
-  ToggleSideNavAction
+  ToggleSideNavAction,
 } from '../../shared/redux/layout/actions';
+import { MdDialog, MdDialogConfig } from '@angular/material';
+
+import { GoUserInfoAction } from '../../shared/redux/layout/actions';
+import { LayoutState } from '../../shared/redux/layout/reducer';
+import { LocationCmp } from './location/location.component';
+import { Observable } from 'rxjs';
+import { RootState } from '../../shared/redux/index';
+import { StateSelectors } from '../../shared/redux/selectors';
+import { StompService } from './../../shared/providers/stomp.service';
+import { Store } from '@ngrx/store';
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'bas-portal',
@@ -29,7 +30,8 @@ export class PortalCmp {
 
   constructor(
     private store: Store<RootState>,
-    private dialog: MdDialog
+    private dialog: MdDialog,
+    private stomp: StompService
   ) {
     /**
      * Selectors can be applied with the `select` operator which passes the state
