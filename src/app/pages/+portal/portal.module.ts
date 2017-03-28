@@ -19,6 +19,7 @@ import { MaterialModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { PasswordChangeCmp } from './user-info.ts/password-change/password-change.component';
 import { PortalCmp } from './portal.component';
+import { PunchCardComponent } from './components/punch-card/punch-card.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { UserInfoCmp } from './user-info.ts/user-info.component';
@@ -33,7 +34,8 @@ import { routes } from './portal.routes';
     MapViewCmp,
     LAYOUT_CMP,
     DeviceListCmp,
-    DeviceDetailCmp
+    DeviceDetailCmp,
+    PunchCardComponent
   ],
   imports: [
     AppSharedModule,

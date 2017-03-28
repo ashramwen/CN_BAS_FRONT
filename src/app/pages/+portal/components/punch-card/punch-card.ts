@@ -17,7 +17,7 @@ export class PunchCard {
   private unitHeight;
   private unitSize;
   private unitWidth;
-  private width = 980;
+  private width = 1440;
   private x;
   private xAxis;
   private xticks = [

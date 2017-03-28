@@ -69,7 +69,7 @@ export class LandingCmp implements OnInit {
     this.light$ = this.esQuery.queryLight({
       startTime: moment().day(-7).startOf('day').valueOf(),
       endTime: moment().day(-1).endOf('day').valueOf(),
-      groupByTarget: false,
+      groupByTarget: true,
       interval: '1h',
       power: true,
       target: this.thingIDs
