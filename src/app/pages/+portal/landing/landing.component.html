@@ -1,35 +1,44 @@
-<h4>{{ 'Home.Welcome' | translate }}</h4>
+<div class="container">
+  <h4>{{ 'Home.Welcome' | translate }}</h4>
 
-<md-card class="card">
-  <md-card-content>
-    <md-grid-list cols="2" rowHeight="100px">
-      <md-grid-tile>
-        <div>
-          <md-card-title>{{ numberOfPowerOn }}</md-card-title>
-          <md-card-subtitle>Power On</md-card-subtitle>
-        </div>
-      </md-grid-tile>
-      <md-grid-tile>
-        <md-icon class="data">lightbulb_outline</md-icon>
-      </md-grid-tile>
-    </md-grid-list>
-  </md-card-content>
-</md-card>
+  <div fxLayout="row">
+    <div fxFlex>
+      <md-card class="card">
+        <md-card-content>
+          <md-grid-list cols="2" rowHeight="100px">
+            <md-grid-tile>
+              <div>
+                <md-card-title>{{ numberOfPowerOn }}</md-card-title>
+                <md-card-subtitle>Power On</md-card-subtitle>
+              </div>
+            </md-grid-tile>
+            <md-grid-tile>
+              <md-icon class="data">lightbulb_outline</md-icon>
+            </md-grid-tile>
+          </md-grid-list>
+        </md-card-content>
+      </md-card>
+    </div>
+    <div fxFlex>
+      <md-card class="card" fxFlex>
+        <md-card-content>
+          <md-grid-list cols="2" rowHeight="100px">
+            <md-grid-tile>
+              <div>
+                <md-card-title>{{ numberOfConnected }} / {{ thingIDs.length }}</md-card-title>
+                <md-card-subtitle>Connected</md-card-subtitle>
+              </div>
+            </md-grid-tile>
+            <md-grid-tile>
+              <md-icon class="data">lightbulb_outline</md-icon>
+            </md-grid-tile>
+          </md-grid-list>
+        </md-card-content>
+      </md-card>
+    </div>
 
-<md-card class="card">
-  <md-card-content>
-    <md-grid-list cols="2" rowHeight="100px">
-      <md-grid-tile>
-        <div>
-          <md-card-title>{{ numberOfConnected }} / {{ thingIDs.length }}</md-card-title>
-          <md-card-subtitle>Connected</md-card-subtitle>
-        </div>
-      </md-grid-tile>
-      <md-grid-tile>
-        <md-icon class="data">lightbulb_outline</md-icon>
-      </md-grid-tile>
-    </md-grid-list>
-  </md-card-content>
-</md-card>
-
-<punch-card [data]="punchData"></punch-card>
+    <div fxFlex></div>
+    <div fxFlex></div>
+  </div>
+  <punch-card [data]="punchData"></punch-card>
+</div>

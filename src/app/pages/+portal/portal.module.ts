@@ -9,6 +9,7 @@ import { DeviceListCmp } from './device-list/device-list.component';
 import {
   ErrorControllerModule,
 } from '../../shared/components/error-controller/error-controller.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { LAYOUT_CMP } from './components/index';
 import { LandingCmp } from './landing/landing.component';
 import { LandingService } from './landing/landing.service';
@@ -39,6 +40,7 @@ import { routes } from './portal.routes';
     TranslateModule,
     FormsModule,
     MaterialModule,
+    FlexLayoutModule.forRoot(),
     CommonModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
