@@ -40,5 +40,10 @@
     <div fxFlex></div>
     <div fxFlex></div>
   </div>
+  <div>
+    <md-list>
+      <md-list-item *ngFor="let thing of top10"> {{ thing.vendorThingID }} </md-list-item>
+    </md-list>
+  </div>
   <punch-card [data]="punchData"></punch-card>
 </div>

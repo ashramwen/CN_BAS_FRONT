@@ -1,18 +1,20 @@
 import * as moment from 'moment';
 
+import { Bucket, ESResponse } from './../../../shared/models/es-response.interface';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ESQueryOption, GroupType } from './../../../shared/models/es-object';
 import { Observable, Subject } from 'rxjs';
 
 import { ActivatedRoute } from '@angular/router';
-import { ESQueryOption } from './../../../shared/models/es-object';
-import { ESResponse } from './../../../shared/models/es-response.interface';
 import { EsQueryService } from './../../../shared/providers/es-query.service';
 import { Message } from 'stompjs';
 import { StompService } from './../../../shared/providers/stomp.service';
 import { StompThing } from './../../../shared/models/stomp-thing.interface';
 import { Thing } from './../../../shared/models/thing.interface';
 
-// five minutes
+/**
+ * five minutes
+ */
 const FIVE_MINUTES = 300000;
 
 @Component({
@@ -45,7 +47,20 @@ export class LandingCmp implements OnInit {
    * @memberOf LandingCmp
    */
   public thingIDs: string[];
+  /**
+   * punch data
+   *
+   * @type {number[]}
+   * @memberOf LandingCmp
+   */
   public punchData: number[];
+  /**
+   * top 10 of light usage
+   *
+   * @type {Bucket[]}
+   * @memberOf LandingCmp
+   */
+  public top10: Bucket[];
 
   private light$: Observable<any>;
 
@@ -79,19 +94,15 @@ export class LandingCmp implements OnInit {
     this.light$ = this.esQuery.queryLight({
       startTime: moment().day(-7).startOf('day').valueOf(),
       endTime: moment().day(-1).endOf('day').valueOf(),
-      groupByTarget: true,
-      interval: '1h',
       power: true,
-      target: this.thingIDs
+      target: this.thingIDs,
+      group: GroupType.Hour | GroupType.Day | GroupType.Target
     });
 
     this.light$.subscribe((r: ESResponse) => {
-      this.punchData = r.aggregations.byTime.buckets.map((o) => o.doc_count);
+      this.punchData = r.aggregations.byHour.buckets.map((o) => o.doc_count);
+      this.parseThings(r.aggregations.byTarget.buckets);
     });
-  }
-
-  private getMessage(message: StompThing) {
-    console.log(message);
   }
 
   private parseData() {
@@ -113,5 +124,16 @@ export class LandingCmp implements OnInit {
     if (!thing.status || !thing.status.date) { return; }
     if (thing.status.date + FIVE_MINUTES < timeStamp) { return; }
     this.numberOfConnected++;
+  }
+
+  private parseThings(buckets: Bucket[]) {
+    this.top10 = buckets.map((bucket: Bucket) => {
+      bucket.vendorThingID = this.findThing(bucket.key).vendorThingID;
+      return bucket;
+    });
+  }
+
+  private findThing(thingID: string): Thing {
+    return this.lights.find((thing: Thing) => thing.kiiThingID === thingID);
   }
 }

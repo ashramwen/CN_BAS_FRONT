@@ -72,8 +72,9 @@ export class DateHistogram {
 export class ByTime {
   public 'date_histogram': DateHistogram;
 
-  constructor() {
+  constructor(interval: string) {
     this.date_histogram = new DateHistogram();
+    this.date_histogram.interval = interval;
   }
 }
 
@@ -94,12 +95,9 @@ export class ByTarget {
 }
 
 export class Aggs {
-  public byTime: ByTime;
+  public byHour?: ByTime;
+  public byDay?: ByTime;
   public byTarget?: ByTarget;
-
-  constructor() {
-    this.byTime = new ByTime();
-  }
 }
 
 /**
@@ -156,11 +154,10 @@ export class ESObject {
    *
    * @memberOf ESObject
    */
-  public setTimeRange(startTime: number, endTime: number, interval: string) {
+  public setTimeRange(startTime: number, endTime: number) {
     let must = new Must();
     must.range = new Range(startTime, endTime);
     this.query.filtered.filter.bool.must.push(must);
-    this.aggs.byTime.date_histogram.interval = interval;
   }
 
   /**
@@ -183,19 +180,30 @@ export class ESObject {
   public setOption(esQueryOption: ESQueryOption) {
     this.setPower(esQueryOption.power);
     this.setTarget(esQueryOption.target);
-    this.setTimeRange(esQueryOption.startTime, esQueryOption.endTime, esQueryOption.interval);
+    this.setTimeRange(esQueryOption.startTime, esQueryOption.endTime);
 
-    if (esQueryOption.groupByTarget) {
+    if (esQueryOption.group & GroupType.Target) {
       this.setGroupByTarget();
+    }
+    if (esQueryOption.group & GroupType.Hour) {
+      this.aggs.byHour = new ByTime('1h');
+    }
+    if (esQueryOption.group & GroupType.Day) {
+      this.aggs.byDay = new ByTime('1d');
     }
   }
 }
 
 export interface ESQueryOption {
   endTime: number;
-  groupByTarget: boolean;
-  interval: string;
   power: boolean;
   startTime: number;
   target: string[];
+  group: GroupType;
+}
+
+export enum GroupType {
+  Hour = 1 << 0,
+  Day = 1 << 1,
+  Target = 1 << 2,
 }

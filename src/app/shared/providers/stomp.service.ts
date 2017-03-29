@@ -121,14 +121,15 @@ export class StompService {
    * @memberOf StompService
    */
   public on(destination: string): Observable<any> {
+    let subscription;
     let callback$ = new Observable((observer) => {
       if (this.state.getValue() === StompState.CONNECTED) {
-        this.on_subscribe(destination, observer);
+        subscription = this.on_subscribe(destination, observer);
       } else {
         let stateObserver: Observer<StompState> = {
           next: (stompState: StompState) => {
             if (stompState === StompState.CONNECTED) {
-              this.on_subscribe(destination, observer);
+              subscription = this.on_subscribe(destination, observer);
               this.state.unsubscribe();
             }
           },
@@ -136,6 +137,11 @@ export class StompService {
           complete: () => console.log('state complete!')
         };
         this.state.subscribe(stateObserver);
+        return () => {
+          if (!subscription) {
+            subscription.unsubscribe();
+          }
+        };
       }
     });
 
@@ -260,7 +266,7 @@ export class StompService {
    *
    * @memberOf StompService
    */
-  private on_subscribe(destination: string, observer: any) {
+  private on_subscribe(destination: string, observer: any): any {
     console.log('STOMP Subscribe:', destination);
     let subscription = this.client.subscribe(
       destination,
@@ -268,6 +274,7 @@ export class StompService {
       { ack: 'auto' }
     );
     this.subscription.push(subscription);
+    return subscription;
   }
 
   /**

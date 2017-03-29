@@ -11,24 +11,22 @@ export interface Hits {
 }
 
 export interface Bucket {
+  vendorThingID?: string;
   key_as_string?: Date;
   key: string;
   doc_count: number;
 }
 
-export interface ByTarget {
-  doc_count_error_upper_bound: number;
-  sum_other_doc_count: number;
-  buckets: Bucket[];
-}
-
-export interface ByTime {
+export interface ByTerm {
+  doc_count_error_upper_bound?: number;
+  sum_other_doc_count?: number;
   buckets: Bucket[];
 }
 
 export interface Aggregations {
-  byTarget?: ByTarget;
-  byTime: ByTime;
+  byDay?: ByTerm;
+  byHour?: ByTerm;
+  byTarget?: ByTerm;
 }
 
 export interface ESResponse {
