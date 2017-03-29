@@ -91,7 +91,7 @@ export class LandingCmp implements OnInit {
     this.lights = this.route.snapshot.data['lightings'];
     this.parseData();
 
-    this.light$ = this.esQuery.queryLight({
+    this.light$ = this.esQuery.query({
       startTime: moment().day(-7).startOf('day').valueOf(),
       endTime: moment().day(-1).endOf('day').valueOf(),
       power: true,

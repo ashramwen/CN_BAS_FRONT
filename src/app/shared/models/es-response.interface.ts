@@ -36,3 +36,8 @@ export interface ESResponse {
   hits: Hits;
   aggregations: Aggregations;
 }
+
+export interface ESCount {
+  count: number;
+  _shards: Shards;
+}

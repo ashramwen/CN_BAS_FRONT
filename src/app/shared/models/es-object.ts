@@ -124,7 +124,7 @@ export class ESObject {
    *
    * @memberOf ESObject
    */
-  public setPower(power: boolean) {
+  public setPower(power: boolean | number) {
     let must = new Must();
     must.terms = new Terms();
     must.terms['state.Power'] = [power ? 1 : 0];
@@ -196,13 +196,14 @@ export class ESObject {
 
 export interface ESQueryOption {
   endTime: number;
-  power: boolean;
+  power: boolean | number;
   startTime: number;
   target: string[];
   group: GroupType;
 }
 
 export enum GroupType {
+  None = 0,
   Hour = 1 << 0,
   Day = 1 << 1,
   Target = 1 << 2,
