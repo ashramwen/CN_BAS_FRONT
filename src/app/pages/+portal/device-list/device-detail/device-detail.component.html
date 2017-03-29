@@ -1,6 +1,6 @@
 <div class="device-detail">
 
-  <table>
+  <!--<table>
     <thead>
       <th>{{'DeviceList.DeviceID' | translate}}</th>
       <th>{{'DeviceList.Location' | translate}}</th>
@@ -15,22 +15,39 @@
         <td>{{ Lighting$.status? Lighting$.status.Power:0 }}</td>
       </tr>
     </tbody>
-  </table>
+  </table>-->
 
-  <table>
-    <thead>
-      <th>Profile ID</th>
-      <th>Profile Name</th>
-    </thead>
-    <tbody>
-      <tr>
-        <td></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+  <md-card class="example-card info">
+    <md-card-header>
+      <md-card-title>info</md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <label>{{'DeviceList.DeviceID' | translate}}</label>
+      <div>{{ Lighting$.id }}</div>
+      <label>{{'DeviceList.Location' | translate}}</label>
+      <div>{{ Lighting$.vendorThingID }}</div>
+      <label>{{'DeviceList.Connectivity' | translate}}</label>
+      <div>{{ Lighting$.connectivity? 1:0 }}</div>
+      <label>{{'DeviceList.LastestStatus' | translate}}</label>
+      <div>{{ Lighting$.status? Lighting$.status.Power:0 }}</div>
+    </md-card-content>
+  </md-card>
 
-  <md-tab-group>
+  <md-tab-group class="tabs">
+    <md-tab (click)="getProfile()" label="{{'DeviceList.DeviceDetail.Profile' | translate}}">
+      <table>
+        <thead>
+          <th>Profile ID</th>
+          <th>Profile Name</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </md-tab>
     <md-tab (click)="getCommandHistory()" label="{{'DeviceList.DeviceDetail.CommandHistory' | translate}}">
       <table>
         <thead>

@@ -20,6 +20,15 @@ export class DeviceDetailCmp implements OnInit {
     private route: ActivatedRoute,
     private deviceService: DeviceService) { }
 
+  public getProfile() {
+    this.commandHistory = {};
+    this.deviceService.fetchCommandHistoryByGlobalThingID(this.Lighting$.globalThingID)
+      .subscribe((history: any) => {
+        this.commandHistory = history;
+        console.log('profile', this.commandHistory);
+      });
+  }
+
   public getCommandHistory() {
     this.commandHistory = {};
     this.deviceService.fetchCommandHistoryByGlobalThingID(this.Lighting$.globalThingID)

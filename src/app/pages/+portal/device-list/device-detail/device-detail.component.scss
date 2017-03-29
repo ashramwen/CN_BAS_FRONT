@@ -2,6 +2,13 @@
   margin-top: 30px;
   width: 1000px;
   margin: 0 auto;
+  .info {
+    margin-top: 30px;
+    label {
+      float: left;
+      width: 200px;
+    }
+  }
   table {
     width: 100%;
     margin-top: 30px;
@@ -22,4 +29,8 @@
       padding: .85rem 1.2rem;
     }
   }
+}
+
+/deep/ .md-tab-list {
+  min-width: 1px !important;
 }
