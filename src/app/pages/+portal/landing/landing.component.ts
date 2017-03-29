@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 import { ActivatedRoute } from '@angular/router';
@@ -54,15 +54,25 @@ export class LandingCmp implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private esQuery: EsQueryService,
-    private stomp: StompService
+    // private stomp: StompService
   ) {
     this.numberOfPowerOn = 0;
     this.numberOfConnected = 0;
   }
 
   public ngOnInit() {
-    this.stomp.onMessage(this.getMessage);
-    this.stomp.subscribe('/topic/493e83c9/th.f83120e36100-02d8-6e11-cb0a-0fa10ec4');
+    // this.stomp
+    //   .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-cb0a-0fa10ec4')
+    //   .subscribe((message: StompThing) => {
+    //     console.log(message);
+    //   });
+
+    // this.stomp
+    //   .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-db0a-063004d9')
+    //   .subscribe((message: StompThing) => {
+    //     console.log(message);
+    //   });
+
     this.lights = this.route.snapshot.data['lightings'];
     this.parseData();
 

@@ -1,12 +1,13 @@
 import * as Stomp from 'stompjs';
 
+import { Observable, Observer, Subject, Subscriber } from 'rxjs';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 import { RootState } from './../redux/index';
 import { StateSelectors } from './../redux/selectors';
 import { StompThing } from './../models/stomp-thing.interface';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
 import { TokenState } from './../redux/token/reducer';
 
 /** possible states for the STOMP service */
@@ -44,7 +45,6 @@ export class StompService {
   private timer: number;
 
   private subscription: any[];
-  private queue: any[];
 
   constructor(
     private store: Store<RootState>
@@ -52,7 +52,6 @@ export class StompService {
     this.messages = new Subject<StompThing>();
     this.state = new BehaviorSubject<StompState>(StompState.CLOSED);
     this.subscription = [];
-    this.queue = [];
 
     this.init();
   }
@@ -121,17 +120,26 @@ export class StompService {
    *
    * @memberOf StompService
    */
-  public subscribe(destination: string): void {
-    if (this.state.getValue() !== StompState.CONNECTED) {
-      this.queue.push(destination);
-    } else {
-      let subscription = this.client.subscribe(
-        destination,
-        this.on_message.bind(this),
-        { ack: 'auto' }
-      );
-      this.subscription.push(subscription);
-    }
+  public on(destination: string): Observable<any> {
+    let callback$ = new Observable((observer) => {
+      if (this.state.getValue() === StompState.CONNECTED) {
+        this.on_subscribe(destination, observer);
+      } else {
+        let stateObserver: Observer<StompState> = {
+          next: (stompState: StompState) => {
+            if (stompState === StompState.CONNECTED) {
+              this.on_subscribe(destination, observer);
+              this.state.unsubscribe();
+            }
+          },
+          error: (error) => console.log('state error: ' + error),
+          complete: () => console.log('state complete!')
+        };
+        this.state.subscribe(stateObserver);
+      }
+    });
+
+    return callback$;
   }
 
   /**
@@ -213,11 +221,6 @@ export class StompService {
 
     // Clear timer
     this.timer = null;
-
-    if (this.queue.length > 0) {
-      this.queue.forEach((q) => this.subscribe(q));
-      this.queue = [];
-    }
   }
 
   /**
@@ -250,15 +253,33 @@ export class StompService {
   }
 
   /**
+   * subscribe
+   *
+   * @private
+   * @param {*} observer
+   *
+   * @memberOf StompService
+   */
+  private on_subscribe(destination: string, observer: any) {
+    console.log('STOMP Subscribe:', destination);
+    let subscription = this.client.subscribe(
+      destination,
+      this.on_message.bind(this, observer),
+      { ack: 'auto' }
+    );
+    this.subscription.push(subscription);
+  }
+
+  /**
    * On message RX, notify the Observable with the message object
    *
    * @param {Stomp.Message} message
    *
    * @memberOf StompService
    */
-  private on_message(message: Stomp.Message) {
+  private on_message(observer: any, message: Stomp.Message) {
     if (message.body) {
-      this.messages.next(JSON.parse(message.body));
+      observer.next(JSON.parse(message.body));
     } else {
       console.error('STOMP: Empty message received!');
     }
