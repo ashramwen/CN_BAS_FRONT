@@ -1,3 +1,5 @@
+import { ESQueryOption, GroupType } from './es-query-option.interface';
+
 export class Terms {
   public 'state.Power'?: number[];
   public 'state.target'?: string[];
@@ -71,6 +73,7 @@ export class DateHistogram {
 
 export class ByTime {
   public 'date_histogram': DateHistogram;
+  public aggs?: Aggs;
 
   constructor(interval: string) {
     this.date_histogram = new DateHistogram();
@@ -81,8 +84,8 @@ export class ByTime {
 export class AggsTerms {
   public field: string;
 
-  constructor() {
-    this.field = 'state.target';
+  constructor(field: string = 'state.target') {
+    this.field = field;
   }
 }
 
@@ -98,6 +101,32 @@ export class Aggs {
   public byHour?: ByTime;
   public byDay?: ByTime;
   public byTarget?: ByTarget;
+
+  public subAggs?: SubAggs;
+}
+
+export class SubAggs {
+  public sum?: AggsTerms;
+
+  constructor(target: string) {
+    this.sum = new AggsTerms(target);
+  }
+}
+
+export class AvgBucket {
+  public 'buckets_path': string;
+
+  constructor(path: string = '') {
+    this.buckets_path = `${path}>subAggs`;
+  }
+}
+
+export class Pipeline {
+  public 'avg_bucket'?: AvgBucket;
+
+  constructor(path: string = '') {
+    this.avg_bucket = new AvgBucket(path);
+  }
 }
 
 /**
@@ -171,6 +200,46 @@ export class ESObject {
   }
 
   /**
+   * set group by
+   *
+   * @param {GroupType} group
+   *
+   * @memberOf ESObject
+   */
+  public setGroup(group: GroupType) {
+    if (group & GroupType.Target) {
+      this.setGroupByTarget();
+    }
+    if (group & GroupType.Hour) {
+      this.aggs.byHour = new ByTime('1h');
+    }
+    if (group & GroupType.Day) {
+      this.aggs.byDay = new ByTime('1d');
+    }
+  }
+
+  /**
+   * set pipeline aggregations
+   *
+   * @param {GroupType} pipeline
+   *
+   * @memberOf ESObject
+   */
+  public setPipeline(pipeline: GroupType) {
+    let i = 0;
+    if (pipeline & GroupType.Hour) {
+      this.aggs[i++] = new Pipeline('byHour');
+      this.aggs.byHour.aggs = new Aggs();
+      this.aggs.byHour.aggs.subAggs = new SubAggs('state.Power');
+    }
+    if (pipeline & GroupType.Day) {
+      this.aggs[i++] = new Pipeline('byDay');
+      this.aggs.byDay.aggs = new Aggs();
+      this.aggs.byDay.aggs.subAggs = new SubAggs('state.Power');
+    }
+  }
+
+  /**
    * set query option
    *
    * @param {ESQueryOption} esQueryOption
@@ -181,30 +250,7 @@ export class ESObject {
     this.setPower(esQueryOption.power);
     this.setTarget(esQueryOption.target);
     this.setTimeRange(esQueryOption.startTime, esQueryOption.endTime);
-
-    if (esQueryOption.group & GroupType.Target) {
-      this.setGroupByTarget();
-    }
-    if (esQueryOption.group & GroupType.Hour) {
-      this.aggs.byHour = new ByTime('1h');
-    }
-    if (esQueryOption.group & GroupType.Day) {
-      this.aggs.byDay = new ByTime('1d');
-    }
+    this.setGroup(esQueryOption.group);
+    this.setPipeline(esQueryOption.pipeline);
   }
-}
-
-export interface ESQueryOption {
-  endTime: number;
-  power: boolean | number;
-  startTime: number;
-  target: string[];
-  group: GroupType;
-}
-
-export enum GroupType {
-  None = 0,
-  Hour = 1 << 0,
-  Day = 1 << 1,
-  Target = 1 << 2,
 }

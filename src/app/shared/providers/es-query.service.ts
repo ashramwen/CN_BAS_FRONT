@@ -1,7 +1,8 @@
-import { ByTarget, ESObject, ESQueryOption, Must, Range, Terms } from './../models/es-object';
+import { ByTarget, ESObject, Must, Range, Terms } from './../models/es-object';
 import { ESCount, ESResponse } from './../models/es-response.interface';
 import { Headers, Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 
+import { ESQueryOption } from './../models/es-query-option.interface';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 

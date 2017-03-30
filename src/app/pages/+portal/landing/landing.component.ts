@@ -2,7 +2,7 @@ import * as moment from 'moment';
 
 import { Bucket, ESResponse } from './../../../shared/models/es-response.interface';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ESQueryOption, GroupType } from './../../../shared/models/es-object';
+import { ESQueryOption, GroupType } from './../../../shared/models/es-query-option.interface';
 import { Observable, Subject } from 'rxjs';
 
 import { ActivatedRoute } from '@angular/router';
@@ -96,7 +96,8 @@ export class LandingCmp implements OnInit {
       endTime: moment().day(-1).endOf('day').valueOf(),
       power: true,
       target: this.thingIDs,
-      group: GroupType.Hour | GroupType.Day | GroupType.Target
+      group: GroupType.Hour | GroupType.Day | GroupType.Target,
+      pipeline: GroupType.Day
     });
 
     this.light$.subscribe((r: ESResponse) => {
