@@ -38,7 +38,7 @@
     "DeviceID": "Device ID",
     "Location": "Location",
     "Connectivity": "Connectivity",
-    "LastestStatus": "Lastest Status",
+    "LatestStatus": "Latest Status",
     "DeviceDetail": {
       "Profile": "Profile",
       "CommandHistory": "Command History",

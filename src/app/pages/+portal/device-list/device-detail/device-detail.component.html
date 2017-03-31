@@ -17,21 +17,39 @@
     </tbody>
   </table>-->
 
-  <md-card class="example-card info">
-    <md-card-header>
-      <md-card-title>info</md-card-title>
-    </md-card-header>
-    <md-card-content>
-      <label>{{'DeviceList.DeviceID' | translate}}</label>
-      <div>{{ Lighting$.id }}</div>
-      <label>{{'DeviceList.Location' | translate}}</label>
-      <div>{{ Lighting$.vendorThingID }}</div>
-      <label>{{'DeviceList.Connectivity' | translate}}</label>
-      <div>{{ Lighting$.connectivity? 1:0 }}</div>
-      <label>{{'DeviceList.LastestStatus' | translate}}</label>
-      <div>{{ Lighting$.status? Lighting$.status.Power:0 }}</div>
-    </md-card-content>
-  </md-card>
+  <div class="card-container">
+    <md-card class="example-card info">
+      <md-card-header>
+        <md-card-title>info</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <section>
+          <label>{{'DeviceList.DeviceID' | translate}}</label>
+          <div>{{ Lighting$.id }}</div>
+        </section>
+        <section>
+          <label>{{'DeviceList.Location' | translate}}</label>
+          <div>{{ Lighting$.vendorThingID }}</div>
+        </section>
+        <section>
+          <label>{{'DeviceList.Connectivity' | translate}}</label>
+          <div>{{ Lighting$.connectivity? 1:0 }}</div>
+        </section>
+        <section>
+          <label>{{'DeviceList.LatestStatus' | translate}}</label>
+          <md-slider [(ngModel)]="Lighting$.status.Brightness" [disabled]="true"></md-slider>
+        </section>
+        <!--<label>{{'DeviceList.LastestStatus' | translate}}</label>
+        <div>{{ Lighting$.status? Lighting$.status.Power:0 }}</div>-->
+      </md-card-content>
+    </md-card>
+
+    <md-card class="switch">
+      <md-card-content>
+
+      </md-card-content>
+    </md-card>
+  </div>
 
   <md-tab-group class="tabs">
     <md-tab (click)="getProfile()" label="{{'DeviceList.DeviceDetail.Profile' | translate}}">

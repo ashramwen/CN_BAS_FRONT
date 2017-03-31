@@ -19,11 +19,15 @@ export class DeviceListCmp implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private store: Store<RootState>,
-    private deviceService: DeviceService) {
+    private deviceService: DeviceService,
+    private router: Router) {
   }
 
   public deviceDetail(item) {
-    this.store.dispatch(go(['/portal/device-list', item.vendorThingID]));
+    console.log('go device detail');
+    // this.store.dispatch(go(['/portal/device-list', item.vendorThingID]));
+    this.router.navigate(['/portal/device-list', item.vendorThingID]);
+
   }
 
   public ngOnInit() {
