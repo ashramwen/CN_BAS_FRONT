@@ -3,6 +3,7 @@ export interface ESQueryOption {
   power: boolean | number;
   startTime: number;
   target: string[];
+  allTargets?: boolean;
   group: GroupType;
   pipeline?: GroupType;
 }

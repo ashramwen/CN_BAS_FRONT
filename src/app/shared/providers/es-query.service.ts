@@ -34,18 +34,12 @@ export class EsQueryService {
   }
 
   public query(esQueryOption: ESQueryOption): Observable<ESResponse> {
-    let esObject = new ESObject();
-    esObject.setOption(esQueryOption);
-
-    // console.log('es', JSON.stringify(esObject));
+    let esObject = new ESObject(esQueryOption);
     return this.searchES(esObject);
   }
 
   public count(esQueryOption: ESQueryOption): Observable<ESCount> {
-    let esObject = new ESObject();
-    esObject.setOption(esQueryOption);
-
-    // console.log('es', JSON.stringify(esObject));
+    let esObject = new ESObject(esQueryOption);
     return this.countES(esObject);
   }
 

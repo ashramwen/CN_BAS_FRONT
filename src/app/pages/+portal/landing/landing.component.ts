@@ -61,51 +61,110 @@ export class LandingCmp implements OnInit {
    * @memberOf LandingCmp
    */
   public top10: Bucket[];
-
-  private light$: Observable<any>;
-
+  /**
+   * the times of on of all lights yesterday
+   *
+   * @type {number}
+   * @memberOf LandingCmp
+   */
+  public numberOfYesterday: number;
+  /**
+   * average time of ON of all lights the days before yesterday
+   *
+   * @type {number}
+   * @memberOf LandingCmp
+   */
+  public avgOfHistory: number;
   private lights: Thing[];
 
   constructor(
     private route: ActivatedRoute,
     private esQuery: EsQueryService,
-    // private stomp: StompService
+    private stomp: StompService
   ) {
     this.numberOfPowerOn = 0;
     this.numberOfConnected = 0;
   }
 
   public ngOnInit() {
-    // this.stomp
-    //   .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-cb0a-0fa10ec4')
-    //   .subscribe((message: StompThing) => {
-    //     console.log(message);
-    //   });
-
-    // this.stomp
-    //   .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-db0a-063004d9')
-    //   .subscribe((message: StompThing) => {
-    //     console.log(message);
-    //   });
-
     this.lights = this.route.snapshot.data['lightings'];
     this.parseData();
 
-    this.light$ = this.esQuery.query({
+    this.getPunchCard();
+    this.getTopN();
+    this.getYesterday();
+    this.getHistory();
+  }
+
+  private getPunchCard() {
+    let punchCard$ = this.esQuery.query({
       startTime: moment().day(-7).startOf('day').valueOf(),
       endTime: moment().day(-1).endOf('day').valueOf(),
       power: true,
       target: this.thingIDs,
-      group: GroupType.Hour | GroupType.Day | GroupType.Target,
+      allTargets: true,
+      group: GroupType.Hour
+    });
+
+    punchCard$.subscribe((r: ESResponse) => {
+      this.punchData = r.aggregations.byHour.buckets.map((o) => o.doc_count);
+    });
+  }
+
+  private getYesterday() {
+    let yesterday$ = this.esQuery.query({
+      startTime: moment().subtract(1, 'day').startOf('day').valueOf(),
+      endTime: moment().subtract(1, 'day').endOf('day').valueOf(),
+      power: true,
+      target: this.thingIDs,
+      allTargets: true,
+      group: GroupType.Target,
+      pipeline: GroupType.Target
+    });
+
+    yesterday$.subscribe((r: ESResponse) => {
+      this.numberOfYesterday = r.aggregations[0].value;
+    });
+  }
+
+  private getHistory() {
+    let history$ = this.esQuery.query({
+      startTime: 0,
+      endTime: moment().subtract(2, 'day').endOf('day').valueOf(),
+      power: true,
+      target: this.thingIDs,
+      group: GroupType.Day,
       pipeline: GroupType.Day
     });
 
-    this.light$.subscribe((r: ESResponse) => {
-      this.punchData = r.aggregations.byHour.buckets.map((o) => o.doc_count);
+    history$.subscribe((r: ESResponse) => {
+      this.avgOfHistory = r.aggregations[0].value;
+    });
+  }
+
+  private getTopN() {
+    let top$ = this.esQuery.query({
+      startTime: 0,
+      endTime: new Date().valueOf(),
+      power: true,
+      target: this.thingIDs,
+      group: GroupType.Target
+    });
+
+    top$.subscribe((r: ESResponse) => {
       this.parseThings(r.aggregations.byTarget.buckets);
     });
   }
 
+  /**
+   * parse lights data
+   * get the number of power on
+   * get the number of connected
+   *
+   * @private
+   *
+   * @memberOf LandingCmp
+   */
   private parseData() {
     this.thingIDs = [];
     let now = new Date().valueOf();
@@ -136,5 +195,19 @@ export class LandingCmp implements OnInit {
 
   private findThing(thingID: string): Thing {
     return this.lights.find((thing: Thing) => thing.kiiThingID === thingID);
+  }
+
+  private stompTest() {
+    this.stomp
+      .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-cb0a-0fa10ec4')
+      .subscribe((message: StompThing) => {
+        console.log(message);
+      });
+
+    this.stomp
+      .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-db0a-063004d9')
+      .subscribe((message: StompThing) => {
+        console.log(message);
+      });
   }
 }
