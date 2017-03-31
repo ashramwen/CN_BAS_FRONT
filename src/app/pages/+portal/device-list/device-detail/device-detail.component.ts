@@ -13,24 +13,20 @@ import { Thing } from '../../../../shared/models/thing.interface';
 
 export class DeviceDetailCmp implements OnInit {
   public Lighting$: Thing;
-  public commandHistory: Object;
-  public stateHistory: Object;
+  public commandHistory: Object[];
+  public stateHistory: Object[];
 
   constructor(
     private route: ActivatedRoute,
     private deviceService: DeviceService) { }
 
   public getProfile() {
-    this.commandHistory = {};
-    this.deviceService.fetchCommandHistoryByGlobalThingID(this.Lighting$.globalThingID)
-      .subscribe((history: any) => {
-        this.commandHistory = history;
-        console.log('profile', this.commandHistory);
-      });
+    console.log();
   }
 
   public getCommandHistory() {
-    this.commandHistory = {};
+    console.log('here');
+    this.commandHistory = [];
     this.deviceService.fetchCommandHistoryByGlobalThingID(this.Lighting$.globalThingID)
       .subscribe((history: any) => {
         this.commandHistory = history;
@@ -39,7 +35,7 @@ export class DeviceDetailCmp implements OnInit {
   }
 
   public getStateHistory() {
-    this.stateHistory = {};
+    this.stateHistory = [];
     this.deviceService.fetchStateHistoryByVendorThingID(this.Lighting$.vendorThingID)
       .subscribe((history: any) => {
         this.stateHistory = history;
@@ -49,5 +45,27 @@ export class DeviceDetailCmp implements OnInit {
 
   public ngOnInit() {
     this.Lighting$ = this.route.snapshot.data['lighting'];
+    this.commandHistory = [];
+    this.deviceService.fetchCommandHistoryByGlobalThingID(this.Lighting$.globalThingID)
+      .subscribe((history: any) => {
+        history.map((object) => {
+          object.power = null;
+          object.brightness = null;
+          object.actions.forEach((action) => {
+            action.turnPower ?
+              object.power = action.turnPower.Power :
+              object.brightness = action.setBri.Bri;
+          });
+          console.log('object', object);
+        });
+        this.commandHistory = history;
+        console.log('command history', this.commandHistory);
+      });
+    this.stateHistory = [];
+    this.deviceService.fetchStateHistoryByVendorThingID(this.Lighting$.vendorThingID)
+      .subscribe((history: any) => {
+        this.stateHistory = history.hits.map((object) => object._source.state);
+        console.log('state history', this.stateHistory);
+      });
   }
 }

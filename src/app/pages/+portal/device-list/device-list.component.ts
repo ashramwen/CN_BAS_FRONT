@@ -32,5 +32,6 @@ export class DeviceListCmp implements OnInit {
 
   public ngOnInit() {
     this.lightings$ = this.route.snapshot.data['lightings'];
+    console.log('lightings', this.lightings$);
   }
 }

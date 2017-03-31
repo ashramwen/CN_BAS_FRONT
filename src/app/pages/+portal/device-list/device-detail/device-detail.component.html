@@ -37,7 +37,11 @@
         </section>
         <section>
           <label>{{'DeviceList.LatestStatus' | translate}}</label>
-          <md-slider [(ngModel)]="Lighting$.status.Brightness" [disabled]="true"></md-slider>
+          <section>
+            <label class="sub-label">Brightness</label>
+            <md-slider [(ngModel)]="Lighting$.status.Brightness" [disabled]="true"></md-slider>
+            <label class="sub-label">Power</label>
+          </section>
         </section>
         <!--<label>{{'DeviceList.LastestStatus' | translate}}</label>
         <div>{{ Lighting$.status? Lighting$.status.Power:0 }}</div>-->
@@ -52,7 +56,7 @@
   </div>
 
   <md-tab-group class="tabs">
-    <md-tab (click)="getProfile()" label="{{'DeviceList.DeviceDetail.Profile' | translate}}">
+    <md-tab md-on-select="getProfile()" label="{{'DeviceList.DeviceDetail.Profile' | translate}}">
       <table>
         <thead>
           <th>Profile ID</th>
@@ -66,34 +70,36 @@
         </tbody>
       </table>
     </md-tab>
-    <md-tab (click)="getCommandHistory()" label="{{'DeviceList.DeviceDetail.CommandHistory' | translate}}">
+    <md-tab md-on-select="getCommandHistory()" label="{{'DeviceList.DeviceDetail.CommandHistory' | translate}}">
       <table>
         <thead>
-          <th>action</th>
-          <th>state</th>
-          <th>time</th>
+          <th>Power</th>
+          <th>Brightness</th>
+          <th>State</th>
+          <th>Time</th>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+          <tr *ngFor="let command of commandHistory">
+            <td>{{command.power}}</td>
+            <td>{{command.brightness}}</td>
+            <td>{{command.commandState}}</td>
+            <td>{{command.createdAt}}</td>
           </tr>
         </tbody>
       </table>
     </md-tab>
-    <md-tab (click)="getStateHistory()" label="{{'DeviceList.DeviceDetail.StateHistory' | translate}}">
+    <md-tab md-on-select="getStateHistory()" label="{{'DeviceList.DeviceDetail.StateHistory' | translate}}">
       <table>
         <thead>
-          <th>action</th>
-          <th>state</th>
-          <th>time</th>
+          <th>Brightness</th>
+          <th>Power</th>
+          <th>Time</th>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+          <tr *ngFor="let state of stateHistory">
+            <td>{{state.Bri}}</td>
+            <td>{{state.Power}}</td>
+            <td>{{state.date}}</td>
           </tr>
         </tbody>
       </table>
