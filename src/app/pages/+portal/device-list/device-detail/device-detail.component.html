@@ -19,25 +19,37 @@
 
   <div class="info-container">
     <div class="info">
-      <h3>info</h3>
+      <h3>{{ 'DeviceList.Info' | translate}}</h3>
       <section>
-        <label>{{'DeviceList.DeviceID' | translate}}</label>
+        <label>
+          <md-icon md-list-icon>devices</md-icon>
+          {{'DeviceList.DeviceID' | translate}}
+          </label>
         <p>{{ Lighting$.id }}</p>
       </section>
       <section>
-        <label>{{'DeviceList.Location' | translate}}</label>
+        <label>
+          <md-icon md-list-icon>place</md-icon>
+          {{'DeviceList.Location' | translate}}
+          </label>
         <p>{{ Lighting$.vendorThingID }}</p>
       </section>
       <section>
-        <label>{{'DeviceList.Connectivity' | translate}}</label>
+        <label>
+          <md-icon md-list-icon>wifi tethering</md-icon>
+          {{'DeviceList.Connectivity' | translate}}
+          </label>
         <p>{{ Lighting$.connectivity? 1:0 }}</p>
       </section>
       <section>
-        <label>{{'DeviceList.LatestStatus' | translate}}</label>
+        <label>
+          <md-icon md-list-icon>description</md-icon>
+          {{'DeviceList.LatestStatus' | translate}}
+          </label>
         <section>
           <label class="sub-label">Brightness</label>
           <md-slider [(ngModel)]="Lighting$.status.Brightness" [disabled]="true"></md-slider>
-          <label class="sub-label">Power</label>
+          <label class="sub-label"></label>
         </section>
       </section>
     </div>
@@ -82,6 +94,22 @@
       </table>
     </md-tab>
     <md-tab md-on-select="getStateHistory()" label="{{'DeviceList.DeviceDetail.StateHistory' | translate}}">
+      <table>
+        <thead>
+          <th>Brightness</th>
+          <th>Power</th>
+          <th>Time</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let state of stateHistory">
+            <td>{{state.Bri}}</td>
+            <td>{{state.Power}}</td>
+            <td>{{state.date | date:'medium'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-tab>
+    <md-tab md-on-select="getAlert()" label="{{'DeviceList.DeviceDetail.Alert' | translate}}">
       <table>
         <thead>
           <th>Brightness</th>

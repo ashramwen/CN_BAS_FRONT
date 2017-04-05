@@ -35,6 +35,7 @@
     }
   },
   "DeviceList": {
+    "Info": "Info",
     "DeviceID": "Device ID",
     "Location": "Location",
     "Connectivity": "Connectivity",
@@ -42,7 +43,8 @@
     "DeviceDetail": {
       "Profile": "Profile",
       "CommandHistory": "Command History",
-      "StateHistory": "State History"
+      "StateHistory": "State History",
+      "Alert": "Alert"
     }
   }
 }
