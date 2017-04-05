@@ -1,5 +1,5 @@
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { DeviceService } from '../../../../shared/providers/device.service';
 import { Observable } from 'rxjs/Observable';
@@ -8,7 +8,8 @@ import { Thing } from '../../../../shared/models/thing.interface';
 @Component({
   selector: 'bas-device-detail',
   templateUrl: 'device-detail.component.html',
-  styleUrls: ['./device-detail.component.scss']
+  styleUrls: ['./device-detail.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class DeviceDetailCmp implements OnInit {

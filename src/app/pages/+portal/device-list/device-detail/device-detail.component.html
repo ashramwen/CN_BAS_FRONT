@@ -17,42 +17,35 @@
     </tbody>
   </table>-->
 
-  <div class="card-container">
-    <md-card class="example-card info">
-      <md-card-header>
-        <md-card-title>info</md-card-title>
-      </md-card-header>
-      <md-card-content>
+  <div class="info-container">
+    <div class="info">
+      <h3>info</h3>
+      <section>
+        <label>{{'DeviceList.DeviceID' | translate}}</label>
+        <p>{{ Lighting$.id }}</p>
+      </section>
+      <section>
+        <label>{{'DeviceList.Location' | translate}}</label>
+        <p>{{ Lighting$.vendorThingID }}</p>
+      </section>
+      <section>
+        <label>{{'DeviceList.Connectivity' | translate}}</label>
+        <p>{{ Lighting$.connectivity? 1:0 }}</p>
+      </section>
+      <section>
+        <label>{{'DeviceList.LatestStatus' | translate}}</label>
         <section>
-          <label>{{'DeviceList.DeviceID' | translate}}</label>
-          <div>{{ Lighting$.id }}</div>
+          <label class="sub-label">Brightness</label>
+          <md-slider [(ngModel)]="Lighting$.status.Brightness" [disabled]="true"></md-slider>
+          <label class="sub-label">Power</label>
         </section>
-        <section>
-          <label>{{'DeviceList.Location' | translate}}</label>
-          <div>{{ Lighting$.vendorThingID }}</div>
-        </section>
-        <section>
-          <label>{{'DeviceList.Connectivity' | translate}}</label>
-          <div>{{ Lighting$.connectivity? 1:0 }}</div>
-        </section>
-        <section>
-          <label>{{'DeviceList.LatestStatus' | translate}}</label>
-          <section>
-            <label class="sub-label">Brightness</label>
-            <md-slider [(ngModel)]="Lighting$.status.Brightness" [disabled]="true"></md-slider>
-            <label class="sub-label">Power</label>
-          </section>
-        </section>
-        <!--<label>{{'DeviceList.LastestStatus' | translate}}</label>
+      </section>
+    </div>
+
+    <!--<label>{{'DeviceList.LastestStatus' | translate}}</label>
         <div>{{ Lighting$.status? Lighting$.status.Power:0 }}</div>-->
-      </md-card-content>
-    </md-card>
-
-    <md-card class="switch">
-      <md-card-content>
-
-      </md-card-content>
-    </md-card>
+    <div class="switch">
+    </div>
   </div>
 
   <md-tab-group class="tabs">
@@ -83,7 +76,7 @@
             <td>{{command.power}}</td>
             <td>{{command.brightness}}</td>
             <td>{{command.commandState}}</td>
-            <td>{{command.createdAt}}</td>
+            <td>{{command.createdAt | date:'medium'}}</td>
           </tr>
         </tbody>
       </table>
@@ -99,7 +92,7 @@
           <tr *ngFor="let state of stateHistory">
             <td>{{state.Bri}}</td>
             <td>{{state.Power}}</td>
-            <td>{{state.date}}</td>
+            <td>{{state.date | date:'medium'}}</td>
           </tr>
         </tbody>
       </table>
