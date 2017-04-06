@@ -138,7 +138,7 @@ export class LandingCmp implements OnInit {
     });
 
     history$.subscribe((r: ESResponse) => {
-      this.avgOfHistory = r.aggregations[0].value;
+      this.avgOfHistory = r.aggregations[0].value / this.lights.length;
     });
   }
 

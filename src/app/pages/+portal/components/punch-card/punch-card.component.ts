@@ -33,7 +33,9 @@ export class PunchCardComponent implements OnInit, OnChanges {
 
     if (!this.chart) {
       this.chart = new PunchCard({
-        target: `#${this.punchChart.id}`
+        target: `#${this.punchChart.id}`,
+        width: this.punchChart.clientWidth,
+        height: 533
       });
     }
 
