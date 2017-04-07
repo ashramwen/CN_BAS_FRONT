@@ -123,7 +123,7 @@ export class LandingCmp implements OnInit {
     });
 
     yesterday$.subscribe((r: ESResponse) => {
-      this.numberOfYesterday = r.aggregations[0].value;
+      this.numberOfYesterday = r.aggregations[0].value * 5;
     });
   }
 
@@ -138,7 +138,7 @@ export class LandingCmp implements OnInit {
     });
 
     history$.subscribe((r: ESResponse) => {
-      this.avgOfHistory = r.aggregations[0].value / this.lights.length;
+      this.avgOfHistory = r.aggregations[0].value * 5 / this.lights.length;
     });
   }
 
