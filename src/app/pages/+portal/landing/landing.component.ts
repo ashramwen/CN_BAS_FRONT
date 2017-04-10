@@ -1,18 +1,20 @@
 import * as moment from 'moment';
 
+import { Bucket, ESResponse } from './../../../shared/models/es-response.interface';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ESQueryOption, GroupType } from './../../../shared/models/es-query-option.interface';
 import { Observable, Subject } from 'rxjs';
 
 import { ActivatedRoute } from '@angular/router';
-import { ESQueryOption } from './../../../shared/models/es-object';
-import { ESResponse } from './../../../shared/models/es-response.interface';
 import { EsQueryService } from './../../../shared/providers/es-query.service';
 import { Message } from 'stompjs';
 import { StompService } from './../../../shared/providers/stomp.service';
 import { StompThing } from './../../../shared/models/stomp-thing.interface';
 import { Thing } from './../../../shared/models/thing.interface';
 
-// five minutes
+/**
+ * five minutes
+ */
 const FIVE_MINUTES = 300000;
 
 @Component({
@@ -45,55 +47,124 @@ export class LandingCmp implements OnInit {
    * @memberOf LandingCmp
    */
   public thingIDs: string[];
+  /**
+   * punch data
+   *
+   * @type {number[]}
+   * @memberOf LandingCmp
+   */
   public punchData: number[];
-
-  private light$: Observable<any>;
-
+  /**
+   * top 10 of light usage
+   *
+   * @type {Bucket[]}
+   * @memberOf LandingCmp
+   */
+  public top10: Bucket[];
+  /**
+   * the times of on of all lights yesterday
+   *
+   * @type {number}
+   * @memberOf LandingCmp
+   */
+  public numberOfYesterday: number;
+  /**
+   * average time of ON of all lights the days before yesterday
+   *
+   * @type {number}
+   * @memberOf LandingCmp
+   */
+  public avgOfHistory: number;
   private lights: Thing[];
 
   constructor(
     private route: ActivatedRoute,
     private esQuery: EsQueryService,
-    // private stomp: StompService
+    private stomp: StompService
   ) {
     this.numberOfPowerOn = 0;
     this.numberOfConnected = 0;
   }
 
   public ngOnInit() {
-    // this.stomp
-    //   .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-cb0a-0fa10ec4')
-    //   .subscribe((message: StompThing) => {
-    //     console.log(message);
-    //   });
-
-    // this.stomp
-    //   .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-db0a-063004d9')
-    //   .subscribe((message: StompThing) => {
-    //     console.log(message);
-    //   });
-
     this.lights = this.route.snapshot.data['lightings'];
     this.parseData();
 
-    this.light$ = this.esQuery.queryLight({
+    this.getPunchCard();
+    this.getTopN();
+    this.getYesterday();
+    this.getHistory();
+  }
+
+  private getPunchCard() {
+    let punchCard$ = this.esQuery.query({
       startTime: moment().day(-7).startOf('day').valueOf(),
       endTime: moment().day(-1).endOf('day').valueOf(),
-      groupByTarget: true,
-      interval: '1h',
       power: true,
-      target: this.thingIDs
+      target: this.thingIDs,
+      allTargets: true,
+      group: GroupType.Hour
     });
 
-    this.light$.subscribe((r: ESResponse) => {
-      this.punchData = r.aggregations.byTime.buckets.map((o) => o.doc_count);
+    punchCard$.subscribe((r: ESResponse) => {
+      this.punchData = r.aggregations.byHour.buckets.map((o) => o.doc_count);
     });
   }
 
-  private getMessage(message: StompThing) {
-    console.log(message);
+  private getYesterday() {
+    let yesterday$ = this.esQuery.query({
+      startTime: moment().subtract(1, 'day').startOf('day').valueOf(),
+      endTime: moment().subtract(1, 'day').endOf('day').valueOf(),
+      power: true,
+      target: this.thingIDs,
+      allTargets: true,
+      group: GroupType.Target,
+      pipeline: GroupType.Target
+    });
+
+    yesterday$.subscribe((r: ESResponse) => {
+      this.numberOfYesterday = r.aggregations[0].value * 5;
+    });
   }
 
+  private getHistory() {
+    let history$ = this.esQuery.query({
+      startTime: 0,
+      endTime: moment().subtract(2, 'day').endOf('day').valueOf(),
+      power: true,
+      target: this.thingIDs,
+      group: GroupType.Day,
+      pipeline: GroupType.Day
+    });
+
+    history$.subscribe((r: ESResponse) => {
+      this.avgOfHistory = r.aggregations[0].value * 5 / this.lights.length;
+    });
+  }
+
+  private getTopN() {
+    let top$ = this.esQuery.query({
+      startTime: 0,
+      endTime: new Date().valueOf(),
+      power: true,
+      target: this.thingIDs,
+      group: GroupType.Target
+    });
+
+    top$.subscribe((r: ESResponse) => {
+      this.parseThings(r.aggregations.byTarget.buckets);
+    });
+  }
+
+  /**
+   * parse lights data
+   * get the number of power on
+   * get the number of connected
+   *
+   * @private
+   *
+   * @memberOf LandingCmp
+   */
   private parseData() {
     this.thingIDs = [];
     let now = new Date().valueOf();
@@ -113,5 +184,30 @@ export class LandingCmp implements OnInit {
     if (!thing.status || !thing.status.date) { return; }
     if (thing.status.date + FIVE_MINUTES < timeStamp) { return; }
     this.numberOfConnected++;
+  }
+
+  private parseThings(buckets: Bucket[]) {
+    this.top10 = buckets.map((bucket: Bucket) => {
+      bucket.vendorThingID = this.findThing(bucket.key).vendorThingID;
+      return bucket;
+    });
+  }
+
+  private findThing(thingID: string): Thing {
+    return this.lights.find((thing: Thing) => thing.kiiThingID === thingID);
+  }
+
+  private stompTest() {
+    this.stomp
+      .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-cb0a-0fa10ec4')
+      .subscribe((message: StompThing) => {
+        console.log(message);
+      });
+
+    this.stomp
+      .on('/topic/493e83c9/th.f83120e36100-02d8-6e11-db0a-063004d9')
+      .subscribe((message: StompThing) => {
+        console.log(message);
+      });
   }
 }

@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 export class PunchCard {
   private chart;
-  private color = '#444';
+  private color = '#7d8ead';
   private data;
   private height = 520;
   private innerHeight;
@@ -84,7 +84,7 @@ export class PunchCard {
     let data = this.data;
     let maxVal = d3.max(data, (d) => d[2]);
 
-    this.r = d3.scaleSqrt().domain([0, parseInt(maxVal, 0)]).range([0, this.unitSize / 2]);
+    this.r = d3.scaleSqrt().domain([0, parseInt(maxVal, 0)]).range([0, this.unitSize / 4]);
 
     let circles = this.chart.selectAll('circle').data(data);
 

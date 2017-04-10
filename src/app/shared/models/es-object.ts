@@ -1,3 +1,5 @@
+import { ESQueryOption, GroupType } from './es-query-option.interface';
+
 export class Terms {
   public 'state.Power'?: number[];
   public 'state.target'?: string[];
@@ -71,22 +73,26 @@ export class DateHistogram {
 
 export class ByTime {
   public 'date_histogram': DateHistogram;
+  public aggs?: Aggs;
 
-  constructor() {
+  constructor(interval: string) {
     this.date_histogram = new DateHistogram();
+    this.date_histogram.interval = interval;
   }
 }
 
 export class AggsTerms {
   public field: string;
+  public size?: number;
 
-  constructor() {
-    this.field = 'state.target';
+  constructor(field: string = 'state.target') {
+    this.field = field;
   }
 }
 
 export class ByTarget {
   public terms: AggsTerms;
+  public aggs?: Aggs;
 
   constructor() {
     this.terms = new AggsTerms();
@@ -94,11 +100,34 @@ export class ByTarget {
 }
 
 export class Aggs {
-  public byTime: ByTime;
+  public byHour?: ByTime;
+  public byDay?: ByTime;
   public byTarget?: ByTarget;
 
-  constructor() {
-    this.byTime = new ByTime();
+  public subAggs?: SubAggs;
+}
+
+export class SubAggs {
+  public sum?: AggsTerms;
+
+  constructor(target: string) {
+    this.sum = new AggsTerms(target);
+  }
+}
+
+export class AvgBucket {
+  public 'buckets_path': string;
+
+  constructor(path: string = '') {
+    this.buckets_path = `${path}>subAggs`;
+  }
+}
+
+export class Pipeline {
+  public 'avg_bucket'?: AvgBucket;
+
+  constructor(path: string = '') {
+    this.avg_bucket = new AvgBucket(path);
   }
 }
 
@@ -112,11 +141,32 @@ export class ESObject {
   public aggs: Aggs;
   public query: Query;
   public size: number;
+  private length?: number;
 
-  constructor() {
+  constructor(esQueryOption?: ESQueryOption) {
     this.aggs = new Aggs();
     this.query = new Query();
     this.size = 0;
+
+    if (esQueryOption) {
+      this.setOption(esQueryOption);
+    }
+  }
+
+  /**
+   * set query option
+   *
+   * @param {ESQueryOption} esQueryOption
+   *
+   * @memberOf ESObject
+   */
+  private setOption(esQueryOption: ESQueryOption) {
+    this.setTarget(esQueryOption.target);
+    this.setPower(esQueryOption.power);
+    this.setTimeRange(esQueryOption.startTime, esQueryOption.endTime);
+    this.setGroup(esQueryOption.group, esQueryOption.allTargets);
+    this.setPipeline(esQueryOption.pipeline);
+    delete this.length;
   }
 
   /**
@@ -126,7 +176,7 @@ export class ESObject {
    *
    * @memberOf ESObject
    */
-  public setPower(power: boolean) {
+  private setPower(power: boolean | number) {
     let must = new Must();
     must.terms = new Terms();
     must.terms['state.Power'] = [power ? 1 : 0];
@@ -140,11 +190,12 @@ export class ESObject {
    *
    * @memberOf ESObject
    */
-  public setTarget(targets: string[]) {
+  private setTarget(targets: string[]) {
     let must = new Must();
     must.terms = new Terms();
     must.terms['state.target'] = targets;
     this.query.filtered.filter.bool.must.push(must);
+    this.length = targets.length;
   }
 
   /**
@@ -156,11 +207,10 @@ export class ESObject {
    *
    * @memberOf ESObject
    */
-  public setTimeRange(startTime: number, endTime: number, interval: string) {
+  private setTimeRange(startTime: number, endTime: number) {
     let must = new Must();
     must.range = new Range(startTime, endTime);
     this.query.filtered.filter.bool.must.push(must);
-    this.aggs.byTime.date_histogram.interval = interval;
   }
 
   /**
@@ -169,33 +219,55 @@ export class ESObject {
    *
    * @memberOf ESObject
    */
-  public setGroupByTarget() {
+  private setGroupByTarget(all: boolean) {
     this.aggs.byTarget = new ByTarget();
+    if (all) {
+      this.aggs.byTarget.terms.size = this.length;
+    }
   }
 
   /**
-   * set query option
+   * set group by
    *
-   * @param {ESQueryOption} esQueryOption
+   * @param {GroupType} group
    *
    * @memberOf ESObject
    */
-  public setOption(esQueryOption: ESQueryOption) {
-    this.setPower(esQueryOption.power);
-    this.setTarget(esQueryOption.target);
-    this.setTimeRange(esQueryOption.startTime, esQueryOption.endTime, esQueryOption.interval);
-
-    if (esQueryOption.groupByTarget) {
-      this.setGroupByTarget();
+  private setGroup(group: GroupType, all: boolean) {
+    if (group & GroupType.Target) {
+      this.setGroupByTarget(all);
+    }
+    if (group & GroupType.Hour) {
+      this.aggs.byHour = new ByTime('1h');
+    }
+    if (group & GroupType.Day) {
+      this.aggs.byDay = new ByTime('1d');
     }
   }
-}
 
-export interface ESQueryOption {
-  endTime: number;
-  groupByTarget: boolean;
-  interval: string;
-  power: boolean;
-  startTime: number;
-  target: string[];
+  /**
+   * set pipeline aggregations
+   *
+   * @param {GroupType} pipeline
+   *
+   * @memberOf ESObject
+   */
+  private setPipeline(pipeline: GroupType) {
+    let i = 0;
+    if (pipeline & GroupType.Hour) {
+      this.aggs[i++] = new Pipeline('byHour');
+      this.aggs.byHour.aggs = new Aggs();
+      this.aggs.byHour.aggs.subAggs = new SubAggs('state.Power');
+    }
+    if (pipeline & GroupType.Day) {
+      this.aggs[i++] = new Pipeline('byDay');
+      this.aggs.byDay.aggs = new Aggs();
+      this.aggs.byDay.aggs.subAggs = new SubAggs('state.Power');
+    }
+    if (pipeline & GroupType.Target) {
+      this.aggs[i++] = new Pipeline('byTarget');
+      this.aggs.byTarget.aggs = new Aggs();
+      this.aggs.byTarget.aggs.subAggs = new SubAggs('state.Power');
+    }
+  }
 }
