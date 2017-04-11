@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+
 export class PunchCard {
   private chart;
   private color = '#7d8ead';
@@ -26,6 +27,7 @@ export class PunchCard {
   private y;
   private yAxis;
   private yticks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  private tip;
 
   constructor(options) {
     Object.assign(this, options);
@@ -69,6 +71,9 @@ export class PunchCard {
       .append('g')
       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
 
+    this.tip = d3.select(this.target)
+      .select('div.d3-tip');
+
     this.x = d3.scaleLinear().domain([0, 23]).range([unitWidth / 2, innerWidth - unitWidth / 2]);
 
     this.y = d3.scaleLinear().domain([0, 6]).range([unitHeight / 2, innerHeight - unitHeight / 2]);
@@ -83,6 +88,7 @@ export class PunchCard {
   private _renderCard() {
     let data = this.data;
     let maxVal = d3.max(data, (d) => d[2]);
+    let tip = this.tip;
 
     this.r = d3.scaleSqrt().domain([0, parseInt(maxVal, 0)]).range([0, this.unitSize / 4]);
 
@@ -94,7 +100,23 @@ export class PunchCard {
         .attr('cx', (d) => this.x(d[1]))
         .attr('cy', (d) => this.y(d[0]))
         .attr('r', (d) => this.r(d[2]))
-        .style('fill', this.color);
+        .style('fill', this.color)
+        .on('mouseover', function (d) {
+          let ele = d3.select(this);
+          let x = parseFloat(ele.attr('cx')) + 65;
+          let y = parseFloat(ele.attr('cy')) - (parseFloat(ele.attr('r')) * 2);
+          tip.transition()
+            .duration(200)
+            .style('opacity', .9);
+          tip.html(d[2])
+            .style('left', x + 'px')
+            .style('top', y + 'px');
+        })
+        .on('mouseout', (d) => {
+          tip.transition()
+            .duration(500)
+            .style('opacity', 0);
+        });
     });
 
     circles.exit().remove();
