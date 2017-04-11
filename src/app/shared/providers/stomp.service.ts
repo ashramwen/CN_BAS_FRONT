@@ -189,7 +189,7 @@ export class StompService {
       .map((tokenState: TokenState) => tokenState.token.accessToken)
       .subscribe((accessToken: string) => {
         // Attempt connection, passing in a callback
-        this.client.connect({
+        this.client.connect(<any> {
           Authorization: `Bearer ${accessToken}`
         },
           this.on_connect.bind(this),

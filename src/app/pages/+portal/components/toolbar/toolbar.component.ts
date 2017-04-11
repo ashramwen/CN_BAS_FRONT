@@ -4,10 +4,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'bas-toolbar',
   template: `
-    <md-toolbar color="primary">
-      <button md-icon-button (click)="toggleMenu.emit()">
-        <md-icon class="menu-toggle" [class.active]="menuVisible">menu</md-icon>
-      </button>
+    <md-toolbar>
       <ng-content></ng-content>
       <button md-icon-button (click)="showUser.emit()">
         <md-icon class="portrait">account_circle</md-icon>
@@ -21,6 +18,5 @@ import { Observable } from 'rxjs';
 })
 export class ToolbarCmp {
   @Input() public menuVisible: boolean;
-  @Output() public toggleMenu = new EventEmitter();
   @Output() public showUser: EventEmitter<any> = new EventEmitter();
 }

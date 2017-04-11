@@ -1,0 +1,24 @@
+@import './icon';
+
+// Creates a container object for a light theme to be given to individual component theme mixins.
+@function custom-theme($primary, $accent, $warn, $foreground, $background) {
+  @return (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+    is-dark: false,
+    foreground: $foreground,
+    background: $background,
+  );
+}
+
+
+@mixin load-theme($primary, $accent, $warn, $foreground, $background) {
+  $theme: custom-theme($primary, $accent, $warn, $foreground, $background);
+
+  // include default theme
+  @include angular-material-theme($theme);
+
+  // override default theme with custom theme
+  @include mat-icon-theme($theme);
+}

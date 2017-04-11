@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
 import {
   Router,
   Event as RouterEvent,
@@ -11,25 +11,13 @@ import {
     <a md-list-item 
         [routerLink]="routerLink"
         [routerLinkActive]="'active'">
-      <md-icon md-list-icon>{{ icon }}</md-icon>
+      <md-icon md-list-icon [class.mat-primary]="">{{ icon }}</md-icon>
       <span md-line><ng-content></ng-content></span>
       <span md-line class="secondary">{{ hint }}</span>
     </a>
   `,
-  styles: [`
-    a.active{
-      color: rgba(255,255,255,0.8);
-      pointer-events: none;
-      cursor: default;
-      background: rgba(0,0,0,0.4);
-    }
-    a.active .secondary {
-      color: rgba(255,255,255,0.5);
-    }
-    .secondary {
-      color: rgba(0, 0, 0, 0.54);
-    }
-  `]
+  styleUrls: ['./nav-item.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class NavItemCmp implements OnInit {
   @Input() public icon = '';

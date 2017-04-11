@@ -1,4 +1,5 @@
 @import '~@angular/material/core/theming/all-theme';
+@import './components/index';
 
 // Include non-theme styles for core.
 @include mat-core();
@@ -6,8 +7,34 @@
 // Define a theme.
 $primary: mat-palette($mat-cyan);
 $accent:  mat-palette($mat-amber, A200, A100, A400);
+$warn: mat-palette($mat-red);
 
-$theme: mat-light-theme($primary, $accent);
+// Foreground palette for light themes.
+$custom-foreground: (
+  base:            black,
+  divider:         rgba(black, 0.12),
+  dividers:        rgba(black, 0.12),
+  disabled:        rgba(black, 0.38),
+  disabled-button: rgba(black, 0.38),
+  disabled-text:   rgba(black, 0.38),
+  hint-text:       rgba(black, 0.38),
+  secondary-text:  rgba(black, 0.54),
+  icon:            rgba(black, 0.54),
+  icons:           rgba(black, 0.54),
+  text:            rgba(black, 0.87)
+);
+
+// Background palette for light themes.
+$custom-background: (
+  status-bar: map_get($mat-grey, 300),
+  app-bar:    map_get($mat-grey, A100),
+  background: map_get($mat-grey, 50),
+  hover:      rgba(black, 0.04), // TODO(kara): check style with Material Design UX
+  card:       white,
+  dialog:     white,
+  disabled-button: rgba(black, 0.12),
+  raised-button: white,
+);
 
 // Include all theme styles for the components.
-@include angular-material-theme($theme);
+@include load-theme($primary, $accent, $warn, $custom-foreground, $custom-background);

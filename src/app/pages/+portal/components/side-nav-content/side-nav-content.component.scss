@@ -1,0 +1,17 @@
+.menu-toggle-btn{
+  margin: 4px;
+  border-radius: 50%;
+  background: #efefef;
+}
+
+.menu-toggle{
+  &.active{
+    transform: rotate(90deg);
+  }
+  transition: all 0.2s ease;
+}
+
+.nav-container{
+  position: relative;
+  top: 80px;
+}
