@@ -17,7 +17,7 @@ export const portalRoutes = [
     children: [{
       path: 'light-management',
       children: [...lightManagementRoutes]
-    },{
+    }, {
       path: '',
       redirectTo: 'light-management',
       pathMatch: 'prefix',

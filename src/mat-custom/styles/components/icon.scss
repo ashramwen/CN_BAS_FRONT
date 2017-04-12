@@ -9,7 +9,6 @@
   $foreground: map-get($theme, foreground);
 
   .mat-icon {
-    color: mat-color($foreground, icon);
     &.mat-primary {
       color: mat-color($primary);
     }

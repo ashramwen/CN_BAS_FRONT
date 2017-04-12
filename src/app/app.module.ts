@@ -32,7 +32,6 @@ import { AppCmp } from './app.component';
 import { LoginCmp } from './pages/login/login.component';
 
 import '../styles/styles.scss';
-import '../styles/headings.css';
 import { AppSharedModule } from './shared/shared.module';
 import { PortalModule } from './pages/+portal/portal.module';
 import { instrumentation } from './shared/redux/index';

@@ -38,7 +38,6 @@ import { LightManagementModule } from './light-management/light-management.modul
     ErrorControllerModule,
     MatCustomModule,
     RouterModule,
-    
     LightManagementModule
   ],
   entryComponents: [PasswordChangeCmp],
