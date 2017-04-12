@@ -8,49 +8,19 @@ import { LocationResolver } from '../../shared/providers/resolvers/location-reso
 import { MapViewCmp } from './map-view/map-view.component';
 import { PortalCmp } from './portal.component';
 import { LightResolver } from '../../shared/providers/resolvers/light-resolver.service';
+import { lightManagementRoutes } from './light-management/light-management.routes';
 
 export const portalRoutes = [
   {
     path: '',
     component: PortalCmp,
-    children: [
-      {
-        path: 'landing',
-        component: LandingCmp,
-        resolve: {
-          lightings: LightsResolver
-        }
-      },
-      {
-        path: 'map-view',
-        component: MapViewCmp,
-        resolve: {
-          buildings: BuildingResolver
-        }
-      },
-      {
-        path: '',
-        redirectTo: 'landing',
-        pathMatch: 'prefix',
-      },
-      {
-        path: 'device-list',
-        children: [
-          {
-            path: '',
-            component: DeviceListCmp,
-            resolve: {
-              lightings: LightsResolver
-            }
-          }, {
-            path: ':id',
-            component: DeviceDetailCmp,
-            resolve: {
-              lighting: LightResolver
-            }
-          }
-        ]
-      }
-    ]
+    children: [{
+      path: 'light-management',
+      children: [...lightManagementRoutes]
+    },{
+      path: '',
+      redirectTo: 'light-management',
+      pathMatch: 'prefix',
+    }],
   },
 ];

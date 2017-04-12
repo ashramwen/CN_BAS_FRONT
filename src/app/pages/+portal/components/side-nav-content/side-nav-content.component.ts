@@ -33,27 +33,19 @@ export class SideNavContentCmp {
     path: '',
     text: '',
     children: [{
-      icon: 'book',
-      path: 'landing',
-      text: 'Welcome',
-      children: [{
-        path: 'landing',
-        text: 'Landing',
-      }, {
-        path: 'landing',
-        text: 'Landing',
-      }, {
-        path: 'landing',
-        text: 'Landing',
-      }]
-    }, {
-      icon: 'map',
-      path: 'map-view',
-      text: 'Map',
-    }, {
       icon: 'lightbulb_outline',
-      path: 'device-list',
-      text: 'Device List',
+      path: 'light-management',
+      text: 'Lighting',
+      children: [{
+        path: 'light-management/landing',
+        text: 'Landing',
+      }, {
+        path: 'light-management/map-view',
+        text: 'Map',
+      }, {
+        path: 'light-management/device-list',
+        text: 'Device Management',
+      }]
     }]
   };
 
