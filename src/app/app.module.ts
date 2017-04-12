@@ -36,6 +36,7 @@ import '../styles/headings.css';
 import { AppSharedModule } from './shared/shared.module';
 import { PortalModule } from './pages/+portal/portal.module';
 import { instrumentation } from './shared/redux/index';
+import { MatCustomModule } from '../mat-custom/mat-custom.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: Http) {
@@ -61,7 +62,6 @@ const APP_PROVIDERS = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppSharedModule,
     MaterialRootModule,
     ReactiveFormsModule,
     // have to comment this line when build:aot:prod
@@ -83,7 +83,9 @@ const APP_PROVIDERS = [
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
 
     // app modules
-    PortalModule
+    PortalModule,
+    AppSharedModule,
+    MatCustomModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

@@ -1,13 +1,16 @@
 @import '~@angular/material/core/theming/all-theme';
 @import './components/index';
+@import '../components/collapse/collapse';
+@import '../components/index';
+@import './palette';
 
 // Include non-theme styles for core.
 @include mat-core();
 
 // Define a theme.
-$primary: mat-palette($mat-cyan);
-$accent:  mat-palette($mat-amber, A200, A100, A400);
-$warn: mat-palette($mat-red);
+$primary: mat-palette($app-primary);
+$accent:  mat-palette($app-accent, A200, A100, A400);
+$warn: mat-palette($app-warn);
 
 // Foreground palette for light themes.
 $custom-foreground: (

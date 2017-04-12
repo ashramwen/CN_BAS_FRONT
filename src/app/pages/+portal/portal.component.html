@@ -1,9 +1,9 @@
 <swipe-wrapper [index]="swipeTabIndex$ | async">
   <swipe-tab>
-    <bas-sidenav-container fullscreen>
-      <bas-sidenav #sidenav mode="side" [opened]="showSidenav$ | async">
+    <md-sidenav-container fullscreen class="custom">
+      <md-sidenav #sidenav mode="custom" [opened]="showSidenav$ | async">
         <side-nav-content (toggleMenu)="toggleSidenav()"></side-nav-content>
-      </bas-sidenav>
+      </md-sidenav>
       <div class="main">
         <bas-toolbar (showUser)="showUserInfo()" [menuVisible]="showSidenav$ | async">
           Book Collection
@@ -12,7 +12,7 @@
           <router-outlet (activate)="onRouteActivated()"></router-outlet>
         </div>
       </div>
-    </bas-sidenav-container>
+    </md-sidenav-container>
   </swipe-tab>
   <swipe-tab activeClass="user-info">
     <user-info></user-info>

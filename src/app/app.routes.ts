@@ -5,11 +5,12 @@ import { AuthGuard } from './shared/providers/guards/authen-guard.service';
 import { LocationResolver } from './shared/providers/resolvers/location-resolver.service';
 import { Component } from '@angular/core';
 import { DeviceListCmp } from './pages/+portal/device-list/device-list.component';
+import { portalRoutes } from './pages/+portal/portal.routes';
 
 export const ROUTES: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {
@@ -18,7 +19,7 @@ export const ROUTES: Routes = [
   },
   {
     path: 'portal',
-    loadChildren: './pages/+portal#PortalModule',
+    children: [...portalRoutes],
     canActivate: [AuthGuard],
     resolve: {
       location: LocationResolver

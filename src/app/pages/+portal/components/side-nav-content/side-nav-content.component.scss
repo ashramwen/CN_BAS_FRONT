@@ -1,5 +1,5 @@
 .menu-toggle-btn{
-  margin: 4px;
+  margin: 4px !important;
   border-radius: 50%;
   background: #efefef;
 }
@@ -14,4 +14,20 @@
 .nav-container{
   position: relative;
   top: 80px;
+}
+
+cm-sidenav-list {
+  cm-sidenav-item {
+    & > a {
+      &.active {
+        color: rgba(255,255,255,0.8);
+        pointer-events: none;
+        cursor: default;
+        background: rgba(0,0,0,0.2);
+      }
+      &[md-list-item] .mat-list-item-content{
+        padding: 0px 8px !important;
+      }
+    }
+  }
 }

@@ -9,7 +9,7 @@ import { MapViewCmp } from './map-view/map-view.component';
 import { PortalCmp } from './portal.component';
 import { LightResolver } from '../../shared/providers/resolvers/light-resolver.service';
 
-export const routes = [
+export const portalRoutes = [
   {
     path: '',
     component: PortalCmp,

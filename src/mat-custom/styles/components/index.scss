@@ -1,4 +1,5 @@
 @import './icon';
+@import './toolbar';
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
 @function custom-theme($primary, $accent, $warn, $foreground, $background) {

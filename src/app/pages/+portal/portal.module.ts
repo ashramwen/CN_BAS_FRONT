@@ -23,7 +23,7 @@ import { PunchCardComponent } from './components/punch-card/punch-card.component
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { UserInfoCmp } from './user-info.ts/user-info.component';
-import { routes } from './portal.routes';
+import { MatCustomModule } from '../../../mat-custom/mat-custom.module';
 
 @NgModule({
   declarations: [
@@ -44,11 +44,12 @@ import { routes } from './portal.routes';
     MaterialModule,
     FlexLayoutModule.forRoot(),
     CommonModule,
-    RouterModule.forChild(routes),
     ReactiveFormsModule,
     ConfirmModalModule,
     ErrorControllerModule,
     BasMapModule,
+    MatCustomModule,
+    RouterModule
   ],
   entryComponents: [PasswordChangeCmp],
   exports: [PortalCmp],

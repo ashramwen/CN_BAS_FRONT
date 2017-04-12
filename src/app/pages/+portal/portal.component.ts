@@ -15,6 +15,7 @@ import { StateSelectors } from '../../shared/redux/selectors';
 import { StompService } from './../../shared/providers/stomp.service';
 import { Store } from '@ngrx/store';
 import { createSelector } from 'reselect';
+import { NavSection } from '../../../mat-custom/components/side-nav/section.interface';
 
 @Component({
   selector: 'bas-portal',
@@ -48,6 +49,8 @@ export class PortalCmp {
         StateSelectors.layout,
         (state: LayoutState) => state.swipeTabIndex
       ));
+    
+
   }
 
   public toggleSidenav() {
