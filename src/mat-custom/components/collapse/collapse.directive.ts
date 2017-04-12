@@ -74,7 +74,6 @@ export class MCCollapse {
 
     this.containerHeight = '0px';
     this.collapsed.emit(this);
-    
   }
 
   /** allows to manually show collapsed content */
@@ -88,14 +87,13 @@ export class MCCollapse {
     this.isCollapse = true;
     this.isCollapsing = false;
     this._renderer.setElementStyle(this._el.nativeElement, 'height', 'auto');
-    
     this.containerHeight = this.containerScrollheight + 'px';
     this.expanded.emit(this);
   }
 
   public get containerScrollheight() {
     let container: HTMLDivElement = this._el.nativeElement;
-    return container.scrollHeight
+    return container.scrollHeight;
   }
 
   public set containerHeight(height: string) {

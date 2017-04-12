@@ -8,10 +8,15 @@ import {
   EventEmitter
 } from '@angular/core';
 import { Store } from '@ngrx/store';
+
 import { RootState } from '../../../../shared/redux/index';
 import { HideSideNavAction } from '../../../../shared/redux/layout/actions';
 import { NavSection } from '../../../../../mat-custom/components/side-nav/section.interface';
 import { ViewEncapsulation } from '@angular/core';
+import { Observable } from 'rxjs';
+import { createSelector } from 'reselect';
+import { StateSelectors } from '../../../../shared/redux/selectors';
+import { LayoutState } from '../../../../shared/redux/layout/reducer';
 
 @Component({
   selector: 'side-nav-content',
@@ -34,10 +39,10 @@ export class SideNavContentCmp {
       children: [{
         path: 'landing',
         text: 'Landing',
-      },{
+      }, {
         path: 'landing',
         text: 'Landing',
-      },{
+      }, {
         path: 'landing',
         text: 'Landing',
       }]
@@ -55,13 +60,20 @@ export class SideNavContentCmp {
   @Input()
   public active: boolean;
 
+  public menuVisible: Observable<boolean>;
+
   constructor(
     private store: Store<RootState>,
     private ele: ElementRef
-  ) { }
+  ) {
+    this.menuVisible = this.store.select(
+      createSelector(StateSelectors.layout, (state: LayoutState) => {
+        return state.sideMenuVisible;
+      })
+    );
+  }
 
   public closeSidenav() {
     this.store.dispatch(new HideSideNavAction());
   }
-
 }

@@ -17,6 +17,5 @@ import { Observable } from 'rxjs';
   encapsulation: ViewEncapsulation.None
 })
 export class ToolbarCmp {
-  @Input() public menuVisible: boolean;
   @Output() public showUser: EventEmitter<any> = new EventEmitter();
 }

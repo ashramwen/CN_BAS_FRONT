@@ -49,8 +49,6 @@ export class PortalCmp {
         StateSelectors.layout,
         (state: LayoutState) => state.swipeTabIndex
       ));
-    
-
   }
 
   public toggleSidenav() {
