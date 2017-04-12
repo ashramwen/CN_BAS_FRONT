@@ -53,32 +53,30 @@ export class PunchCard {
   };
 
   private _init() {
-    let width = this.width;
-    let height = this.height;
-    let margin = this.margin;
+    this.innerWidth = this.width - this.margin.left - this.margin.right;
+    this.innerHeight = this.height - this.margin.top - this.margin.bottom;
+    this.unitWidth = this.innerWidth / 24;
+    this.unitHeight = this.innerHeight / 7;
 
-    let innerWidth = this.innerWidth = width - margin.left - margin.right;
-    let innerHeight = this.innerHeight = height - margin.top - margin.bottom;
-    let unitWidth = this.unitWidth = innerWidth / 24;
-    let unitHeight = this.unitHeight = innerHeight / 7;
-
-    this.unitSize = Math.min(unitWidth, unitHeight);
+    this.unitSize = Math.min(this.unitWidth, this.unitHeight);
 
     this.chart = d3.select(this.target)
       .append('svg')
-      .attr('width', width)
-      .attr('height', height)
+      .attr('width', this.width)
+      .attr('height', this.height)
       .append('g')
-      .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+      .attr('transform', 'translate(' + this.margin.left + ', ' + this.margin.top + ')');
 
-    this.tip = d3.select(this.target)
-      .select('div.d3-tip');
+    this.tip = d3.select(this.target).select('div.d3-tip');
 
-    this.x = d3.scaleLinear().domain([0, 23]).range([unitWidth / 2, innerWidth - unitWidth / 2]);
+    this.x = d3.scaleLinear().domain([0, 23])
+      .range([this.unitWidth / 2, this.innerWidth - this.unitWidth / 2]);
 
-    this.y = d3.scaleLinear().domain([0, 6]).range([unitHeight / 2, innerHeight - unitHeight / 2]);
+    this.y = d3.scaleLinear().domain([0, 6])
+      .range([this.unitHeight / 2, this.innerHeight - this.unitHeight / 2]);
 
-    this.xAxis = d3.axisBottom(this.x).ticks(24).tickFormat((d, i) => this.xticks[i]);
+    this.xAxis = d3.axisBottom(this.x).ticks(24)
+      .tickFormat((d, i) => this.xticks[i]);
 
     this.yAxis = d3.axisLeft(this.y).ticks(7).tickFormat((d, i) => this.yticks[i]);
 
@@ -124,7 +122,7 @@ export class PunchCard {
   private _renderAxis() {
     this.chart.append('g')
       .attr('class', 'x axis')
-      .attr('transform', 'translate(0, ' + this.innerHeight + ')')
+      .attr('transform', `translate(0, ${this.innerHeight})`)
       .call(this.xAxis);
 
     this.chart.append('g').attr('class', 'y axis').call(this.yAxis);
