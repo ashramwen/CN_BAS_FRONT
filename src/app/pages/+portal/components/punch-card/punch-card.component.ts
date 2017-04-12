@@ -1,6 +1,14 @@
 import * as d3 from 'd3';
 
-import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 
 import { PunchCard } from './punch-card';
 
@@ -15,7 +23,7 @@ export class PunchCardComponent implements OnInit, OnChanges {
   public data: number[];
 
   @ViewChild('chart')
-  private chartContainer: ElementRef;
+  public chartContainer: ElementRef;
 
   private punchChart: HTMLDivElement;
   private chart: PunchCard;
@@ -28,7 +36,7 @@ export class PunchCardComponent implements OnInit, OnChanges {
     this.punchChart = this.chartContainer.nativeElement;
   }
 
-  public ngOnChanges() {
+  public ngOnChanges(changes: SimpleChanges) {
     if (!this.data) { return; }
 
     if (!this.chart) {

@@ -20,5 +20,4 @@ export class CMSideNavItem {
   @Input()
   public section: NavSection;
 
-  constructor() { }
 }

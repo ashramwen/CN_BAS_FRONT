@@ -1,5 +1,5 @@
 <button class="menu-toggle-btn" md-icon-button (click)="toggleMenu.emit()">
-  <md-icon class="menu-toggle" [class.active]="menuVisible">menu</md-icon>
+  <md-icon class="menu-toggle" [class.active]="menuVisible | async">menu</md-icon>
 </button>
 
 <cm-sidenav-list class="nav-container" [navRoot]="rootSection"></cm-sidenav-list>

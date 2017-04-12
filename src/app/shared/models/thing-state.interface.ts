@@ -9,6 +9,7 @@ export interface ThingState {
   Smoke?: number;
   Temp?: number;
   VOC?: number;
+  Brightness?: number;
 
   date: number;
   target: string;
