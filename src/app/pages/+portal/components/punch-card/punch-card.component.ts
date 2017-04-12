@@ -15,7 +15,7 @@ export class PunchCardComponent implements OnInit, OnChanges {
   public data: number[];
 
   @ViewChild('chart')
-  private chartContainer: ElementRef;
+  public chartContainer: ElementRef;
 
   private punchChart: HTMLDivElement;
   private chart: PunchCard;

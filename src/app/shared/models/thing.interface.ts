@@ -15,4 +15,5 @@ export interface Thing {
   kiiThingID: string;
   tags?: any[];
   globalThingID: number;
+  connectivity?: any;
 }
