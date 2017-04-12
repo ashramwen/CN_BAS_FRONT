@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-
-import { DeviceService } from '../../../shared/providers/device.service';
+import { Store } from '@ngrx/store';
+import { go } from '@ngrx/router-store';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Rx';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RootState } from '../../../shared/redux/index';
-import { Store } from '@ngrx/store';
-import { go } from '@ngrx/router-store';
-import { Thing } from '../../../shared/models/thing.interface';
+
+import { DeviceService } from '../../../../shared/providers/device.service';
+import { RootState } from '../../../../shared/redux/index';
+import { Thing } from '../../../../shared/models/thing.interface';
 
 @Component({
   selector: 'bas-device-list',

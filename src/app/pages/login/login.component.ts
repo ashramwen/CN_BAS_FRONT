@@ -46,7 +46,7 @@ export class LoginCmp implements OnInit {
   public ngOnInit() {
     this.store.select(StateSelectors.token).subscribe((tokenState: TokenState) => {
       if (tokenState && tokenState.loggedIn) {
-        this.store.dispatch(go(['portal/landing']));
+        this.store.dispatch(go(['portal']));
       }
     });
   }

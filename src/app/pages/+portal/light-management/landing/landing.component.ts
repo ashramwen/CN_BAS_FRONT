@@ -1,16 +1,16 @@
 import * as moment from 'moment';
 
-import { Bucket, ESResponse } from './../../../shared/models/es-response.interface';
+import { Bucket, ESResponse } from '../../../../shared/models/es-response.interface';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ESQueryOption, GroupType } from './../../../shared/models/es-query-option.interface';
+import { ESQueryOption, GroupType } from '../../../../shared/models/es-query-option.interface';
 import { Observable, Subject } from 'rxjs';
 
 import { ActivatedRoute } from '@angular/router';
-import { EsQueryService } from './../../../shared/providers/es-query.service';
+import { EsQueryService } from '../../../../shared/providers/es-query.service';
 import { Message } from 'stompjs';
-import { StompService } from './../../../shared/providers/stomp.service';
-import { StompThing } from './../../../shared/models/stomp-thing.interface';
-import { Thing } from './../../../shared/models/thing.interface';
+import { StompService } from '../../../../shared/providers/stomp.service';
+import { StompThing } from '../../../../shared/models/stomp-thing.interface';
+import { Thing } from '../../../../shared/models/thing.interface';
 
 /**
  * five minutes
