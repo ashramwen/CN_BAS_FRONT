@@ -61,6 +61,7 @@ const APP_PROVIDERS = [
   ],
   imports: [ // import Angular's modules
     // vendor modules
+    BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     HttpModule,
