@@ -2,6 +2,7 @@ import { BasMapModule } from '../../../shared/components/bas-map/bas-map.module'
 import { CommonModule } from '@angular/common';
 import { DeviceDetailCmp } from './device-list/device-detail/device-detail.component';
 import { DeviceListCmp } from './device-list/device-list.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { LandingCmp } from './landing/landing.component';
 import { LandingService } from './landing/landing.service';
@@ -16,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [
     BasMapModule,
     MaterialModule,
+    FlexLayoutModule,
     CommonModule,
     FormsModule,
     TranslateModule,

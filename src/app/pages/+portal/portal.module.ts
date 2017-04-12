@@ -30,7 +30,7 @@ import { UserInfoCmp } from './user-info.ts/user-info.component';
     TranslateModule,
     FormsModule,
     MaterialModule,
-    FlexLayoutModule.forRoot(),
+    FlexLayoutModule,
     CommonModule,
     ReactiveFormsModule,
     ConfirmModalModule,
