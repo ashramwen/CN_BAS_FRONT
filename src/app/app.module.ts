@@ -1,42 +1,44 @@
-import { BrowserModule } from '@angular/platform-browser';
+import '../styles/styles.scss';
+import '../styles/headings.css';
+
+import {
+  ApplicationRef,
+  NgModule,
+  OpaqueToken,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule, Http } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
 import { MaterialRootModule, OverlayContainer } from '@angular/material';
 import {
-  NgModule,
-  ApplicationRef,
-  OpaqueToken
-} from '@angular/core';
-import {
-  removeNgStyles,
-  createNewHosts,
-  createInputTransfer
-} from '@angularclass/hmr';
-import {
+  PreloadAllModules,
   RouterModule,
-  PreloadAllModules
 } from '@angular/router';
-import { LocalStorageModule } from 'angular-2-local-storage';
-import { StoreLogMonitorModule } from '@ngrx/store-log-monitor';
-import { routerReducer, RouterStoreModule } from '@ngrx/router-store';
-import { StoreModule } from '@ngrx/store';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { RouterStoreModule, routerReducer } from '@ngrx/router-store';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import {
+  createInputTransfer,
+  createNewHosts,
+  removeNgStyles,
+} from '@angularclass/hmr';
+
+// App is our top level component
+import { AppCmp } from './app.component';
+import { AppSharedModule } from './shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 /*
  * Platform and Environment providers/directives/pipes
  */
 import { ENV_PROVIDERS } from './environment';
-import { ROUTES } from './app.routes';
-// App is our top level component
-import { AppCmp } from './app.component';
+import { LocalStorageModule } from 'angular-2-local-storage';
 import { LoginCmp } from './pages/login/login.component';
-
-import '../styles/styles.scss';
-import '../styles/headings.css';
-import { AppSharedModule } from './shared/shared.module';
-import { PortalModule } from './pages/+portal/portal.module';
-import { instrumentation } from './shared/redux/index';
 import { MatCustomModule } from '../mat-custom/mat-custom.module';
+import { PortalModule } from './pages/+portal/portal.module';
+import { ROUTES } from './app.routes';
+import { StoreLogMonitorModule } from '@ngrx/store-log-monitor';
+import { StoreModule } from '@ngrx/store';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { instrumentation } from './shared/redux/index';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: Http) {

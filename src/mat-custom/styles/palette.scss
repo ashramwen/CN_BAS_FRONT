@@ -1,4 +1,4 @@
-@import '~@angular/material/core/theming/palette';
+@import '~@angular/material/theming';
 
 $app-primary: (
   50:	#f4f8f9,
@@ -54,7 +54,7 @@ $app-accent: (
   A700: #a867dd,
   A701: #a9d759,
   A702: #e9f4fa,
-  A703: #ebebeb, 
+  A703: #ebebeb,
   A704: #65696c,
   contrast: (
     50: $black-87-opacity,
