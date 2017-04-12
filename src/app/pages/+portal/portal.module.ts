@@ -13,7 +13,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { LAYOUT_CMP } from './components/index';
 import { LandingCmp } from './landing/landing.component';
 import { LandingService } from './landing/landing.service';
-import { LocationCmp } from './location/location.component';
 import { MapViewCmp } from './map-view/map-view.component';
 import { MaterialModule } from '@angular/material';
 import { NgModule } from '@angular/core';
