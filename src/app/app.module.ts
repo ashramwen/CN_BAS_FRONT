@@ -1,5 +1,4 @@
 import '../styles/styles.scss';
-import '../styles/headings.css';
 
 import {
   ApplicationRef,
@@ -39,12 +38,6 @@ import { StoreLogMonitorModule } from '@ngrx/store-log-monitor';
 import { StoreModule } from '@ngrx/store';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { instrumentation } from './shared/redux/index';
-
-/**
- * styles
- */
-import '../styles/styles.scss';
-
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: Http) {
