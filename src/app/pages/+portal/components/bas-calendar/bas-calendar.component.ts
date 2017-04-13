@@ -35,11 +35,11 @@ const colors: any = {
 
 @Component({
   selector: 'bas-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss'],
+  templateUrl: './bas-calendar.component.html',
+  styleUrls: ['./bas-calendar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarComponent {
+export class BasCalendarComponent {
 
   @ViewChild('modalContent')
   public modalContent: TemplateRef<any>;

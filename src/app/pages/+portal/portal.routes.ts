@@ -9,6 +9,7 @@ import { LocationResolver } from '../../shared/providers/resolvers/location-reso
 import { MapViewCmp } from './map-view/map-view.component';
 import { PortalCmp } from './portal.component';
 import { lightManagementRoutes } from './light-management/light-management.routes';
+import { profileRoutes } from './profile/profile.routes';
 
 export const portalRoutes = [
   {
@@ -17,6 +18,9 @@ export const portalRoutes = [
     children: [{
       path: 'light-management',
       children: [...lightManagementRoutes]
+    }, {
+      path: 'profile',
+      children: [...profileRoutes]
     }, {
       path: '',
       redirectTo: 'light-management',

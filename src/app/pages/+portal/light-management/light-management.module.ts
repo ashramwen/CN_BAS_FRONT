@@ -1,5 +1,4 @@
 import { BasMapModule } from '../../../shared/components/bas-map/bas-map.module';
-import { CalendarComponent } from './../components/calendar/calendar.component';
 import { CalendarModule } from 'angular-calendar';
 import { CommonModule } from '@angular/common';
 import { DeviceDetailCmp } from './device-list/device-detail/device-detail.component';
@@ -31,8 +30,7 @@ import { TranslateModule } from '@ngx-translate/core';
     MapViewCmp,
     DeviceListCmp,
     DeviceDetailCmp,
-    PunchCardComponent,
-    CalendarComponent
+    PunchCardComponent
   ],
   providers: [LandingService]
 })

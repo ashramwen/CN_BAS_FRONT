@@ -1,22 +1,22 @@
 import {
   Component,
+  ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
-  SimpleChanges,
-  ElementRef,
   Output,
-  EventEmitter
+  SimpleChanges,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
 
-import { RootState } from '../../../../shared/redux/index';
 import { HideSideNavAction } from '../../../../shared/redux/layout/actions';
-import { NavSection } from '../../../../../mat-custom/components/side-nav/section.interface';
-import { ViewEncapsulation } from '@angular/core';
-import { Observable } from 'rxjs';
-import { createSelector } from 'reselect';
-import { StateSelectors } from '../../../../shared/redux/selectors';
 import { LayoutState } from '../../../../shared/redux/layout/reducer';
+import { NavSection } from '../../../../../mat-custom/components/side-nav/section.interface';
+import { Observable } from 'rxjs';
+import { RootState } from '../../../../shared/redux/index';
+import { StateSelectors } from '../../../../shared/redux/selectors';
+import { Store } from '@ngrx/store';
+import { ViewEncapsulation } from '@angular/core';
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'side-nav-content',
@@ -45,6 +45,14 @@ export class SideNavContentCmp {
       }, {
         path: 'light-management/device-list',
         text: 'Device Management',
+      }]
+    }, {
+      icon: 'featured_play_list',
+      path: 'profile',
+      text: 'Profile',
+      children: [{
+        path: 'profile/calendar',
+        text: 'Calendar',
       }]
     }]
   };
