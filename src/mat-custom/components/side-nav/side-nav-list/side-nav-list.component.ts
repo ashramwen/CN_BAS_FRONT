@@ -5,7 +5,10 @@ import { NavSection } from '../section.interface';
   selector: 'cm-sidenav-list',
   template: `
     <md-nav-list>
-      <cm-sidenav-item [section]="childSection" *ngFor="let childSection of navRoot.children">
+      <cm-sidenav-item 
+        [open]="open" 
+        [section]="childSection" 
+        *ngFor="let childSection of navRoot.children">
       </cm-sidenav-item>
     </md-nav-list>
   `,
@@ -13,4 +16,6 @@ import { NavSection } from '../section.interface';
 export class CMSideNavList {
   @Input()
   public navRoot: NavSection;
+  @Input()
+  public open: boolean = null;
 }

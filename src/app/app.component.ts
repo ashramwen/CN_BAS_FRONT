@@ -39,7 +39,6 @@ import { createSelector } from 'reselect';
 })
 export class AppCmp implements OnInit {
   public url = 'http://cn.kii.com';
-  public loading$: Observable<boolean>;
 
   constructor(
     private router: Router,
@@ -52,11 +51,6 @@ export class AppCmp implements OnInit {
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     // translate.use('en');
-
-    this.loading$ = store.select(createSelector(
-      StateSelectors.layout,
-      (state: LayoutState) => !!state.loading
-    ));
   }
 
   public ngOnInit() {

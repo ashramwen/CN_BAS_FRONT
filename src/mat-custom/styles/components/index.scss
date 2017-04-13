@@ -22,4 +22,5 @@
 
   // override default theme with custom theme
   @include mat-icon-theme($theme);
+  @include custom-sidenav($theme);
 }

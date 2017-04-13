@@ -1,5 +1,15 @@
+@import '../font';
+
+md-toolbar{
+  min-height: 3rem !important;
+  .mat-toolbar-row{
+    h1{
+      @include cm-h1-font();
+    }
+  }
+}
 @media (max-width: 960px) and (orientation: landscape){
-  md-toobar{
+  md-toolbar{
     .mat-toolbar-row {
       height: 3rem;
     }
@@ -9,7 +19,7 @@
   }
 }
 @media (min-width: 960px) and (orientation: landscape){
-  md-toobar{
+  md-toolbar{
     .mat-toolbar-row {
       height: 3rem;
     }

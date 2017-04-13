@@ -12,6 +12,7 @@ import { NgModule } from '@angular/core';
 import { PunchCardComponent } from './landing/punch-card/punch-card.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatCustomModule } from '../../../../mat-custom/mat-custom.module';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     FormsModule,
     TranslateModule,
-    RouterModule
+    RouterModule,
+    MatCustomModule
   ],
   declarations: [
     LandingCmp,
