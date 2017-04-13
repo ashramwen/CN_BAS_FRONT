@@ -488,6 +488,24 @@ angular-2-local-storage@^1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/angular-2-local-storage/download/angular-2-local-storage-1.0.1.tgz#3b846c90b2fffc9124f7bacc347f22d043a1e3a4"
 
+angular-calendar@^0.13.4:
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/angular-calendar/-/angular-calendar-0.13.4.tgz#db2a126cb2148629ef45721cb2e0e79d67d0fa3a"
+  dependencies:
+    angular-draggable-droppable "^1.0.0"
+    angular-resizable-element "^1.0.0"
+    calendar-utils "0.0.45"
+    date-fns "^1.15.1"
+    positioning "^1.0.4"
+
+angular-draggable-droppable@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/angular-draggable-droppable/-/angular-draggable-droppable-1.0.0.tgz#16e9c881611c5a0c6c018b441fa774691ed9356c"
+
+angular-resizable-element@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/angular-resizable-element/-/angular-resizable-element-1.0.0.tgz#5698a703d5db876ef1a7b43ace7463e81ec54685"
+
 angular2-template-loader@^0.6.0:
   version "0.6.2"
   resolved "http://registry.npm.taobao.org/angular2-template-loader/download/angular2-template-loader-0.6.2.tgz#c0d44e90fff0fac95e8b23f043acda7fd1c51d7c"
@@ -1003,6 +1021,10 @@ bytes@2.3.0:
 bytes@2.4.0:
   version "2.4.0"
   resolved "http://registry.npm.taobao.org/bytes/download/bytes-2.4.0.tgz#7d97196f9d5baf7f6935e25985549edd2a6c2339"
+
+calendar-utils@0.0.45:
+  version "0.0.45"
+  resolved "https://registry.yarnpkg.com/calendar-utils/-/calendar-utils-0.0.45.tgz#ebe2e29250367c5eeb420340c6b1ebbad7a5e078"
 
 callsite@1.0.0:
   version "1.0.0"
@@ -1769,6 +1791,10 @@ dashdash@^1.12.0:
   resolved "http://registry.npm.taobao.org/dashdash/download/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
   dependencies:
     assert-plus "^1.0.0"
+
+date-fns@^1.15.1:
+  version "1.28.2"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.28.2.tgz#19e4192d68875c0bf7c9537e3f296a8ec64853ef"
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -4399,6 +4425,10 @@ portfinder@^1.0.9:
     async "^1.5.2"
     debug "^2.2.0"
     mkdirp "0.5.x"
+
+positioning@^1.0.4:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/positioning/-/positioning-1.1.0.tgz#9284bf36b2e38035728e19afc5e07ee89711e58c"
 
 postcss-calc@^5.2.0:
   version "5.3.1"

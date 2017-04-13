@@ -1,4 +1,6 @@
 import { BasMapModule } from '../../../shared/components/bas-map/bas-map.module';
+import { CalendarComponent } from './../components/calendar/calendar.component';
+import { CalendarModule } from 'angular-calendar';
 import { CommonModule } from '@angular/common';
 import { DeviceDetailCmp } from './device-list/device-detail/device-detail.component';
 import { DeviceListCmp } from './device-list/device-list.component';
@@ -21,7 +23,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     FormsModule,
     TranslateModule,
-    RouterModule
+    RouterModule,
+    CalendarModule.forRoot()
   ],
   declarations: [
     LandingCmp,
@@ -29,6 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
     DeviceListCmp,
     DeviceDetailCmp,
     PunchCardComponent,
+    CalendarComponent
   ],
   providers: [LandingService]
 })
