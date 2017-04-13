@@ -100,6 +100,8 @@ export class StompService {
     if (this.client && this.client.connected) {
       this.client.disconnect(() => this.state.next(StompState.CLOSED));
     }
+
+    this.debug('STOMP Disconnected.');
   }
 
   /**
