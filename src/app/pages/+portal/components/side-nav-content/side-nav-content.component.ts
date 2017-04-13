@@ -47,7 +47,7 @@ export class SideNavContentCmp {
         text: 'Device Management',
       }]
     }, {
-      icon: 'featured_play_list',
+      icon: 'event',
       path: 'profile',
       text: 'Profile',
       children: [{
