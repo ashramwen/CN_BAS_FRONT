@@ -1,27 +1,28 @@
-import { Injectable } from '@angular/core';
-import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { empty } from 'rxjs/observable/empty';
-import { of } from 'rxjs/observable/of';
-import { LocalStorageService } from 'angular-2-local-storage';
-
 import {
   ActionTypes,
+  ClearAction,
   LoadAction,
-  LoadSuccessAction,
   LoadFailureAction,
-  StoreSuccessAction,
-  StoreAction,
+  LoadSuccessAction,
   LogOutAction,
-  ClearAction
+  StoreAction,
+  StoreSuccessAction,
 } from './actions';
-import { LOCAL_STORAGE_KEYS } from '../../constants/local-storage';
-import { Token } from '../../models/token.interface';
-import { SessionService } from '../../providers/session.service';
-import { RootState } from '../index';
-import { go } from '@ngrx/router-store';
+import { Actions, Effect, toPayload } from '@ngrx/effects';
+
 import { GoMainAction } from '../layout/actions';
+import { Injectable } from '@angular/core';
+import { LOCAL_STORAGE_KEYS } from '../../constants/local-storage';
+import { LocalStorageService } from 'angular-2-local-storage';
+import { Observable } from 'rxjs/Observable';
+import { RootState } from '../index';
+import { SessionService } from '../../providers/session.service';
+import { StompService } from './../../providers/stomp.service';
+import { Token } from '../../models/token.interface';
+import { empty } from 'rxjs/observable/empty';
+import { go } from '@ngrx/router-store';
+import { of } from 'rxjs/observable/of';
 
 @Injectable()
 export class TokenEffects {
@@ -65,6 +66,7 @@ export class TokenEffects {
   public logout$: Observable<Action> = this.actions$
     .ofType(ActionTypes.LOGOUT)
     .switchMap(() => {
+      this.stomp.disconnect();
       this.store.dispatch(new GoMainAction());
       this.session.logout()
         .map(() => new ClearAction())
@@ -85,6 +87,7 @@ export class TokenEffects {
     private actions$: Actions,
     private localStorage: LocalStorageService,
     private session: SessionService,
-    private store: Store<RootState>
+    private store: Store<RootState>,
+    private stomp: StompService
   ) { }
 }

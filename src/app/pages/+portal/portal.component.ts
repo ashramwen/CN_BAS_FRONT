@@ -9,13 +9,13 @@ import { MdDialog, MdDialogConfig } from '@angular/material';
 import { GoUserInfoAction } from '../../shared/redux/layout/actions';
 import { LayoutState } from '../../shared/redux/layout/reducer';
 import { LocationCmp } from './location/location.component';
+import { NavSection } from '../../../mat-custom/components/side-nav/section.interface';
 import { Observable } from 'rxjs';
 import { RootState } from '../../shared/redux/index';
 import { StateSelectors } from '../../shared/redux/selectors';
 import { StompService } from './../../shared/providers/stomp.service';
 import { Store } from '@ngrx/store';
 import { createSelector } from 'reselect';
-import { NavSection } from '../../../mat-custom/components/side-nav/section.interface';
 
 @Component({
   selector: 'bas-portal',
@@ -49,6 +49,8 @@ export class PortalCmp {
         StateSelectors.layout,
         (state: LayoutState) => state.swipeTabIndex
       ));
+
+    this.stomp.init();
   }
 
   public toggleSidenav() {
