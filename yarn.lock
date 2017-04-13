@@ -2,59 +2,64 @@
 # yarn lockfile v1
 
 
-"@angular/common@2.4.6":
-  version "2.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/common/download/@angular/common-2.4.6.tgz#f005528f75d0a6deaaf636f3b779f26bda4adb07"
+"@angular/animations@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-4.0.2.tgz#79f6a77d8b6e19b2d1fd9fa175f78143cd689727"
 
-"@angular/compiler-cli@2.4.6":
-  version "2.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/compiler-cli/download/@angular/compiler-cli-2.4.6.tgz#7a34a3114b67ba9f42cb5d65eb81c9cffd54583f"
+"@angular/common@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-4.0.2.tgz#092b272f193d3ac9549b53792657e48e96f39f5d"
+
+"@angular/compiler-cli@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-4.0.2.tgz#007c05728c836be15f99530e45effa1cd7c96284"
   dependencies:
-    "@angular/tsc-wrapped" "0.5.2"
+    "@angular/tsc-wrapped" "4.0.2"
     minimist "^1.2.0"
     reflect-metadata "^0.1.2"
 
-"@angular/compiler@2.4.6":
-  version "2.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/compiler/download/@angular/compiler-2.4.6.tgz#17236b858f5730eed257d93e90bcbae45e21e0fe"
+"@angular/compiler@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-4.0.2.tgz#729e0ead261232698678bbdd09d3d360dcd6f889"
 
-"@angular/core@2.4.6":
-  version "2.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/core/download/@angular/core-2.4.6.tgz#4abec78ee035b27e8192acf70409c3dbca24e829"
+"@angular/core@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-4.0.2.tgz#195153f8623b59f07c30b3b8954e14842c3959c3"
 
-"@angular/flex-layout@^2.0.0-rc.1":
-  version "2.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@angular/flex-layout/-/flex-layout-2.0.0-rc.1.tgz#96fa7f85b2c4bacf2784913a2d607e2ed23dc7f1"
+"@angular/flex-layout@^2.0.0-beta.7":
+  version "2.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@angular/flex-layout/-/flex-layout-2.0.0-beta.7.tgz#a8191243bf70515ced59f5d89b9ed6ee470fb645"
 
-"@angular/forms@2.4.6":
-  version "2.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/forms/download/@angular/forms-2.4.6.tgz#aca73ad404ebe3022ffb6461cb6c06da864185fe"
+"@angular/forms@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-4.0.2.tgz#9094f46983298681bbaf0dcc17dcf8f7be6f35a3"
 
-"@angular/http@2.4.6":
-  version "2.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/http/download/@angular/http-2.4.6.tgz#32952ce82558f939be52863faa8cab19b20351fd"
+"@angular/http@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/http/-/http-4.0.2.tgz#8c61b9ff52748c5dcb52b57046829d34d66662ec"
 
-"@angular/material@^2.0.0-beta.2":
-  version "2.0.0-beta.2"
-  resolved "http://registry.npm.taobao.org/@angular/material/download/@angular/material-2.0.0-beta.2.tgz#65ee8733990347b7518b7f42113e02e069dc109b"
+"@angular/material@^2.0.0-beta.3":
+  version "2.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-2.0.0-beta.3.tgz#ec31dee61d7300ece28fee476852db236ded1e13"
 
-"@angular/platform-browser-dynamic@2.4.6":
-  version "2.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/platform-browser-dynamic/download/@angular/platform-browser-dynamic-2.4.6.tgz#d50d8b66f7fa00c0449f33c2c1b5348b67c9fcda"
+"@angular/platform-browser-dynamic@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-4.0.2.tgz#5a26f9a3e9f7eaf3cc7c02836cfae2e88cf1862f"
 
-"@angular/platform-browser@2.4.6":
-  version "2.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/platform-browser/download/@angular/platform-browser-2.4.6.tgz#ded44169d4a870d5ee40e95496d34e9ab03c2c3a"
+"@angular/platform-browser@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-4.0.2.tgz#bce01526917a5b49606fc7e81600af85b15846ea"
 
-"@angular/platform-server@2.4.6":
-  version "2.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/platform-server/download/@angular/platform-server-2.4.6.tgz#753a60866583e0469532719a3d0b92d0763bcef9"
+"@angular/platform-server@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-4.0.2.tgz#dbcd098d6e12a0614fd3ba0aa56d7d8709704c96"
   dependencies:
-    parse5 "^2.2.1"
+    parse5 "^3.0.1"
+    xhr2 "^0.1.4"
 
-"@angular/router@3.4.6":
-  version "3.4.6"
-  resolved "http://registry.npm.taobao.org/@angular/router/download/@angular/router-3.4.6.tgz#df708503f2006a090a2704f5490a9ea1ba9fc9d0"
+"@angular/router@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/router/-/router-4.0.2.tgz#e574ee2ce31035c6e574acf28ed9a28bfe1179ef"
 
 "@angular/tsc-wrapped@0.5.0":
   version "0.5.0"
@@ -62,11 +67,11 @@
   dependencies:
     tsickle "^0.2"
 
-"@angular/tsc-wrapped@0.5.2":
-  version "0.5.2"
-  resolved "http://registry.npm.taobao.org/@angular/tsc-wrapped/download/@angular/tsc-wrapped-0.5.2.tgz#2eddf472c467fcb334ea94deddaaa71990c5a482"
+"@angular/tsc-wrapped@4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/tsc-wrapped/-/tsc-wrapped-4.0.2.tgz#38f584082897946b011d293ce662e0178d07ac41"
   dependencies:
-    tsickle "^0.2"
+    tsickle "^0.21.0"
 
 "@angularclass/conventions-loader@^1.0.2":
   version "1.0.13"
@@ -92,9 +97,9 @@
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/@ngrx/db/download/@ngrx/db-2.0.1.tgz#c14a2204ab34c587e41bb5c57411877f8f832183"
 
-"@ngrx/effects@^2.0.0":
-  version "2.0.0"
-  resolved "http://registry.npm.taobao.org/@ngrx/effects/download/@ngrx/effects-2.0.0.tgz#db4c3e1b69030229cb6b908477115b3479e4c4e0"
+"@ngrx/effects@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-2.0.2.tgz#8255e29cc0276f108784c90481e3b96e6713154b"
 
 "@ngrx/router-store@^1.2.5":
   version "1.2.5"
@@ -4278,10 +4283,6 @@ parse-json@^2.2.0:
   dependencies:
     error-ex "^1.2.0"
 
-parse5@^2.2.1:
-  version "2.2.3"
-  resolved "http://registry.npm.taobao.org/parse5/download/parse5-2.2.3.tgz#0c4fc41c1000c5e6b93d48b03f8083837834e9f6"
-
 parse5@^3.0.1:
   version "3.0.2"
   resolved "http://registry.npm.taobao.org/parse5/download/parse5-3.0.2.tgz#05eff57f0ef4577fb144a79f8b9a967a6cc44510"
@@ -5767,6 +5768,15 @@ tsickle@^0.2:
     source-map "^0.5.6"
     source-map-support "^0.4.2"
 
+tsickle@^0.21.0:
+  version "0.21.6"
+  resolved "https://registry.yarnpkg.com/tsickle/-/tsickle-0.21.6.tgz#53b01b979c5c13fdb13afb3fb958177e5991588d"
+  dependencies:
+    minimist "^1.2.0"
+    mkdirp "^0.5.1"
+    source-map "^0.5.6"
+    source-map-support "^0.4.2"
+
 tslib@^1.5.0:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/tslib/download/tslib-1.6.0.tgz#cf36c93e02ae86a20fc131eae511162b869a6652"
@@ -5860,9 +5870,13 @@ typedoc@^0.5.3:
     typedoc-default-themes "^0.4.2"
     typescript "2.1.6"
 
-typescript@2.1.6, typescript@>=2.1.4, typescript@~2.1.6:
+typescript@2.1.6:
   version "2.1.6"
   resolved "http://registry.npm.taobao.org/typescript/download/typescript-2.1.6.tgz#40c7e6e9e5da7961b7718b55505f9cac9487a607"
+
+typescript@>=2.1.4, typescript@^2.2.2:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.3.0.tgz#2e63e09284392bc8158a2444c33e2093795c0418"
 
 uglify-js@2.8.x, uglify-js@^2.6, uglify-js@^2.7.5:
   version "2.8.7"
@@ -6274,6 +6288,10 @@ wtf-8@1.0.0:
 xdg-basedir@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/xdg-basedir/download/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
+
+xhr2@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/xhr2/-/xhr2-0.1.4.tgz#7f87658847716db5026323812f818cadab387a5f"
 
 xml-char-classes@^1.0.0:
   version "1.0.0"

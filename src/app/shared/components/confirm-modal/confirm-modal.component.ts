@@ -1,7 +1,8 @@
-import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
-import { StateType, ConfirmModal } from './confirm-modal.service';
-import { Observable } from 'rxjs/Observable';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ConfirmModal, StateType } from './confirm-modal.service';
+
 import { MdDialogRef } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
 
 export interface ConfirmConifg {
   message?: string;
@@ -37,7 +38,7 @@ export class ConfirmModalComponent {
   constructor(
     public dialogRef: MdDialogRef<ConfirmModalComponent>
   ) {
-    let config: ConfirmConifg = dialogRef.config.data;
+    let config: ConfirmConifg = dialogRef._containerInstance.dialogConfig.data;
     this._message = config.message;
     this._okText = config.okText || 'controls.ok';
     this._cancelText = config.cancelText || 'controls.cancel';
