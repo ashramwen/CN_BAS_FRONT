@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild, HostBinding, OnDestroy } from '@angular/core';
 import { NavSection } from '../section.interface';
+import { Router, RouterLinkActive, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'cm-side-subnav-item',
@@ -7,12 +9,36 @@ import { NavSection } from '../section.interface';
     <a md-list-item 
         [routerLink]="section.path"
         [routerLinkActive]="'active'" #rla="routerLinkActive">
-      <md-icon md-list-icon [class.mat-primary]="rla.isActive">{{ section.icon }}</md-icon>
       <span md-line>{{section.text}}</span>
     </a>
   `
 })
-export class CMSideSubnavItem {
+export class CMSideSubnavItem implements OnDestroy {
   @Input()
   public section: NavSection;
+
+  @ViewChild('rla')
+  public routerLinkActive: RouterLinkActive;
+
+  @HostBinding('class.active') public active: boolean;
+
+  private subscription: Subscription;
+
+  constructor(private router: Router) {
+    this.subscription = router.events.subscribe((s) => {
+      if (s instanceof NavigationEnd) {
+        this.update();
+      }
+    });
+  }
+
+  public ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  private update() {
+    this.active = this.routerLinkActive
+      .linksWithHrefs
+      .some((link) => this.router.isActive(link.urlTree, true));
+  }
 }

@@ -26,6 +26,7 @@ import { NavSection } from '../../../mat-custom/components/side-nav/section.inte
   encapsulation: ViewEncapsulation.None
 })
 export class PortalCmp {
+  public loading$: Observable<boolean>;
   public showSidenav$: Observable<boolean>;
   public swipeTabIndex$: Observable<number>;
 
@@ -34,6 +35,10 @@ export class PortalCmp {
     private dialog: MdDialog,
     private stomp: StompService
   ) {
+    this.loading$ = store.select(createSelector(
+      StateSelectors.layout,
+      (state: LayoutState) => !!state.loading
+    ));
     /**
      * Selectors can be applied with the `select` operator which passes the state
      * tree to the provided selector

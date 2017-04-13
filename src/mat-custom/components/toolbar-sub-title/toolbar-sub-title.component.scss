@@ -1,0 +1,21 @@
+
+md-toolbar{
+  position: absolute;
+  width: 100%;
+  top: -1px;
+  border-bottom: 1px solid #ccc;
+  
+  .sub-title-container{
+    flex:1;
+    position: absolute;
+    text-align: left;
+    h2 {
+      font-size: 1rem;
+      color: #3f5269;
+    }
+  }
+  .cmp-container{
+    flex: 1;
+    position: relative;
+  }
+}

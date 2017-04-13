@@ -24,7 +24,9 @@ $custom-foreground: (
   secondary-text:  rgba(black, 0.54),
   icon:            rgba(black, 0.54),
   icons:           rgba(black, 0.54),
-  text:            rgba(black, 0.87)
+  text:            rgba(black, 0.87),
+  menu-nav-text: #2e3133,
+  menu-subnav-text: #2e3133,
 );
 
 // Background palette for light themes.
@@ -41,6 +43,10 @@ $custom-background: (
   selected-button: map_get($mat-grey, 300),
   selected-disabled-button: map_get($mat-grey, 400),
   disabled-button-toggle: map_get($mat-grey, 200),
+  border: #ccc,
+  border-light: #c2c2c2,
+  selected-sidenav-item: #f0f5fa,
+  selected-sub-sidenav-item: #e4e9ee,
 );
 
 // Include all theme styles for the components.

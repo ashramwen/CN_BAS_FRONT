@@ -7,9 +7,14 @@
 @import './_library';
 @import './_flex-layout';
 
-body,
-html {
+@font-face {
+	font-family: 'roboto';
+	src: url('../assets/fonts/roboto/Roboto-Regular.ttf') format('truetype');
+}
+
+body, html{
   margin: 0px;
+  font-family: 'roboto';
 }
 
 nav {

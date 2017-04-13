@@ -5,16 +5,17 @@ import { Observable } from 'rxjs';
   selector: 'bas-toolbar',
   template: `
     <md-toolbar>
-      <ng-content></ng-content>
-      <button md-icon-button (click)="showUser.emit()">
-        <md-icon class="portrait">account_circle</md-icon>
-      </button>
+      <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-between center">
+        <h1><ng-content></ng-content></h1>
+        <button md-icon-button (click)="showUser.emit()">
+          <md-icon class="portrait">account_circle</md-icon>
+        </button>
+      </div>
     </md-toolbar>
   `,
   styleUrls: [
     `./toolbar.component.scss`
-  ],
-  encapsulation: ViewEncapsulation.None
+  ]
 })
 export class ToolbarCmp {
   @Output() public showUser: EventEmitter<any> = new EventEmitter();
