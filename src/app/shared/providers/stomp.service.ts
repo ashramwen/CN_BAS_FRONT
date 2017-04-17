@@ -85,7 +85,7 @@ export class StompService {
    * @memberOf StompService
    */
   public disconnect(): void {
-    this.token$.unsubscribe();
+    this._unsubscribe();
 
     // Notify observers that we are disconnecting!
     this.state.next(StompState.DISCONNECTING);
@@ -100,6 +100,8 @@ export class StompService {
     if (this.client && this.client.connected) {
       this.client.disconnect(() => this.state.next(StompState.CLOSED));
     }
+
+    this.debug('STOMP Disconnected.');
   }
 
   /**
@@ -182,12 +184,12 @@ export class StompService {
    * @memberOf StompService
    */
   private try_connect(): any {
-
     if (this.state.getValue() !== StompState.CLOSED) {
       throw Error('STOMP: Can\'t try_connect if not CLOSED!');
     }
 
     this.token$ = this.store.select(StateSelectors.token)
+      .first()
       .map((tokenState: TokenState) => tokenState.token.accessToken)
       .subscribe((accessToken: string) => {
         let option: any = {
@@ -223,7 +225,6 @@ export class StompService {
    * @memberOf StompService
    */
   private on_connect() {
-
     this.debug('STOMP Connected.');
 
     // Indicate our connected state to observers
@@ -294,5 +295,10 @@ export class StompService {
     } else {
       console.error('STOMP: Empty message received!');
     }
+  }
+
+  private _unsubscribe() {
+    if (!this.token$ || this.token$.closed) { return; }
+    this.token$.unsubscribe();
   }
 }
