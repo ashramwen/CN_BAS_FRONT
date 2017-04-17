@@ -24,7 +24,12 @@ import { NavSection } from '../section.interface';
         [routerLink]="section.path"
         [routerLinkActive]="'active'" 
         #rla="routerLinkActive">
-      <md-icon md-list-icon [class.mat-primary]="rla.isActive">{{ section.icon }}</md-icon>
+      <md-icon 
+          md-list-icon 
+          class="nav-icon" 
+          [class.mat-primary]="rla.isActive"
+        >{{ section.icon }}
+      </md-icon>
       <span md-line>
         {{section.text}}
       </span>

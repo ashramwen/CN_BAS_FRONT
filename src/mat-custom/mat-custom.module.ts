@@ -8,16 +8,19 @@ import { MCCollapse } from './components/collapse/collapse.directive';
 import { SIDENAV_CMPS } from './components/side-nav/index';
 import { CMSideNavList } from './components/side-nav/side-nav-list/side-nav-list.component';
 import { ToolbarSubTitle } from './components/toolbar-sub-title/toolbar-sub-title.component';
+import { ContentContainer } from './components/content-container/content-container.directive';
 
 @NgModule({
   declarations: [
     MCCollapse,
     ToolbarSubTitle,
+    ContentContainer,
     ...SIDENAV_CMPS
   ],
   exports: [
     CMSideNavList,
-    ToolbarSubTitle
+    ToolbarSubTitle,
+    ContentContainer
   ],
   imports: [MaterialRootModule, FormsModule, CommonModule, RouterModule],
   providers: []

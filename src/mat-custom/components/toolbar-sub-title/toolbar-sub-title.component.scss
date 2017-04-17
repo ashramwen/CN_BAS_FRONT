@@ -1,8 +1,9 @@
 
 md-toolbar{
-  position: absolute;
+  position: fixed;
+  z-index: 1;
   width: 100%;
-  top: -1px;
+  top: 48px;
   border-bottom: 1px solid #ccc;
   
   .sub-title-container{
