@@ -1,9 +1,8 @@
-import * as moment from 'moment';
-
 import { Bucket, ESResponse } from '../../../../shared/models/es-response.interface';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ESQueryOption, GroupType } from '../../../../shared/models/es-query-option.interface';
 import { Observable, Subject } from 'rxjs';
+import { endOfDay, setDay, startOfDay, subDays } from 'date-fns';
 
 import { ActivatedRoute } from '@angular/router';
 import { EsQueryService } from '../../../../shared/providers/es-query.service';
@@ -90,16 +89,16 @@ export class LandingCmp implements OnInit {
     this.lights = this.route.snapshot.data['lightings'];
     this.parseData();
 
-    this.getPunchCard();
-    this.getTopN();
-    this.getYesterday();
+    // this.getPunchCard();
+    // this.getTopN();
+    // this.getYesterday();
     this.getHistory();
   }
 
   private getPunchCard() {
     let punchCard$ = this.esQuery.query({
-      startTime: moment().day(-7).startOf('day').valueOf(),
-      endTime: moment().day(-1).endOf('day').valueOf(),
+      startTime: startOfDay(setDay(new Date(), -7)).valueOf(),
+      endTime: endOfDay(setDay(new Date(), -1)).valueOf(),
       power: true,
       target: this.thingIDs,
       allTargets: true,
@@ -113,8 +112,8 @@ export class LandingCmp implements OnInit {
 
   private getYesterday() {
     let yesterday$ = this.esQuery.query({
-      startTime: moment().subtract(1, 'day').startOf('day').valueOf(),
-      endTime: moment().subtract(1, 'day').endOf('day').valueOf(),
+      startTime: startOfDay(subDays(new Date(), 1)).valueOf(),
+      endTime: endOfDay(subDays(new Date(), 1)).valueOf(),
       power: true,
       target: this.thingIDs,
       allTargets: true,
@@ -130,7 +129,7 @@ export class LandingCmp implements OnInit {
   private getHistory() {
     let history$ = this.esQuery.query({
       startTime: 0,
-      endTime: moment().subtract(2, 'day').endOf('day').valueOf(),
+      endTime: endOfDay(subDays(new Date(), 2)).valueOf(),
       power: true,
       target: this.thingIDs,
       group: GroupType.Day,
