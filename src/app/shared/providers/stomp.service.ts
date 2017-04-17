@@ -8,6 +8,7 @@ import { RootState } from './../redux/index';
 import { StateSelectors } from './../redux/selectors';
 import { StompThing } from './../models/stomp-thing.interface';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs/Rx';
 import { TokenState } from './../redux/token/reducer';
 
 /** possible states for the STOMP service */
@@ -46,14 +47,14 @@ export class StompService {
 
   private subscription: any[];
 
+  private token$: Subscription;
+
   constructor(
     private store: Store<RootState>
   ) {
     this.messages = new Subject<StompThing>();
     this.state = new BehaviorSubject<StompState>(StompState.CLOSED);
     this.subscription = [];
-
-    this.init();
   }
 
   /**
@@ -84,6 +85,7 @@ export class StompService {
    * @memberOf StompService
    */
   public disconnect(): void {
+    this.token$.unsubscribe();
 
     // Notify observers that we are disconnecting!
     this.state.next(StompState.DISCONNECTING);
@@ -185,13 +187,14 @@ export class StompService {
       throw Error('STOMP: Can\'t try_connect if not CLOSED!');
     }
 
-    return this.store.select(StateSelectors.token)
+    this.token$ = this.store.select(StateSelectors.token)
       .map((tokenState: TokenState) => tokenState.token.accessToken)
       .subscribe((accessToken: string) => {
-        // Attempt connection, passing in a callback
-        this.client.connect(<any> {
+        let option: any = {
           Authorization: `Bearer ${accessToken}`
-        },
+        };
+        // Attempt connection, passing in a callback
+        this.client.connect(option,
           this.on_connect.bind(this),
           this.on_error.bind(this)
         );
@@ -199,6 +202,7 @@ export class StompService {
         this.debug('STOMP Connecting...');
         this.state.next(StompState.TRYING);
       });
+    return this.token$;
   }
 
   /**
