@@ -15,6 +15,7 @@ import {
   subDays,
 } from 'date-fns';
 
+import { MdMenuTrigger } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 
@@ -40,6 +41,9 @@ const colors: any = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BasCalendarComponent {
+
+  @ViewChild('trial')
+  public mdMenu: MdMenuTrigger;
 
   @ViewChild('modalContent')
   public modalContent: TemplateRef<any>;
@@ -126,19 +130,12 @@ export class BasCalendarComponent {
     // this.modal.open(this.modalContent, {size: 'lg'});
   }
 
-  public addEvent(): void {
+  public addEvent(date: Date): void {
     this.events.push({
+      start: date,
       title: 'New event',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      color: colors.red,
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      }
+      color: colors.red
     });
     this.refresh.next();
   }
-
 }
