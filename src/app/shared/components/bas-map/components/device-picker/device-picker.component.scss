@@ -1,23 +1,53 @@
-.tab-container{
-  min-height: 10rem;
-  padding-bottom: 1rem;
-  max-height: 20rem;
-}
 
-md-card.device-picker{
-  z-index: 3;
-  position: absolute;
-  top: 60px;
-  right: 20px;
-  padding: 0px;
-}
+bm-device-picker {
+  .tab-container{
+    min-height: 10rem;
+    padding-bottom: 1rem;
+    max-height: 20rem;
+    overflow: auto;
+  }
 
-.device-name{
-  font-size: 0.8125rem;
-  line-height: 1.5rem;
-}
+  md-card.device-picker{
+    z-index: 3;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    padding: 0px;
+  }
 
-.light-icon{
-  font-size: 1.2rem;
-  line-height: 1.5rem;
+  .device-name{
+    font-size: 0.8125rem;
+    line-height: 1.5rem;
+  }
+
+  .light-icon{
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+  }
+
+  .profile-item{
+    border: solid 1px #00b4ff;
+    background: lighten(#00b4ff, 30%);
+    text-align: center;
+    color: #2ca1f4;
+    height: 2.4rem;
+    line-height: 2.4rem;
+    font-size: 0.825rem;
+  }
+
+  md-list-item.list-row{
+    & > .mat-list-item-content{
+      flex: 1;
+    }
+  }
+  md-list-item.title-row {
+    & > .mat-list-item-content{
+      // height: 2.5rem;
+    }
+  }
+  md-list-item {
+    & > .mat-list-item-content{
+      font-size: 0.825rem !important;
+    }
+  }
 }

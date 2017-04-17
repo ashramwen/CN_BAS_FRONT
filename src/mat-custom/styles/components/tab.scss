@@ -11,6 +11,20 @@
       & > .mat-tab-label-container {
         & > .mat-tab-list{
           & > .mat-tab-labels{
+            & > .mat-tab-label {
+              min-width: 8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .mat-tab-group[full-ink-bar] {
+    & > .mat-tab-header{
+      & > .mat-tab-label-container {
+        & > .mat-tab-list{
+          & > .mat-tab-labels{
             position: relative;
             z-index: 2;
             & > .mat-tab-label.mat-tab-label-active{

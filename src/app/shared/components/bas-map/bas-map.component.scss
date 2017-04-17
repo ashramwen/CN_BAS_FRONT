@@ -11,19 +11,6 @@
     z-index: 1;
   }
 
-  md-sidenav-container{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    md-sidenav {
-      width: 200px;
-      display: flex;
-    }
-    .mat-sidenav-content{
-      flex: 1;
-    }
-  }
-
   .location-picker{
     z-index: 3;
     position: absolute;

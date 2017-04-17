@@ -37,7 +37,7 @@
       &.mat-sidenav-opening{
         width: 12.25rem;
       }
-      .mat-sidenav-closed{
+      &.mat-sidenav-closed{
         visibility: visible !important;
       }
     }

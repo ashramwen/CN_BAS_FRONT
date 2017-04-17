@@ -10,12 +10,39 @@
               </p>
               <md-slide-toggle></md-slide-toggle>
             </md-list-item>
+            <md-list-item  class="title-row">
+              Power
+            </md-list-item>
+            <md-list-item class="list-row" fxLayout fxLayoutAlign="center stretch">
+              <div fxLayout fxLayoutAlign="space-between stretch" full-width>
+                <button md-raised-button>ON</button>
+                <button md-raised-button>OFF</button>
+              </div>
+            </md-list-item>
+             <md-list-item  class="title-row">
+              <p md-line fxLayout fxLayoutAlign="space-between stretch">
+                <span>Brightness</span>
+                <span>{{brighness}}</span>
+              </p>
+            </md-list-item>
+            <md-list-item class="list-row">
+              <md-slider fxFlexFill></md-slider>
+            </md-list-item>
+            <md-list-item class="title-row">
+              <p md-line fxLayout fxLayoutAlign="space-between stretch">
+                <span>Profiles</span>
+                <md-icon color="primary">add_box</md-icon>
+              </p>
+            </md-list-item>
+            <md-list-item class="list-row">
+              <div class="profile-item" full-width>Profile</div>
+            </md-list-item>
+
           </md-list>
         </div>
       </md-tab>
       <md-tab label="Selection" color="primary">
         <div class="tab-container">
-          
           <md-list class="location-list sm">
             <md-list-item>
               <div fxLayout full-width>
@@ -28,6 +55,9 @@
               </div>
             </md-list-item>
             <md-divider></md-divider>
+          </md-list>
+          
+          <md-list class="location-list sm">
             <template ngFor #location [ngForOf]="locations">
               <md-list-item *ngFor="let device of deviceList" >
                 <label fxLayout full-width>

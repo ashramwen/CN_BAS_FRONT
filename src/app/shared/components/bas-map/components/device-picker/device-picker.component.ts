@@ -26,7 +26,8 @@ export interface DeviceCheck {
       transition('inactive => active', animate('100ms ease-in')),
       transition('active => inactive', animate('100ms ease-out'))
     ])
-  ]
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class DevicePickerCmp {
 
