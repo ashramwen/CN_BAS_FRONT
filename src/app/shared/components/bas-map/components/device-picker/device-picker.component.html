@@ -1,9 +1,48 @@
-<div class="device-picker-conaienr">
-  <section>
-    <md-list class="location-list">
-      <md-list-item *ngFor="let location of locations">
-        <bm-location-card [location]="location"></bm-location-card>
-      </md-list-item>
-    </md-list>
-  </section>
-</div>
+<md-card class="device-picker" [@flyInOut]="active? 'active': 'inactive'">
+  <md-card-content>
+    <md-tab-group full-ink-bar>
+      <md-tab label="Controls">
+        <div class="tab-container">
+          <md-list>
+            <md-list-item>
+              <p md-line>
+                Smart Control
+              </p>
+              <md-slide-toggle></md-slide-toggle>
+            </md-list-item>
+          </md-list>
+        </div>
+      </md-tab>
+      <md-tab label="Selection" color="primary">
+        <div class="tab-container">
+          
+          <md-list class="location-list sm">
+            <md-list-item>
+              <div fxLayout full-width>
+                <md-checkbox #check>
+                  All
+                </md-checkbox>
+                <div fxFlex="100%" text-right class="device-name">
+                  Device ID
+                </div>
+              </div>
+            </md-list-item>
+            <md-divider></md-divider>
+            <template ngFor #location [ngForOf]="locations">
+              <md-list-item *ngFor="let device of deviceList" >
+                <label fxLayout full-width>
+                  <md-checkbox #check>
+                  </md-checkbox>
+                  <md-icon class="light-icon" [color]="check.checked? 'accent': ''">lightbulb_outline</md-icon>
+                  <div fxFlex="100%" text-right class="device-name">
+                    {{device.deviceID}}
+                  </div>
+                </label>
+              </md-list-item>
+            </template>
+          </md-list>
+        </div>
+      </md-tab>
+    </md-tab-group>
+  </md-card-content>
+</md-card>

@@ -55,7 +55,7 @@ export class LoginCmp implements OnInit {
     this.store.dispatch(new ShowLoadingAction());
 
     Object.assign(this.credentials, this.loginForm.value);
-    this.loginService
+    let subscription = this.loginService
       .login(this.credentials)
       .map((res) => {
         return <Token> res.json();
@@ -72,6 +72,7 @@ export class LoginCmp implements OnInit {
       })
       .finally(() => {
         this.store.dispatch(new HideLoadingAction());
+        subscription.unsubscribe();
       })
       .subscribe((token: Token) => {
         this.store.dispatch(new LoginSuccessAction(token));

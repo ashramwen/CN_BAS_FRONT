@@ -84,15 +84,15 @@ export class BasMap implements AfterViewInit, OnInit {
     });
     this.myState.onSelectionModeChange.subscribe(() => {
       this.layerSelector.clear();
-      if (this.myState.selectionMode) {
-        this.sidenav.open().then(() => {
-          this.resizeMap();
-        });
-      } else {
-        this.sidenav.close().then(() => {
-          this.resizeMap();
-        });
-      }
+      // if (this.myState.selectionMode) {
+      //   this.sidenav.open().then(() => {
+      //     this.resizeMap();
+      //   });
+      // } else {
+      //   this.sidenav.close().then(() => {
+      //     this.resizeMap();
+      //   });
+      // }
     });
   }
 

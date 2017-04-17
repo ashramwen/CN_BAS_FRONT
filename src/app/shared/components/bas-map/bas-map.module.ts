@@ -6,10 +6,23 @@ import { LocationCardCmp } from './components/device-picker/location-card.compon
 import { DeviceCheckCmp } from './components/device-picker/device-check.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LocationPickerCmp } from './components/location-picker/location-picker.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
-  declarations: [BasMap, DevicePickerCmp, LocationCardCmp, DeviceCheckCmp],
-  imports: [MaterialModule, CommonModule, FormsModule],
+  declarations: [
+    BasMap,
+    DevicePickerCmp,
+    LocationCardCmp,
+    DeviceCheckCmp,
+    LocationPickerCmp,
+  ],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    FormsModule,
+    FlexLayoutModule
+  ],
   providers: [],
   exports: [BasMap]
 })

@@ -9,7 +9,7 @@
 
 // Define a theme.
 $primary: mat-palette($app-primary);
-$accent:  mat-palette($app-accent, A200, A100, A400);
+$accent:  mat-palette($app-accent);
 $warn: mat-palette($app-warn);
 
 // Foreground palette for light themes.

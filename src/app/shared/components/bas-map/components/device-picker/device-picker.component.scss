@@ -1,12 +1,23 @@
-.device-picker-conaienr{
-  width: 300px;
+.tab-container{
+  min-height: 10rem;
+  padding-bottom: 1rem;
+  max-height: 20rem;
+}
 
-  .location-list {
-    md-list-item{
-      background: #ccc;
-      & > div.mat-list-item-content{
-        height: auto;
-      }
-    }
-  }
+md-card.device-picker{
+  z-index: 3;
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  padding: 0px;
+}
+
+.device-name{
+  font-size: 0.8125rem;
+  line-height: 1.5rem;
+}
+
+.light-icon{
+  font-size: 1.2rem;
+  line-height: 1.5rem;
 }
