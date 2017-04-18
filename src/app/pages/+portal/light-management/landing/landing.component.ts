@@ -89,9 +89,9 @@ export class LandingCmp implements OnInit {
     this.lights = this.route.snapshot.data['lightings'];
     this.parseData();
 
-    // this.getPunchCard();
-    // this.getTopN();
-    // this.getYesterday();
+    this.getPunchCard();
+    this.getTopN();
+    this.getYesterday();
     this.getHistory();
   }
 
