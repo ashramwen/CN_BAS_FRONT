@@ -15,7 +15,7 @@ import { HttpError } from '../../shared/models/http-error.interface';
 import { TokenState } from '../../shared/redux/token/reducer';
 import { StateSelectors } from '../../shared/redux/selectors';
 import { ShowLoadingAction, HideLoadingAction } from '../../shared/redux/layout/actions';
-import { AlertModal } from '../../shared/components/alert-modal/alert-modal.service';
+import { AlertModal } from '../../../mat-custom/components/alert-modal/alert-modal.service';
 
 @Component({
   selector: 'bas-login',

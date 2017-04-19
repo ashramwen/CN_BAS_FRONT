@@ -1,28 +1,19 @@
 <cm-content-container>
   <cm-toolbar-sub-title subTitle="Device List"></cm-toolbar-sub-title>
-  <div class="device-list">
-    <div class="search">
-    </div>
-    <div>
-      <div class="title">
-      </div>
-      <table>
-        <thead>
-          <th>{{'DeviceList.DeviceID' | translate}}</th>
-          <th>{{'DeviceList.Location' | translate}}</th>
-          <th>{{'DeviceList.Connectivity' | translate}}</th>
-          <th>{{'DeviceList.LatestStatus' | translate}}</th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of lightings$" (click)="deviceDetail(item)">
-            <td>{{ item.id }}</td>
-            <td>{{ item.vendorThingID }}</td>
-            <td>{{ item.connectivity }}</td>
-            <td>{{ item.status? item.status.Power:0 }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <router-outlet></router-outlet>
+  <table>
+    <thead>
+      <th>{{'DeviceList.DeviceID' | translate}}</th>
+      <th>{{'DeviceList.Location' | translate}}</th>
+      <th>{{'DeviceList.Connectivity' | translate}}</th>
+      <th>{{'DeviceList.LatestStatus' | translate}}</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of lightings" (click)="deviceDetail(item)">
+        <td>{{ item.id }}</td>
+        <td>{{ item.vendorThingID }}</td>
+        <td>{{ item.connectivity }}</td>
+        <td>{{ item.status? item.status.Power:0 }}</td>
+      </tr>
+    </tbody>
+  </table>
 </cm-content-container>

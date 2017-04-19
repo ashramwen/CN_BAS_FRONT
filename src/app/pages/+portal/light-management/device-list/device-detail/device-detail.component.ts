@@ -4,22 +4,32 @@ import { Observable } from 'rxjs/Observable';
 
 import { DeviceService } from '../../../../../shared/providers/device.service';
 import { Thing } from '../../../../../shared/models/thing.interface';
+import {
+  PortalModalRef
+} from '../../../../../../mat-custom/components/portal-modal/portal-modal-ref.type';
+
+export interface DeviceDetailInputData {
+  thing: Thing;
+}
 
 @Component({
   selector: 'bas-device-detail',
   templateUrl: './device-detail.component.html',
   styleUrls: ['./device-detail.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
-
 export class DeviceDetailCmp implements OnInit {
-  public Lighting$: Thing;
   public commandHistory: Object[];
   public stateHistory: Object[];
 
+  public thing: Thing;
+
   constructor(
     private route: ActivatedRoute,
-    private deviceService: DeviceService) { }
+    private deviceService: DeviceService,
+    private portalModalRef: PortalModalRef<DeviceDetailInputData>
+  ) {
+    this.thing = portalModalRef.data.thing;
+  }
 
   public getProfile() {
     console.log();
@@ -28,7 +38,7 @@ export class DeviceDetailCmp implements OnInit {
   public getCommandHistory() {
     console.log('here');
     this.commandHistory = [];
-    this.deviceService.fetchCommandHistoryByGlobalThingID(this.Lighting$.globalThingID)
+    this.deviceService.fetchCommandHistoryByGlobalThingID(this.thing.globalThingID)
       .subscribe((history: any) => {
         this.commandHistory = history;
         console.log('command history', this.commandHistory);
@@ -37,7 +47,7 @@ export class DeviceDetailCmp implements OnInit {
 
   public getStateHistory() {
     this.stateHistory = [];
-    this.deviceService.fetchStateHistoryByVendorThingID(this.Lighting$.vendorThingID)
+    this.deviceService.fetchStateHistoryByVendorThingID(this.thing.vendorThingID)
       .subscribe((history: any) => {
         this.stateHistory = history;
         console.log('state history', this.stateHistory);
@@ -45,9 +55,8 @@ export class DeviceDetailCmp implements OnInit {
   }
 
   public ngOnInit() {
-    this.Lighting$ = this.route.snapshot.data['lighting'];
     this.commandHistory = [];
-    this.deviceService.fetchCommandHistoryByGlobalThingID(this.Lighting$.globalThingID)
+    this.deviceService.fetchCommandHistoryByGlobalThingID(this.thing.globalThingID)
       .subscribe((history: any) => {
         history.map((object) => {
           object.power = null;
@@ -63,7 +72,7 @@ export class DeviceDetailCmp implements OnInit {
         console.log('command history', this.commandHistory);
       });
     this.stateHistory = [];
-    this.deviceService.fetchStateHistoryByVendorThingID(this.Lighting$.vendorThingID)
+    this.deviceService.fetchStateHistoryByVendorThingID(this.thing.vendorThingID)
       .subscribe((history: any) => {
         this.stateHistory = history.hits.map((object) => object._source.state);
         console.log('state history', this.stateHistory);

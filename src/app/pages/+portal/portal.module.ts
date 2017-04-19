@@ -2,10 +2,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppSharedModule } from '../../shared/shared.module';
 import { CommonModule } from '@angular/common';
-import { ConfirmModalModule } from '../../shared/components/confirm-modal/confirm-modal.module';
-import {
-  ErrorControllerModule,
-} from '../../shared/components/error-controller/error-controller.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LAYOUT_CMP } from './components/index';
 import { LightManagementModule } from './light-management/light-management.module';
@@ -34,8 +30,6 @@ import { UserInfoCmp } from './user-info.ts/user-info.component';
     FlexLayoutModule,
     CommonModule,
     ReactiveFormsModule,
-    ConfirmModalModule,
-    ErrorControllerModule,
     MatCustomModule,
     RouterModule,
     LightManagementModule,

@@ -8,6 +8,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DeviceService } from '../../../../shared/providers/device.service';
 import { RootState } from '../../../../shared/redux/index';
 import { Thing } from '../../../../shared/models/thing.interface';
+import {
+  DeviceDetailCmp,
+  DeviceDetailInputData
+} from './device-detail/device-detail.component';
+import {
+  PortalModal
+} from '../../../../../mat-custom/components/portal-modal/portal-modal.service';
 
 @Component({
   selector: 'bas-device-list',
@@ -15,23 +22,29 @@ import { Thing } from '../../../../shared/models/thing.interface';
   styleUrls: ['./device-list.component.scss']
 })
 export class DeviceListCmp implements OnInit {
-  public lightings$: Observable<Thing>;
+
+  public lightings: Thing[];
+
   constructor(
     private route: ActivatedRoute,
     private store: Store<RootState>,
     private deviceService: DeviceService,
-    private router: Router) {
-  }
+    private router: Router,
+    private portalModal: PortalModal
+  ) { }
 
-  public deviceDetail(item) {
+  public deviceDetail(item: Thing) {
     console.log('go device detail');
     // this.store.dispatch(go(['/portal/device-list', item.vendorThingID]));
-    this.router.navigate(['/portal/device-list', item.vendorThingID]);
+    // this.router.navigate(['/portal/device-list', item.vendorThingID]);
+    let data: DeviceDetailInputData = {
+      thing: item
+    };
 
+    this.portalModal.show(DeviceDetailCmp, data);
   }
 
   public ngOnInit() {
-    this.lightings$ = this.route.snapshot.data['lightings'];
-    console.log('lightings', this.lightings$);
+    this.lightings = this.route.snapshot.data['lightings'];
   }
 }

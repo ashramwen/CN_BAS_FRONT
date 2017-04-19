@@ -1,4 +1,9 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  HostBinding,
+  ElementRef
+} from '@angular/core';
 
 @Component({
   selector: 'cm-toolbar-sub-title',
@@ -12,7 +17,11 @@ import { Component, Input } from '@angular/core';
       </div>
     </md-toolbar>
   `,
-  styleUrls: ['./toolbar-sub-title.component.scss']
+  styles: [
+    `
+      
+    `
+  ]
 })
 export class ToolbarSubTitle {
   @Input()

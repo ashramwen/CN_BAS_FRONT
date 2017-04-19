@@ -1,7 +1,6 @@
-import { ConfirmModalModule } from './confirm-modal/confirm-modal.module';
-import { ErrorControllerModule } from './error-controller/error-controller.module';
+import { BasMapModule } from './bas-map/bas-map.module';
 
 export const SHARED_COMPONENTS = [
-  ConfirmModalModule,
-  ErrorControllerModule
 ];
+
+export const SHARED_MODULES = [BasMapModule];
