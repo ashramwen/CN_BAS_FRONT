@@ -58,7 +58,7 @@
           </md-list>
           
           <md-list class="location-list sm">
-            <template ngFor #location [ngForOf]="locations">
+            <ng-template ngFor #location [ngForOf]="locations">
               <md-list-item *ngFor="let device of deviceList" >
                 <label fxLayout full-width>
                   <md-checkbox #check>
@@ -69,7 +69,7 @@
                   </div>
                 </label>
               </md-list-item>
-            </template>
+            </ng-template>
           </md-list>
         </div>
       </md-tab>
