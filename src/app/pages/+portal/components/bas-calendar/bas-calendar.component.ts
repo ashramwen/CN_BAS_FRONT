@@ -48,9 +48,8 @@ export class BasCalendarComponent {
   @ViewChild('modalContent')
   public modalContent: TemplateRef<any>;
 
-  private view: string = 'month';
-
-  private viewDate: Date = new Date();
+  public view: string = 'month';
+  public viewDate: Date = new Date();
 
   private modalData: {
     action: string,

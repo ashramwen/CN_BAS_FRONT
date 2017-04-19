@@ -68,7 +68,7 @@ export class BasMap implements AfterViewInit, OnInit {
   }
 
   constructor(
-    private myState: StateService,
+    public myState: StateService,
     private layerControl: LayerControl,
     private layerSelector: LayerSelector,
     private zone: NgZone,
