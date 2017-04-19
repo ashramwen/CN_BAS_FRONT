@@ -7,23 +7,26 @@ import { RouterModule } from '@angular/router';
 import { MCCollapse } from './components/collapse/collapse.directive';
 import { SIDENAV_CMPS } from './components/side-nav/index';
 import { CMSideNavList } from './components/side-nav/side-nav-list/side-nav-list.component';
-import { ToolbarSubTitle } from './components/toolbar-sub-title/toolbar-sub-title.component';
-import { ContentContainer } from './components/content-container/content-container.directive';
+import { ToolbarSubTitle } from './components/content-container/toolbar-sub-title.component';
+import { ContentContainer } from './components/content-container/content-container.component';
+import { CUSTOM_MODULES, CUSTOM_PROVIDERS } from './components/index';
 
 @NgModule({
   declarations: [
-    MCCollapse,
-    ToolbarSubTitle,
-    ContentContainer,
-    ...SIDENAV_CMPS
   ],
   exports: [
-    CMSideNavList,
-    ToolbarSubTitle,
-    ContentContainer
+    ...CUSTOM_MODULES,
   ],
-  imports: [MaterialRootModule, FormsModule, CommonModule, RouterModule],
-  providers: []
+  imports: [
+    MaterialRootModule,
+    FormsModule,
+    CommonModule,
+    RouterModule,
+    ...CUSTOM_MODULES
+  ],
+  providers: [
+    ...CUSTOM_PROVIDERS
+  ]
 })
 export class MatCustomModule {
 

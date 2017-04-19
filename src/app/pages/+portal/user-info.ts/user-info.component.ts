@@ -6,7 +6,9 @@ import { RootState } from '../../../shared/redux/index';
 import { LogOutAction } from '../../../shared/redux/token/actions';
 import { PasswordChangeCmp } from './password-change/password-change.component';
 import { GoMainAction } from '../../../shared/redux/layout/actions';
-import { ConfirmModal } from '../../../shared/components/confirm-modal/confirm-modal.service';
+import {
+  ConfirmModal
+} from '../../../../mat-custom/components/confirm-modal/confirm-modal.service';
 
 @Component({
   selector: 'user-info',

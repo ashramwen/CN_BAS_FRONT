@@ -29,9 +29,6 @@ export class SideNavContentCmp {
   @Output() public toggleMenu = new EventEmitter();
 
   public rootSection: NavSection = {
-    icon: '',
-    path: '',
-    text: '',
     children: [{
       icon: 'lightbulb_outline',
       path: 'light-management',

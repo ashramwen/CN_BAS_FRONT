@@ -1,4 +1,3 @@
-import { ToolbarSubTitle } from '../toolbar-sub-title/toolbar-sub-title.component';
 import {
   Component,
   OnInit,
@@ -6,36 +5,25 @@ import {
   HostBinding,
   ViewChild,
   AfterViewInit,
-  ContentChild
+  ContentChild,
+  TemplateRef
 } from '@angular/core';
+
+import { ToolbarSubTitle } from './toolbar-sub-title.component';
 
 @Component({
   selector: 'cm-content-container',
   template: `
+    <ng-content select="cm-toolbar-sub-title"></ng-content>
     <div class="cm-content-container-inner">
       <ng-content></ng-content>
     </div>
   `,
   styles: [`
-    :host {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-    :host-context(.has-sub-title) .cm-content-container-inner{
-      margin-top: 48px;
-    }
-    .cm-content-container-inner {
-      flex: 1;
-      overflow: auto;
-    }
+    
   `]
 })
 export class ContentContainer implements AfterViewInit {
-
-  @HostBinding('class.has-sub-title')
-  public hasSubTitle: boolean;
 
   @ContentChild(ToolbarSubTitle)
   public subTitleCmp: ToolbarSubTitle;
@@ -43,12 +31,11 @@ export class ContentContainer implements AfterViewInit {
   constructor(
     private ele: ElementRef
   ) { }
-  
+
   public ngAfterViewInit() {
     if (!!this.subTitleCmp) {
-      this.hasSubTitle = true;
-    } else {
-      this.hasSubTitle = false;
+      this.ele.nativeElement.getElementsByClassName('cm-content-container-inner')[0]
+        .classList.add('has-sub-title');
     }
   }
 }

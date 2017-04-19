@@ -1,4 +1,3 @@
-import { BasMapModule } from '../../../shared/components/bas-map/bas-map.module';
 import { CalendarModule } from 'angular-calendar';
 import { CommonModule } from '@angular/common';
 import { DeviceDetailCmp } from './device-list/device-detail/device-detail.component';
@@ -14,10 +13,10 @@ import { PunchCardComponent } from './landing/punch-card/punch-card.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatCustomModule } from '../../../../mat-custom/mat-custom.module';
+import { AppSharedModule } from '../../../shared/shared.module';
 
 @NgModule({
   imports: [
-    BasMapModule,
     MaterialModule,
     FlexLayoutModule,
     CommonModule,
@@ -25,7 +24,8 @@ import { MatCustomModule } from '../../../../mat-custom/mat-custom.module';
     TranslateModule,
     RouterModule,
     CalendarModule.forRoot(),
-    MatCustomModule
+    MatCustomModule,
+    AppSharedModule
   ],
   declarations: [
     LandingCmp,

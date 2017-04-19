@@ -5,6 +5,8 @@
 @import './checkbox';
 @import './list';
 @import './slide-toggle';
+@import './overlay';
+@import './dialog';
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
 @function custom-theme($primary, $accent, $warn, $foreground, $background) {
@@ -32,4 +34,7 @@
   @include cm-checkbox-theme($theme);
   @include cm-list-theme($theme);
   @include cm-slide-toggle-theme($theme);
+  @include cm-overlay-theme($theme);
+  @include cm-dialog-theme($theme);
+  @include mc-toolbar-theme($theme);
 }
