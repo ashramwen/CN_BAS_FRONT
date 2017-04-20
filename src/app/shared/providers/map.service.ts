@@ -10,7 +10,7 @@ export class MapService {
     private http: Http
   ) { }
   public getBuildingsGeo(): Observable<Building[]> {
-    return this.http.get('/assets/mock-data/new.geojson')
+    return this.http.get('./assets/mock-data/new.geojson')
       .map((r) => {
         return r.json();
       })

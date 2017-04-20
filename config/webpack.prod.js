@@ -33,7 +33,8 @@ const BASE_CONFIG = process.env.BASE_CONFIG = {
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
 const METADATA = webpackMerge(commonConfig({
-  env: ENV
+  env: ENV,
+  baseUrl: '/bas',
 }).metadata, {
   host: HOST,
   port: PORT,

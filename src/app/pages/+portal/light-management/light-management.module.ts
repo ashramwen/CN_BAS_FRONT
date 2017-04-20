@@ -34,7 +34,8 @@ import { AppSharedModule } from '../../../shared/shared.module';
     DeviceDetailCmp,
     PunchCardComponent
   ],
-  providers: [LandingService]
+  providers: [LandingService],
+  entryComponents: [DeviceDetailCmp]
 })
 export class LightManagementModule {
 

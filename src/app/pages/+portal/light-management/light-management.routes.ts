@@ -1,5 +1,4 @@
 import { BuildingResolver } from '../../../shared/providers/resolvers/building-resolver.service';
-import { DeviceDetailCmp } from './device-list/device-detail/device-detail.component';
 import { DeviceListCmp } from './device-list/device-list.component';
 import { LandingCmp } from './landing/landing.component';
 import { LightResolver } from '../../../shared/providers/resolvers/light-resolver.service';
@@ -34,12 +33,6 @@ export const lightManagementRoutes = [
         component: DeviceListCmp,
         resolve: {
           lightings: LightsResolver
-        }
-      }, {
-        path: ':id',
-        component: DeviceDetailCmp,
-        resolve: {
-          lighting: LightResolver
         }
       }
     ]
