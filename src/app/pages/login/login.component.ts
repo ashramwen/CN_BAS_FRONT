@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -16,7 +16,7 @@ import { TokenState } from '../../shared/redux/token/reducer';
 import { StateSelectors } from '../../shared/redux/selectors';
 import { ShowLoadingAction, HideLoadingAction } from '../../shared/redux/layout/actions';
 import { AlertModal } from '../../../mat-custom/components/alert-modal/alert-modal.service';
-import * as particles from './particles';
+import { particles } from './particles';
 
 @Component({
   selector: 'bas-login',
@@ -24,7 +24,7 @@ import * as particles from './particles';
   templateUrl: './login.component.html',
   encapsulation: ViewEncapsulation.None
 })
-export class LoginCmp implements OnInit, AfterViewInit {
+export class LoginCmp implements OnInit, AfterViewInit, OnDestroy {
 
   public credentials: Credential = {
     userName: '',
@@ -36,6 +36,8 @@ export class LoginCmp implements OnInit, AfterViewInit {
     userName: ['', Validators.required],
     password: ['', Validators.required]
   });
+
+  private _pJS: any;
 
   constructor(
     private loginService: SessionService,
@@ -96,8 +98,14 @@ export class LoginCmp implements OnInit, AfterViewInit {
       });
   }
 
+  public ngOnDestroy() {
+    if (this._pJS) {
+      this._pJS.fn.vendors.destroy();
+    }
+  }
+
   private renderAnimation() {
-    particles.particlesJS('bg-animation', {
+    this._pJS = particles('bg-animation', {
       particles: {
         color: '#fff',
         shape: 'circle', // "circle", "edge" or "triangle"
