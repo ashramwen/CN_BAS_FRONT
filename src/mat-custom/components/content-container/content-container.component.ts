@@ -16,7 +16,9 @@ import { ToolbarSubTitle } from './toolbar-sub-title.component';
   template: `
     <ng-content select="cm-toolbar-sub-title"></ng-content>
     <div class="cm-content-container-inner">
-      <ng-content></ng-content>
+      <div class="content-wrap">
+        <ng-content></ng-content>
+      </div>
     </div>
   `,
   styles: [`

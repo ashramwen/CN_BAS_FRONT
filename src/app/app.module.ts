@@ -30,7 +30,6 @@ import { BrowserModule } from '@angular/platform-browser';
  */
 import { ENV_PROVIDERS } from './environment';
 import { LocalStorageModule } from 'angular-2-local-storage';
-import { LoginCmp } from './pages/login/login.component';
 import { MatCustomModule } from '../mat-custom/mat-custom.module';
 import { PortalModule } from './pages/+portal/portal.module';
 import { ROUTES } from './app.routes';
@@ -38,6 +37,7 @@ import { StoreLogMonitorModule } from '@ngrx/store-log-monitor';
 import { StoreModule } from '@ngrx/store';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { instrumentation } from './shared/redux/index';
+import { LoginModule } from './pages/login/login.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: Http) {
@@ -56,7 +56,6 @@ const APP_PROVIDERS = [
   bootstrap: [AppCmp],
   declarations: [
     AppCmp,
-    LoginCmp
   ],
   imports: [ // import Angular's modules
     // vendor modules
@@ -86,6 +85,7 @@ const APP_PROVIDERS = [
 
     // app modules
     PortalModule,
+    LoginModule,
     AppSharedModule,
     MatCustomModule
   ],

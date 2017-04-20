@@ -1,31 +1,6 @@
 
 $default-color: #2ca1f4;
 $opacity: 0.8;
-
-.login-page{
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    overflow: hidden;
-    background-image: url(../../../assets/img/login-bg.png) ;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center; 
-    background-size: cover;
-    overflow: hidden;
-
-    #bg-animation {
-        width: 100%;
-        height: 100%;
-        background-color: rgba($default-color, 0.2);
-        position: absolute;
-        z-index: 0;
-    }
-}
 .login-form{
     width: 61.8%;
     max-width: 21rem;
@@ -80,9 +55,10 @@ $opacity: 0.8;
         color: $default-color;
         width: 100%;
         transition: all 0.2s;
-        background-color: rgba(#fff, $opacity);
+        background-color: #fff;
+        
         &:hover {
-            background-color: #fff;
+            background-color: rgba(#fff, $opacity);
             .mat-button-focus-overlay {
                 background-color: transparent;
             }

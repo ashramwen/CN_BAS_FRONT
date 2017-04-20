@@ -1,4 +1,8 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -16,7 +20,6 @@ import { TokenState } from '../../shared/redux/token/reducer';
 import { StateSelectors } from '../../shared/redux/selectors';
 import { ShowLoadingAction, HideLoadingAction } from '../../shared/redux/layout/actions';
 import { AlertModal } from '../../../mat-custom/components/alert-modal/alert-modal.service';
-import { particles } from './particles';
 
 @Component({
   selector: 'bas-login',
@@ -24,7 +27,7 @@ import { particles } from './particles';
   templateUrl: './login.component.html',
   encapsulation: ViewEncapsulation.None
 })
-export class LoginCmp implements OnInit, AfterViewInit, OnDestroy {
+export class LoginCmp implements OnInit {
 
   public credentials: Credential = {
     userName: '',
@@ -36,8 +39,6 @@ export class LoginCmp implements OnInit, AfterViewInit, OnDestroy {
     userName: ['', Validators.required],
     password: ['', Validators.required]
   });
-
-  private _pJS: any;
 
   constructor(
     private loginService: SessionService,
@@ -53,10 +54,6 @@ export class LoginCmp implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(go(['portal']));
       }
     });
-  }
-
-  public ngAfterViewInit() {
-    this.renderAnimation();
   }
 
   public login() {
@@ -96,60 +93,5 @@ export class LoginCmp implements OnInit, AfterViewInit, OnDestroy {
           }
         });
       });
-  }
-
-  public ngOnDestroy() {
-    if (this._pJS) {
-      this._pJS.fn.vendors.destroy();
-    }
-  }
-
-  private renderAnimation() {
-    this._pJS = particles('bg-animation', {
-      particles: {
-        color: '#fff',
-        shape: 'circle', // "circle", "edge" or "triangle"
-        opacity: 1,
-        size: 4,
-        size_random: true,
-        nb: 150,
-        line_linked: {
-          enable_auto: true,
-          distance: 100,
-          color: '#fff',
-          opacity: 1,
-          width: 1,
-          condensed_mode: {
-            enable: false,
-            rotateX: 600,
-            rotateY: 600
-          }
-        },
-        anim: {
-          enable: true,
-          speed: 1
-        }
-      },
-      interactivity: {
-        enable: true,
-        mouse: {
-          distance: 300
-        },
-        detect_on: 'canvas', // "canvas" or "window"
-        mode: 'grab',
-        line_linked: {
-          opacity: .5
-        },
-        events: {
-          onclick: {
-            enable: true,
-            mode: 'push', // "push" or "remove"
-            nb: 4
-          }
-        }
-      },
-      /* Retina Display Support */
-      retina_detect: true
-    });
   }
 }

@@ -1,8 +1,10 @@
  cm-content-container{
-  display: flex;
-  width: 100%;
-  height: 100%;
-  position: relative;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  position: absolute;
+  display: block;
 
   &[padding]{
     .cm-content-container-inner{
@@ -15,10 +17,20 @@
     }
   }
   .cm-content-container-inner {
-    flex: 1;
+    display: block;
     overflow: auto;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    
     &.has-sub-title {
       margin-top: 48px;
+    }
+    & > .content-wrap{
+      width: 100%;
+      height: 100%;
     }
   }
 
