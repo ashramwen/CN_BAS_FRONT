@@ -1,6 +1,6 @@
 @import '../font';
 
-@mixin mc-toolbar-theme($theme){
+@mixin cm-toolbar-theme($theme){
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);

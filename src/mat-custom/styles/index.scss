@@ -39,6 +39,7 @@ $custom-background: (
   dialog:     white,
   disabled-button: rgba(black, 0.12),
   raised-button: white,
+  spinner-backdrop: rgba(#fff, 0.7),
   focused-button: $black-6-opacity,
   selected-button: map_get($mat-grey, 300),
   selected-disabled-button: map_get($mat-grey, 400),

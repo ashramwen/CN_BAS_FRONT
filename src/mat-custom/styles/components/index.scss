@@ -36,5 +36,6 @@
   @include cm-slide-toggle-theme($theme);
   @include cm-overlay-theme($theme);
   @include cm-dialog-theme($theme);
-  @include mc-toolbar-theme($theme);
+  @include cm-toolbar-theme($theme);
+  @include cm-button-spinner-theme($theme);
 }

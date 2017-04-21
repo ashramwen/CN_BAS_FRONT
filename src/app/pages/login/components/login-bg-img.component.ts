@@ -26,6 +26,7 @@ import {
         background-attachment: fixed;
         background-position: bottom; 
         background-size: cover;
+        transition: all 0.3s;
       }
     `
   ]
@@ -65,7 +66,8 @@ export class LoginBgImgComponent implements AfterViewInit, OnDestroy {
       return;
     }
     let fitSize = this._getFitSize();
-    this.backgroundPositionY = window.screen.height - fitSize.height / 3 * 2;
+    let html = document.querySelector('html');
+    this.backgroundPositionY = html.clientHeight - fitSize.height / 3 * 2;
   }
 
   private _getImgSize() {
@@ -80,8 +82,9 @@ export class LoginBgImgComponent implements AfterViewInit, OnDestroy {
   }
 
   private _getFitSize() {
-    let ratioW = this.imgSize.width / window.screen.width;
-    let ratioH = this.imgSize.height / window.screen.height;
+    let html = document.querySelector('html');
+    let ratioW = this.imgSize.width / html.clientWidth;
+    let ratioH = this.imgSize.height / html.clientHeight;
     let ratio: number = null;
     ratio = ratioW > ratioH ? ratioH : ratioW;
 

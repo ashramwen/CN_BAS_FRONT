@@ -7,6 +7,7 @@ import { ConfirmModalModule } from './confirm-modal/confirm-modal.module';
 import { MCCollapse } from './collapse/collapse.directive';
 import { SideNavModule } from './side-nav/side-nav.module';
 import { CollapseModule } from './collapse/collapse.module';
+import { CMButtonSpinnerModule } from './button-spinner/button-spinner.module';
 
 export const CUSTOM_PROVIDERS = [
   AlertModal,
@@ -19,5 +20,6 @@ export const CUSTOM_MODULES = [
   ErrorControllerModule,
   ConfirmModalModule,
   SideNavModule,
-  CollapseModule
+  CollapseModule,
+  CMButtonSpinnerModule
 ];

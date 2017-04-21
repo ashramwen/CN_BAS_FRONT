@@ -40,6 +40,8 @@ export class LoginCmp implements OnInit {
     password: ['', Validators.required]
   });
 
+  public processing: boolean; // submitting forms
+
   constructor(
     private loginService: SessionService,
     private store: Store<RootState>,
@@ -57,8 +59,7 @@ export class LoginCmp implements OnInit {
   }
 
   public login() {
-    this.store.dispatch(new ShowLoadingAction());
-
+    this.processing = true;
     Object.assign(this.credentials, this.loginForm.value);
     let subscription = this.loginService
       .login(this.credentials)
@@ -76,8 +77,8 @@ export class LoginCmp implements OnInit {
         return Observable.empty();
       })
       .finally(() => {
-        this.store.dispatch(new HideLoadingAction());
         subscription.unsubscribe();
+        this.processing = false;
       })
       .subscribe((token: Token) => {
         this.store.dispatch(new LoginSuccessAction(token));

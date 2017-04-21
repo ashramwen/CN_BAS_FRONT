@@ -56,6 +56,8 @@ export class LoginBgComponent implements AfterViewInit, OnDestroy {
   }
 
   private renderAnimation() {
+    let html = document.querySelector('html');
+
     this._pJS = particles('bg-animation', {
       particles: {
         color: '#fff',
@@ -63,7 +65,7 @@ export class LoginBgComponent implements AfterViewInit, OnDestroy {
         opacity: 1,
         size: 4,
         size_random: true,
-        nb: 150,
+        nb: 150 / 1000000 * html.clientWidth * html.clientHeight,
         line_linked: {
           enable_auto: true,
           distance: 100,
