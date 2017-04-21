@@ -9,11 +9,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCustomModule } from '../../../mat-custom/mat-custom.module';
 import { RouterModule } from '@angular/router';
+import { LoginBgImgComponent } from './components/login-bg-img.component';
 
 @NgModule({
   declarations: [
     LoginCmp,
-    LoginBgComponent
+    LoginBgComponent,
+    LoginBgImgComponent
   ],
   imports: [
     AppSharedModule,

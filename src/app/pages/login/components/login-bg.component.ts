@@ -12,13 +12,13 @@ import { particles } from './particles';
 @Component({
   selector: 'bas-login-bg',
   template: `
+    <bas-login-bg-img></bas-login-bg-img>
     <div id="bg-animation"></div>
     <ng-content></ng-content>
   `,
   styles: [
     `
       :host{
-        background-position: center;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -26,48 +26,27 @@ import { particles } from './particles';
         height: 100%;
         text-align: center;
         overflow: hidden;
-        background-image: url(./assets/img/login-bg.png) ;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: bottom; 
-        background-size: cover;
-        overflow: hidden;
+      }
+      :host bas-login-bg-img{
+        z-index: 0;
       }
       :host #bg-animation {
           width: 100%;
           height: 100%;
-          background-color: rgba(44, 161, 244, 0.2);
           position: absolute;
           left: 0px;
           top: 0px;
-          z-index: 0;
+          z-index: 1;
       }
     `
   ]
 })
 export class LoginBgComponent implements AfterViewInit, OnDestroy {
 
-  @HostBinding('style.background-position-y.px')
-  public backgroundPositionY: number;
-
   private _pJS: any;
-  private imgSize: {
-    height: number;
-    width: number;
-  } = null;
-
-  constructor(
-    private _zone: NgZone
-  ) { }
-
-  @HostListener('window:resize')
-  public onResize(event) {
-    this._recalcBgPosition();
-  }
 
   public ngAfterViewInit() {
     this.renderAnimation();
-    this._getImgSize();
   }
 
   public ngOnDestroy() {
@@ -124,36 +103,4 @@ export class LoginBgComponent implements AfterViewInit, OnDestroy {
       retina_detect: true
     });
   }
-
-  private _recalcBgPosition() {
-    if (!this.imgSize) {
-      return;
-    }
-    let fitSize = this._getFitSize();
-    this.backgroundPositionY = window.screen.height - fitSize.height / 3 * 2;
-  }
-
-  private _getImgSize() {
-    let img = new Image();
-    img.src = './assets/img/login-bg.png';
-    img.onload = () => {
-      this.imgSize = img;
-      this._zone.run(() => {
-        this._recalcBgPosition();
-      });
-    };
-  }
-
-  private _getFitSize() {
-    let ratioW = this.imgSize.width / window.screen.width;
-    let ratioH = this.imgSize.height / window.screen.height;
-    let ratio: number = null;
-    ratio = ratioW > ratioH ? ratioH : ratioW;
-
-    return {
-      height: this.imgSize.height / ratio,
-      width: this.imgSize.width / ratio
-    };
-  }
-
 }
