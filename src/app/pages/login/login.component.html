@@ -15,8 +15,8 @@
 					<span>
 						{{'Login.Username' | translate}}
 					</span>
-					<input 
-						mdInput 
+					<input
+						mdInput
 						formControlName="userName"
 						autocomplete="off"
 					>
@@ -30,8 +30,8 @@
 					<span>
 						{{'Login.Password' | translate}}
 					</span>
-					<input 
-						mdInput 
+					<input
+						mdInput
 						type="password"
 						formControlName="password"
 						autocomplete="new-password"
@@ -41,9 +41,7 @@
 		</div>
 
 		<div>
-			<button md-button button-spinner [processing]="processing" (click)="login()" class="login-btn">
-				LOGIN
-			</button>
+			<button md-button button-spinner [processing]="processing" (click)="login()" class="login-btn" i18n>LOGIN</button>
 		</div>
 	</form>
 </bas-login-bg>
