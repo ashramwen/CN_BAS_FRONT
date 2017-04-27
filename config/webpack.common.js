@@ -26,6 +26,7 @@ const ngcWebpack = require('ngc-webpack');
  */
 const HMR = helpers.hasProcessFlag('hot');
 const AOT = helpers.hasNpmFlag('aot');
+const LOCALE = '';
 const METADATA = {
   title: 'BAS @Kii',
   baseUrl: '/',
@@ -355,7 +356,12 @@ module.exports = function (options) {
       new ngcWebpack.NgcWebpackPlugin({
         disabled: !AOT,
         tsConfig: helpers.root('tsconfig.webpack.json'),
-        // resourceOverride: helpers.root('config/resource-override.js')
+        // resourceOverride: helpers.root('config/resource-override.js'),
+        cliOptions: {
+          locale: LOCALE || '',
+          i18nFile: LOCALE ? 'src/locale/messages.' + LOCALE + '.xlf' : '',
+          i18nFormat: 'xlf'
+        }
       })
 
     ],
