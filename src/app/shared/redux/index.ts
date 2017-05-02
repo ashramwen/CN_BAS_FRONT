@@ -29,12 +29,14 @@ import { combineReducers } from '@ngrx/store';
 import { locationReducer, LocationState } from './location';
 import { LayoutState, layoutReducer } from './layout';
 import { TokenState, TokenEffects, tokenReducer } from './token';
+import { globalReducer, GlobalState } from './global/reducer';
 
 const reducers = {
   token: tokenReducer,
   router: routerReducer,
   layout: layoutReducer,
-  location: locationReducer
+  location: locationReducer,
+  global: globalReducer
 };
 
 export const EFFECTS = [
@@ -46,6 +48,7 @@ export interface RootState {
   layout: LayoutState;
   router: RouterStateSnapshot;
   location: LocationState;
+  global: GlobalState;
 }
 
 const developmentReducer: ActionReducer<RootState>

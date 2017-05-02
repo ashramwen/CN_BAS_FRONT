@@ -11,8 +11,8 @@ export class LightsResolver implements Resolve<Thing[]> {
 
   constructor(private deviceService: DeviceService) { }
 
-  public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.deviceService.fetchLightings();
+  public async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return await this.deviceService.fetchDevicesByType('Lighting');
   }
 
 }

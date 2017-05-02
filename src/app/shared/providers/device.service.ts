@@ -6,8 +6,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RESOURCE_URLS } from '../constants/resource-urls';
 import { RequestHelper } from './helpers/request-helper';
-import { Thing } from './../models/thing.interface';
+import { Thing } from '../models/thing.interface';
 import { AppUtils } from '../utils/app-utils';
+import { BasORM } from '../orm/orm.service';
 
 @Injectable()
 export class DeviceService {
@@ -15,7 +16,9 @@ export class DeviceService {
   constructor(
     private beehiveClient: BeehiveClient,
     private configHelper: ConfigHelper,
-    private requestHelper: RequestHelper) { }
+    private requestHelper: RequestHelper,
+    private _orm: BasORM
+  ) { }
 
   /**
    * get things by type
@@ -25,21 +28,11 @@ export class DeviceService {
    *
    * @memberOf ThingService
    */
-  public fetchDevicesByType(type: string): Observable<Thing[]> {
+  public async fetchDevicesByType(type: string) {
     let url = this.configHelper.buildUrl(RESOURCE_URLS.TYPE, [type]);
     let requestOptions: RequestOptionsArgs = {};
-    return this.beehiveClient.get(url, requestOptions).map((res: Response) => res.json());
-  }
-
-  /**
-   * get all lightings
-   *
-   * @returns {Observable<Thing[]>}
-   *
-   * @memberOf DeviceService
-   */
-  public fetchLightings(): Observable<Thing[]> {
-    return this.fetchDevicesByType('Lighting');
+    let result = await this._orm.thingRepo.find({ type });
+    return result;
   }
 
   /**
@@ -99,5 +92,51 @@ export class DeviceService {
       end: AppUtils.now()
     };
     return this.beehiveClient.post(url, requestOptions).map((res) => res.json());
+  }
+
+
+
+  /**
+   * get things
+   * subject to remove when sync logic is done
+   * 
+   * @returns {Promise<Thing[]>} 
+   * 
+   * @memberOf DeviceService
+   */
+  public async getAllThings(): Promise<Thing[]> {
+    let thingIDs = await this._queryAllDeviceIDs();
+    return this._queryDeviceDetailsByIDs(thingIDs.map((id) => id.thingID));
+  }
+
+  /**
+   * subject to remove when sync logic is done
+   * 
+   * @private
+   * @returns 
+   * 
+   * @memberOf DeviceService
+   */
+  private async _queryAllDeviceIDs(): Promise<Array<{ vendorThingID: string; thingID: number }>> {
+    let url = this.configHelper.buildUrl(RESOURCE_URLS.REPORTS, ['thingQuery']);
+    let body = {
+      includeSubLevel: true,
+      locationPrefix: ''
+    };
+    return await this.beehiveClient.post(url, body).map(d => d.json()).toPromise();
+  }
+
+  /**
+   * subject to remove when sync logic is done
+   * 
+   * @private
+   * @param {number[]} ids 
+   * @returns 
+   * 
+   * @memberOf DeviceService
+   */
+  private async _queryDeviceDetailsByIDs(ids: number[]) {
+    let url = this.configHelper.buildUrl(RESOURCE_URLS.THING, ['queryDetailByIDs']);
+    return await this.beehiveClient.post(url, ids).map(d=> d.json()).toPromise();
   }
 }

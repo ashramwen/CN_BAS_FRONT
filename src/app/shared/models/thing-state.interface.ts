@@ -11,6 +11,6 @@ export interface ThingState {
   VOC?: number;
   Brightness?: number;
 
-  date: number;
-  target: string;
+  date?: number;
+  target?: string;
 }

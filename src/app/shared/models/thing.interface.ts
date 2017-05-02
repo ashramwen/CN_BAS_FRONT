@@ -47,10 +47,6 @@ export class Thing {
   @Column()
   public kiiThingID: string;
 
-  @Column()
-  public globalThingID: number;
-
   public connectivity: any;
-  public tags: any[];
-  public status: ThingState;
+  public status: ThingState = {};
 }

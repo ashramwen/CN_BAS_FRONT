@@ -16,6 +16,7 @@ import { StoreModule } from '@ngrx/store';
 import { TokenEffects } from './redux/token/effects';
 import { schema } from '../configs/db';
 import { MatCustomModule } from '../../mat-custom/mat-custom.module';
+import { BasORMModule } from './orm/orm.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { MatCustomModule } from '../../mat-custom/mat-custom.module';
     RouterStoreModule.connectRouter(),
     ...SHARED_COMPONENTS,
     MatCustomModule,
-    SHARED_MODULES
+    SHARED_MODULES,
+    BasORMModule
   ],
   exports: [SHARED_COMPONENTS, SHARED_DIRECTIVES, SHARED_MODULES],
   declarations: [...SHARED_DIRECTIVES],

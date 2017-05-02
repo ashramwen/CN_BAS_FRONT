@@ -36,9 +36,8 @@ export class DeviceDetailCmp implements OnInit {
   }
 
   public getCommandHistory() {
-    console.log('here');
     this.commandHistory = [];
-    this.deviceService.fetchCommandHistoryByGlobalThingID(this.thing.globalThingID)
+    this.deviceService.fetchCommandHistoryByGlobalThingID(this.thing.id)
       .subscribe((history: any) => {
         this.commandHistory = history;
         console.log('command history', this.commandHistory);
@@ -56,7 +55,7 @@ export class DeviceDetailCmp implements OnInit {
 
   public ngOnInit() {
     this.commandHistory = [];
-    this.deviceService.fetchCommandHistoryByGlobalThingID(this.thing.globalThingID)
+    this.deviceService.fetchCommandHistoryByGlobalThingID(this.thing.id)
       .subscribe((history: any) => {
         history.map((object) => {
           object.power = null;

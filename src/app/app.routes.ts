@@ -6,6 +6,7 @@ import { LocationResolver } from './shared/providers/resolvers/location-resolver
 import { Component } from '@angular/core';
 import { DeviceListCmp } from './pages/+portal/device-list/device-list.component';
 import { portalRoutes } from './pages/+portal/portal.routes';
+import { MetaGuard } from './shared/providers/guards/meta-guard.service';
 
 export const ROUTES: Routes = [
   {
@@ -20,7 +21,10 @@ export const ROUTES: Routes = [
   {
     path: 'portal',
     children: [...portalRoutes],
-    canActivate: [AuthGuard],
+    canActivate: [
+      AuthGuard,
+      MetaGuard
+    ],
     resolve: {
       location: LocationResolver
     }

@@ -809,9 +809,9 @@ balanced-match@^0.4.1, balanced-match@^0.4.2:
   version "0.4.2"
   resolved "http://registry.npm.taobao.org/balanced-match/download/balanced-match-0.4.2.tgz#cb3f3e3c732dc0f01ee70b403f302e61d7709838"
 
-bas-typeorm@0.0.9:
-  version "0.0.9"
-  resolved "http://registry.npm.taobao.org/bas-typeorm/download/bas-typeorm-0.0.9.tgz#eac534e885ca21773febf11d86aa055cf9030974"
+bas-typeorm@0.0.10:
+  version "0.0.10"
+  resolved "http://registry.npm.taobao.org/bas-typeorm/download/bas-typeorm-0.0.10.tgz#f49ec607ec3008046e90bbfb9f04a7a324bab533"
   dependencies:
     "@types/mongodb" "^2.1.41"
     app-root-path "^2.0.1"

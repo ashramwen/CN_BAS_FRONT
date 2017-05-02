@@ -12,8 +12,13 @@ const locationSelector = (state: RootState) => {
   return state.location;
 };
 
+const globalSelector = (state: RootState) => {
+  return state.global;
+}
+
 export const StateSelectors = {
   token: tokenSelector,
   layout: layoutSelector,
-  location: locationSelector
+  location: locationSelector,
+  global: globalSelector
 };
