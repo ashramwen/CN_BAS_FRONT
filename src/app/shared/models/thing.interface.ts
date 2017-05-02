@@ -1,19 +1,56 @@
 import { ThingState } from './thing-state.interface';
-export interface Thing {
-  id: number;
-  createDate: number;
-  modifyDate: number;
-  createBy: string;
-  modifyBy: string;
-  vendorThingID: string;
-  kiiAppID: string;
-  type: string;
-  status?: ThingState;
-  fullKiiThingID: string;
-  schemaName: string;
-  schemaVersion: string;
-  kiiThingID: string;
-  tags?: any[];
-  globalThingID: number;
-  connectivity?: any;
+
+import {
+  ConnectionOptions,
+  createConnection,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column
+} from 'bas-typeorm';
+
+@Entity()
+export class Thing {
+
+  @PrimaryGeneratedColumn()
+  public id: number;
+
+  @Column()
+  public createDate: number;
+
+  @Column()
+  public modifyDate: number;
+
+  @Column()
+  public createBy: string;
+
+  @Column()
+  public modifyBy: string;
+
+  @Column()
+  public vendorThingID: string;
+
+  @Column()
+  public kiiAppID: string;
+
+  @Column()
+  public type: string;
+
+  @Column()
+  public fullKiiThingID: string;
+
+  @Column()
+  public schemaName: string;
+
+  @Column()
+  public schemaVersion: string;
+
+  @Column()
+  public kiiThingID: string;
+
+  @Column()
+  public globalThingID: number;
+
+  public connectivity: any;
+  public tags: any[];
+  public status: ThingState;
 }

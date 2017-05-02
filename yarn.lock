@@ -119,6 +119,12 @@
   version "0.0.3"
   resolved "http://registry.npm.taobao.org/@ngx-translate/http-loader/download/@ngx-translate/http-loader-0.0.3.tgz#8346c8d2d6f630254601029668f17abe2afe8a9b"
 
+"@types/bson@*":
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/@types/bson/download/@types/bson-1.0.3.tgz#6c26f0876bf9d8cbb06edd4019e29354bf3a03e0"
+  dependencies:
+    "@types/node" "*"
+
 "@types/d3-array@*":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-1.1.1.tgz#11845239ae973849857a031530af77b970b9ff09"
@@ -340,6 +346,13 @@
 "@types/minimatch@^2.0.29":
   version "2.0.29"
   resolved "http://registry.npm.taobao.org/@types/minimatch/download/@types/minimatch-2.0.29.tgz#5002e14f75e2d71e564281df0431c8c1b4a2a36a"
+
+"@types/mongodb@^2.1.41":
+  version "2.2.0"
+  resolved "http://registry.npm.taobao.org/@types/mongodb/download/@types/mongodb-2.2.0.tgz#715adcf0e1d615f2f3100d3b879124e799fe1b4c"
+  dependencies:
+    "@types/bson" "*"
+    "@types/node" "*"
 
 "@types/node@*", "@types/node@^7.0.0":
   version "7.0.5"
@@ -795,6 +808,17 @@ backo2@1.0.2:
 balanced-match@^0.4.1, balanced-match@^0.4.2:
   version "0.4.2"
   resolved "http://registry.npm.taobao.org/balanced-match/download/balanced-match-0.4.2.tgz#cb3f3e3c732dc0f01ee70b403f302e61d7709838"
+
+bas-typeorm@0.0.9:
+  version "0.0.9"
+  resolved "http://registry.npm.taobao.org/bas-typeorm/download/bas-typeorm-0.0.9.tgz#eac534e885ca21773febf11d86aa055cf9030974"
+  dependencies:
+    "@types/mongodb" "^2.1.41"
+    app-root-path "^2.0.1"
+    glob "^7.1.1"
+    reflect-metadata "^0.1.9"
+    yargonaut "^1.1.2"
+    yargs "^6.6.0"
 
 base64-arraybuffer@0.1.5:
   version "0.1.5"
@@ -2435,6 +2459,10 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/fs.realpath/download/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
 
+fs@^0.0.1-security:
+  version "0.0.1-security"
+  resolved "http://registry.npm.taobao.org/fs/download/fs-0.0.1-security.tgz#8a7bd37186b6dddf3813f23858b57ecaaf5e41d4"
+
 fsevents@^1.0.0:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/fsevents/download/fsevents-1.1.1.tgz#f19fd28f43eeaf761680e519a203c4d0b3d31aff"
@@ -3908,10 +3936,6 @@ multipipe@^0.1.2:
     duplexer2 "0.0.2"
 
 nan@^2.3.0, nan@^2.3.2, nan@^2.3.3:
-  version "2.5.1"
-  resolved "http://registry.npm.taobao.org/nan/download/nan-2.5.1.tgz#d5b01691253326a97a2bbee9e61c55d8d60351e2"
-
-nan@~2.4.0:
   version "2.4.0"
   resolved "http://registry.npm.taobao.org/nan/download/nan-2.4.0.tgz#fb3c59d45fe4effe215f0b890f8adf6eb32d2232"
 
@@ -4004,7 +4028,7 @@ node-libs-browser@^2.0.0:
     util "^0.10.3"
     vm-browserify "0.0.4"
 
-node-pre-gyp@^0.6.29, node-pre-gyp@~0.6.31:
+node-pre-gyp@^0.6.29:
   version "0.6.33"
   resolved "http://registry.npm.taobao.org/node-pre-gyp/download/node-pre-gyp-0.6.33.tgz#640ac55198f6a925972e0c16c4ac26a034d5ecc9"
   dependencies:
@@ -5498,13 +5522,6 @@ sprintf-js@^1.0.3, sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "http://registry.npm.taobao.org/sprintf-js/download/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
 
-sqlite3@^3.1.8:
-  version "3.1.8"
-  resolved "http://registry.npm.taobao.org/sqlite3/download/sqlite3-3.1.8.tgz#4cbcf965d8b901d1b1015cbc7fc415aae157dfaa"
-  dependencies:
-    nan "~2.4.0"
-    node-pre-gyp "~0.6.31"
-
 sshpk@^1.7.0:
   version "1.11.0"
   resolved "http://registry.npm.taobao.org/sshpk/download/sshpk-1.11.0.tgz#2d8d5ebb4a6fab28ffba37fa62a90f4a3ea59d77"
@@ -5896,6 +5913,10 @@ typedoc@^0.5.3:
     shelljs "^0.7.0"
     typedoc-default-themes "^0.4.2"
     typescript "2.1.6"
+
+typeorm-browser@^0.0.6:
+  version "0.0.6"
+  resolved "http://registry.npm.taobao.org/typeorm-browser/download/typeorm-browser-0.0.6.tgz#1fd623259d125192793955886dc4f6f26a2ea3c2"
 
 typeorm@^0.0.11:
   version "0.0.11"
