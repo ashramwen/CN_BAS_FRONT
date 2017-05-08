@@ -339,6 +339,10 @@
   version "4.14.54"
   resolved "http://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.54.tgz#287dbbcd97d5da69c25ca99fb5afa81c4839b7fa"
 
+"@types/lodash@^4.14.64":
+  version "4.14.64"
+  resolved "http://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.64.tgz#979cf3a3d4a368670840bf9b3e448dc33ffe84ee"
+
 "@types/marked@0.0.28":
   version "0.0.28"
   resolved "http://registry.npm.taobao.org/@types/marked/download/@types/marked-0.0.28.tgz#44ba754e9fa51432583e8eb30a7c4dd249b52faa"

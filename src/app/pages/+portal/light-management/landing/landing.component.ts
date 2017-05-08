@@ -5,11 +5,11 @@ import { Observable, Subject } from 'rxjs';
 import { endOfDay, setDay, startOfDay, subDays } from 'date-fns';
 
 import { ActivatedRoute } from '@angular/router';
-import { EsQueryService } from '../../../../shared/providers/es-query.service';
 import { Message } from 'stompjs';
 import { StompService } from '../../../../shared/providers/stomp.service';
 import { StompThing } from '../../../../shared/models/stomp-thing.interface';
 import { Thing } from '../../../../shared/models/thing.interface';
+import { EsQueryService } from '../../../../shared/providers/resource-services/es-query.service';
 
 /**
  * five minutes

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { BasORM } from '../../orm/orm.service';
-import { SyncronizeService } from '../../orm/services/syncronize.service';
 import { RootState } from '../../redux/index';
 import { StateSelectors } from '../../redux/selectors';
 import { MetaInitSuccessAction } from '../../redux/global/actions';
@@ -17,7 +16,6 @@ export class MetaGuard implements CanActivate, CanActivateChild {
   constructor(
     private router: Router,
     private _orm: BasORM,
-    private _sycnService: SyncronizeService,
     private store: Store<RootState>
   ) { }
 
@@ -38,7 +36,6 @@ export class MetaGuard implements CanActivate, CanActivateChild {
           if (!this._orm.connection) {
             await this._orm.init();
           }
-          await this._sycnService.sync();
           this.store.dispatch(new MetaInitSuccessAction());
           resolve(true);
         } catch (e) {

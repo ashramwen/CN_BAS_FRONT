@@ -11,6 +11,8 @@ export const ActionTypes = {
   HIDE_LOADING: type('[Layout] HideLoading'),
   GO_USER_INFO: type('[Layout] GoUserInfo'),
   GO_MAIN: type('[Layout] GoMain'),
+  SHOW_APP_SPINNER: type('[Layout] SHOW_APP_SPINNER'),
+  HIDE_APP_SPINNER: type('[Layout] HIDE_APP_SPINNER'),
 };
 
 export class ShowSideNavAction implements Action {
@@ -41,9 +43,19 @@ export class GoMainAction implements Action {
   public type = ActionTypes.GO_MAIN;
 }
 
+export class ShowAppSpinnerAction implements Action {
+  public type = ActionTypes.SHOW_APP_SPINNER;
+}
+
+export class HideAppSpinnerAction implements Action {
+  public type = ActionTypes.HIDE_APP_SPINNER;
+}
+
 export type Actions =
   ShowSideNavAction |
   HideSideNavAction |
   ToggleSideNavAction |
   GoUserInfoAction |
-  GoMainAction;
+  GoMainAction |
+  ShowAppSpinnerAction |
+  HideAppSpinnerAction;

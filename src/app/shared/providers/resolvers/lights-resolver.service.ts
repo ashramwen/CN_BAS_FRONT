@@ -1,10 +1,10 @@
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
-import { DeviceService } from './../device.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Response } from '@angular/http';
 import { Thing } from './../../models/thing.interface';
+import { DeviceService } from '../resource-services/device.service';
 
 @Injectable()
 export class LightsResolver implements Resolve<Thing[]> {
@@ -14,5 +14,4 @@ export class LightsResolver implements Resolve<Thing[]> {
   public async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return await this.deviceService.fetchDevicesByType('Lighting');
   }
-
 }

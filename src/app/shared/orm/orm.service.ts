@@ -1,5 +1,9 @@
 import { Thing } from '../models/thing.interface';
+import { Location } from '../models/location.interface';
+
 import { Injectable } from '@angular/core';
+import { SyncronizeService } from './services/syncronize.service';
+import { LocationType } from '../models/location-type.interface';
 import {
   ConnectionOptions,
   createConnection,
@@ -12,7 +16,7 @@ import {
 let options: ConnectionOptions = {
   driver: {
     type: 'websql',
-    database: 'basdb',
+    database: 'bas-db',
     extra: {
       version: 1,
       description: 'BAS local database',
@@ -20,7 +24,9 @@ let options: ConnectionOptions = {
     }
   },
   entities: [
-    Thing
+    Thing,
+    LocationType,
+    Location
   ],
   autoSchemaSync: true
 };

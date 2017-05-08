@@ -1,14 +1,15 @@
 import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
-
-import { BeehiveClient } from './helpers/beehive-client.service';
-import { ConfigHelper } from './helpers/config-helper';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
-import { RESOURCE_URLS } from '../constants/resource-urls';
-import { RequestHelper } from './helpers/request-helper';
-import { Thing } from '../models/thing.interface';
-import { AppUtils } from '../utils/app-utils';
-import { BasORM } from '../orm/orm.service';
+import { RESOURCE_URLS } from '../../constants/resource-urls';
+import { AppUtils } from '../../utils/app-utils';
+import { BeehiveClient } from '../helpers/beehive-client.service';
+import { ConfigHelper } from '../helpers/config-helper';
+import { RequestHelper } from '../helpers/request-helper';
+import { BasORM } from '../../orm/orm.service';
+import { Thing } from '../../models/thing.interface';
+import { ThingResponse } from './interfaces/thing-response.interface';
 
 @Injectable()
 export class DeviceService {
@@ -94,27 +95,25 @@ export class DeviceService {
     return this.beehiveClient.post(url, requestOptions).map((res) => res.json());
   }
 
-
-
   /**
    * get things
    * subject to remove when sync logic is done
-   * 
-   * @returns {Promise<Thing[]>} 
-   * 
+   *
+   * @returns {Promise<Thing[]>}
+   *
    * @memberOf DeviceService
    */
-  public async getAllThings(): Promise<Thing[]> {
+  public async getAllThings(): Promise<ThingResponse[]> {
     let thingIDs = await this._queryAllDeviceIDs();
     return this._queryDeviceDetailsByIDs(thingIDs.map((id) => id.thingID));
   }
 
   /**
    * subject to remove when sync logic is done
-   * 
+   *
    * @private
-   * @returns 
-   * 
+   * @returns
+   *
    * @memberOf DeviceService
    */
   private async _queryAllDeviceIDs(): Promise<Array<{ vendorThingID: string; thingID: number }>> {
@@ -123,20 +122,21 @@ export class DeviceService {
       includeSubLevel: true,
       locationPrefix: ''
     };
-    return await this.beehiveClient.post(url, body).map(d => d.json()).toPromise();
+    return await this.beehiveClient.post(url, body).map((d) => d.json()).toPromise();
   }
 
   /**
    * subject to remove when sync logic is done
-   * 
+   *
    * @private
-   * @param {number[]} ids 
-   * @returns 
-   * 
+   * @param {number[]} ids
+   * @returns
+   *
    * @memberOf DeviceService
    */
   private async _queryDeviceDetailsByIDs(ids: number[]) {
     let url = this.configHelper.buildUrl(RESOURCE_URLS.THING, ['queryDetailByIDs']);
-    return await this.beehiveClient.post(url, ids).map(d=> d.json()).toPromise();
+    return await this.beehiveClient
+      .post(url, ids).map((d) => d.json() as ThingResponse[]).toPromise();
   }
 }

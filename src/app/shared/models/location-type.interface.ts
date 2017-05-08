@@ -1,16 +1,19 @@
+
 import { ThingState } from './thing-state.interface';
 import { SyncRecord } from './sync_record.interface';
+import { Location } from './location.interface';
 
 import {
   ConnectionOptions,
   createConnection,
   Entity,
   PrimaryGeneratedColumn,
-  Column
+  Column,
+  OneToMany
 } from 'bas-typeorm';
 
 @Entity()
-export class Thing implements SyncRecord {
+export class LocationType implements SyncRecord {
 
   @PrimaryGeneratedColumn()
   public id: number;
@@ -31,26 +34,20 @@ export class Thing implements SyncRecord {
   public isDeleted: boolean;
 
   @Column()
-  public vendorThingID: string;
+  public level: number;
 
   @Column()
-  public kiiAppID: string;
+  public displayNameCN: string;
 
   @Column()
-  public type: string;
+  public displayNameEN: string;
 
-  @Column()
-  public fullKiiThingID: string;
+  @OneToMany((type) => Location, (location) => location.locationType)
+  public locations: Location[];
 
-  @Column()
-  public schemaName: string;
+  set description(value) {
+    this.displayNameCN = value['displayNameCN'];
+    this.displayNameEN = value['displayNameEN'];
+  }
 
-  @Column()
-  public schemaVersion: string;
-
-  @Column()
-  public kiiThingID: string;
-
-  public connectivity: any;
-  public status: ThingState = {};
 }

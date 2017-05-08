@@ -1,10 +1,10 @@
-import { ByTarget, ESObject, Must, Range, Terms } from './../models/es-object';
-import { ESCount, ESResponse } from './../models/es-response.interface';
+import { ESCount, ESResponse } from '../../models/es-response.interface';
 import { Headers, Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 
-import { ESQueryOption } from './../models/es-query-option.interface';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { ESObject } from '../../models/es-object';
+import { ESQueryOption } from '../../models/es-query-option.interface';
 
 const SEARCH_URL = `${BASE_CONFIG.esUrl}${BASE_CONFIG.kiiAppID}/_search`;
 const COUNT_URL = `${BASE_CONFIG.esUrl}${BASE_CONFIG.kiiAppID}/_count`;

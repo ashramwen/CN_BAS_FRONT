@@ -5,7 +5,12 @@ import { MdDialog } from '@angular/material';
 import { RootState } from '../../../shared/redux/index';
 import { LogOutAction } from '../../../shared/redux/token/actions';
 import { PasswordChangeCmp } from './password-change/password-change.component';
-import { GoMainAction } from '../../../shared/redux/layout/actions';
+import {
+  GoMainAction, ShowAppSpinnerAction, HideAppSpinnerAction
+} from '../../../shared/redux/layout/actions';
+import { BasORM } from '../../../shared/orm/orm.service';
+import { SyncronizeService } from '../../../shared/orm/services/syncronize.service';
+import { AlertModal } from '../../../../mat-custom/components/alert-modal/alert-modal.service';
 import {
   ConfirmModal
 } from '../../../../mat-custom/components/confirm-modal/confirm-modal.service';
@@ -20,7 +25,10 @@ export class UserInfoCmp {
   constructor(
     private store: Store<RootState>,
     private dialog: MdDialog,
-    private confirm: ConfirmModal
+    private confirm: ConfirmModal,
+    private _orm: BasORM,
+    private _syncService: SyncronizeService,
+    private _alert: AlertModal
   ) { }
 
   public logout() {
@@ -50,6 +58,25 @@ export class UserInfoCmp {
     });
     dialogRef.componentInstance.close.subscribe(() => {
       dialogRef.close();
+    });
+  }
+
+  public refreshLocalData() {
+    let result = this.confirm.open({
+      message: `Are you sure to refresh data?`,
+    });
+
+    result.ok.subscribe(async () => {
+      try {
+        this.store.dispatch(new ShowAppSpinnerAction());
+        await this._orm.connection.dropDatabase();
+        await this._orm.init();
+        await this._syncService.sync();
+      } catch (e) {
+        this._alert.failure(`Syncronic Failed, reason: ${e.message}`);
+      } finally {
+        this.store.dispatch(new HideAppSpinnerAction());
+      }
     });
   }
 }

@@ -2,8 +2,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { DeviceService } from '../../../../../shared/providers/device.service';
 import { Thing } from '../../../../../shared/models/thing.interface';
+import { DeviceService } from '../../../../../shared/providers/resource-services/device.service';
 import {
   PortalModalRef
 } from '../../../../../../mat-custom/components/portal-modal/portal-modal-ref.type';

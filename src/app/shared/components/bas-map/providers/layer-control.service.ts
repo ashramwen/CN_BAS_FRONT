@@ -30,7 +30,7 @@ export class LayerControl {
       this.myState.locationTree,
       [this.myState.locationTree]
     );
-    if (result.location.locationLevel === 'building') {
+    if (result.location.locationType.displayNameEN === 'building') {
       let levels = this.myState.geoData.find((b) => b.id === result.path[1].location).levels;
       if (!levels || !levels[0]) {
         throw new Error(`level is not existing for building: ${result.path[1].location}`);
@@ -53,7 +53,7 @@ export class LayerControl {
 
   public goBack() {
     let parentLocation: string = '';
-    switch (this.myState.currentLocation.locationLevel) {
+    switch (this.myState.currentLocation.locationType.displayNameEN) {
       case 'area':
         parentLocation = this.myState.currentLocation.parent.location;
         break;
@@ -73,18 +73,18 @@ export class LayerControl {
   }
 
   private updateLocationPicker(location: Location, path: Location[]) {
-    switch (this.myState.currentLocation.locationLevel) {
+    switch (this.myState.currentLocation.locationType.displayNameEN) {
       case 'site':
       case 'area':
         this._currentArea = path[4];
       case 'partition':
         this._currentPartition = path[3];
-        if (this.myState.currentLocation.locationLevel === 'partition') {
+        if (this.myState.currentLocation.locationType.displayNameEN === 'partition') {
           this._currentArea = null;
         }
       case 'floor':
         this._currentLevel = path[2];
-        if (this.myState.currentLocation.locationLevel === 'floor') {
+        if (this.myState.currentLocation.locationType.displayNameEN === 'floor') {
           this._currentArea = null;
           this._currentPartition = null;
         }
@@ -107,7 +107,7 @@ export class LayerControl {
     // else if current location is partition level then
     //  display all area level areas of this partition, hide all buildings/levels,
     //  and fade other partitions in the same level
-    if (!this.myState.currentLocation.locationLevel) {
+    if (!this.myState.currentLocation.locationType.displayNameEN) {
       this.myState.layers.forEach((l) => {
         if ((<AreaFeature> l.feature).properties.parentID
           === this.myState.currentLocation.location) {
@@ -116,7 +116,7 @@ export class LayerControl {
           this.hideLayer(l);
         }
       });
-    } else if (this.myState.currentLocation.locationLevel === 'floor') {
+    } else if (this.myState.currentLocation.locationType.displayNameEN === 'floor') {
       this.myState.layers.forEach((l) => {
         let feature: AreaFeature = <AreaFeature> l.feature;
         if (feature.properties.parentID === this.myState.currentLocation.location) {
@@ -127,7 +127,7 @@ export class LayerControl {
           this.hideLayer(l);
         }
       });
-    } else if (this.myState.currentLocation.locationLevel === 'partition') {
+    } else if (this.myState.currentLocation.locationType.displayNameEN === 'partition') {
       this.myState.layers.forEach((l) => {
         if ((<AreaFeature> l.feature).properties.parentID
             === this.myState.currentLocation.location) {

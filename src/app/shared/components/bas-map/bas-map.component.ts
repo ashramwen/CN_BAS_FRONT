@@ -60,11 +60,7 @@ export class BasMap implements AfterViewInit, OnInit {
    * @description back button is visible or not
    */
   public get backButtonIsVisible(): boolean {
-    return (this.myState.currentLocation.locationLevel === 'area'
-      || this.myState.currentLocation.locationLevel === 'floor'
-      || this.myState.currentLocation.locationLevel === 'partition'
-      || this.myState.currentLocation.locationLevel === 'site')
-      && !this.myState.selectionMode;
+    return !!this.myState.currentLocation.parent;
   }
 
   constructor(
@@ -228,17 +224,13 @@ export class BasMap implements AfterViewInit, OnInit {
     if (!this.myState.currentLocation) {
       return 18;
     }
-    switch (this.myState.currentLocation.locationLevel) {
-      case 'floor':
-        return 19;
-      case 'partition':
-        return 20;
-      case 'site':
-      case 'area':
-        return 22;
-      default:
-        return 18;
+    let i = 0;
+    let location = this.myState.currentLocation;
+    while (!!location.parent) {
+      location = location.parent;
+      i++;
     }
+    return 18 + i;
   }
 
   private findBounds() {

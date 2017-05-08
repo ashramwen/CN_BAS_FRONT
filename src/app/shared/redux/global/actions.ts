@@ -5,11 +5,21 @@ import { Observable } from 'rxjs/Observable';
 
 export const ActionTypes = {
   META_INIT_SUCCESS: type('[Global] META_INIT_SUCCESS'),
+  ADD_LOCATION: type('[Global] ADD_LOCATION'),
 };
 
 export class MetaInitSuccessAction implements Action {
   public type = ActionTypes.META_INIT_SUCCESS;
 }
 
+export class AddLocationAction implements Action {
+  public type = ActionTypes.ADD_LOCATION;
+
+  constructor(
+    public payload: Location
+  ) { }
+}
+
 export type Actions =
-  MetaInitSuccessAction;
+  MetaInitSuccessAction |
+  AddLocationAction;

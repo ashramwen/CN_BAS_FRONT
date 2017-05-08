@@ -5,13 +5,13 @@ import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Rx';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { DeviceService } from '../../../../shared/providers/device.service';
 import { RootState } from '../../../../shared/redux/index';
 import { Thing } from '../../../../shared/models/thing.interface';
 import {
   DeviceDetailCmp,
   DeviceDetailInputData
 } from './device-detail/device-detail.component';
+import { DeviceService } from '../../../../shared/providers/resource-services/device.service';
 import {
   PortalModal
 } from '../../../../../mat-custom/components/portal-modal/portal-modal.service';

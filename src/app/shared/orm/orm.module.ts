@@ -5,7 +5,7 @@ import { BasORM } from './orm.service';
 @NgModule({
   providers: [
     BasORM,
-    ORM_SERVIES
+    ORM_SERVIES,
   ]
 })
 export class BasORMModule { }

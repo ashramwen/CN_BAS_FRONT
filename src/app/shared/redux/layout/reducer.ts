@@ -12,17 +12,20 @@ import {
 } from './actions';
 import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { ShowAppSpinnerAction, HideAppSpinnerAction } from './actions';
 
 export interface LayoutState {
-  sideMenuVisible: boolean;
-  loading: number;
-  swipeTabIndex: number;
+  sideMenuVisible?: boolean;
+  loading?: number;
+  swipeTabIndex?: number;
+  appSpinnerVisible?: boolean;
 };
 
 export const initialState: LayoutState = {
   sideMenuVisible: true,
   loading: 0,
-  swipeTabIndex: 0
+  swipeTabIndex: 0,
+  appSpinnerVisible: false,
 };
 
 export function layoutReducer(state = initialState, action: Actions): LayoutState {
@@ -47,6 +50,12 @@ export function layoutReducer(state = initialState, action: Actions): LayoutStat
     }
     case ActionTypes.GO_USER_INFO: {
       return onGoUserInfo(state, <GoUserInfoAction> action);
+    }
+    case ActionTypes.SHOW_APP_SPINNER: {
+      return onShowAppSpinner(state, <ShowAppSpinnerAction> action);
+    }
+    case ActionTypes.HIDE_APP_SPINNER: {
+      return onHideAppSpinner(state, <HideAppSpinnerAction> action);
     }
     default: {
       return state;
@@ -94,4 +103,16 @@ function onGoMain(state: LayoutState, action: GoUserInfoAction): LayoutState {
   return Object.assign({}, state, {
     swipeTabIndex: 0
   });
+}
+
+function onShowAppSpinner(state: LayoutState, action: GoUserInfoAction): LayoutState {
+  return Object.assign({}, state, {
+    appSpinnerVisible: true
+  } as LayoutState);
+}
+
+function onHideAppSpinner(state: LayoutState, action: GoUserInfoAction): LayoutState {
+  return Object.assign({}, state, {
+    appSpinnerVisible: false
+  } as LayoutState);
 }

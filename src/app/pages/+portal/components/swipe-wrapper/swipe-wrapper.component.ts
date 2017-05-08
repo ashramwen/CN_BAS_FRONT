@@ -34,7 +34,7 @@ import { replace } from '@ngrx/router-store';
       }
 
       .portal-wrapper.user-info{
-        background-color:#00BCD4 !important;
+        background-color:#2ca1f4 !important;
       }
       :host {
         width: 100%;
