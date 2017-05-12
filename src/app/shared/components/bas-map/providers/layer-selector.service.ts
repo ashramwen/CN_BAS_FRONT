@@ -10,7 +10,7 @@ import { StateService } from './state.service';
 @Injectable()
 export class LayerSelector {
 
-  private _selectedLayers: L.Polygon[] = [];
+  private _selectedLayers: L.Layer[] = [];
   private _selectedLocation: Location[] = [];
 
   constructor(
@@ -21,26 +21,31 @@ export class LayerSelector {
     return this._selectedLocation;
   }
 
-  public toggleLayer(layer) {
+  public deselectLocation(location: Location) {
+    let index = this._selectedLocation.findIndex((l) => l.location === location.location);
+    this.deselectLayer(this._selectedLayers[index]);
+  }
+
+  public toggleLayer(layer: L.Layer) {
     this.layerIsSelected(layer) ? this.deselectLayer(layer) :
       this.selectLayer(layer);
   }
 
-  public selectLayer(layer: L.Polygon) {
+  public selectLayer(layer: L.Layer) {
     this._selectedLayers.push(layer);
     this.highlight(layer);
-    let location = (<AreaFeature> layer.feature).properties.tag;
-    this._selectedLocation.push(MapUtils.findLocation(location, this.myState.locationTree));
+    let location: Location = layer['location'];
+    this._selectedLocation = this._selectedLocation.concat([location]);
   }
 
-  public deselectLayer(layer: L.Polygon) {
+  public deselectLayer(layer: L.Layer) {
     this._selectedLayers.splice(this._selectedLayers.indexOf(layer), 1);
     this.fade(layer);
-    let location = (<AreaFeature> layer.feature).properties.tag;
-    this._selectedLocation = this._selectedLocation.filter((l) => l.location !== location);
+    let location: Location = layer['location'];
+    this._selectedLocation = this._selectedLocation.filter((l) => l.location !== location.location);
   }
 
-  public layerIsSelected(layer: L.Polygon): boolean {
+  public layerIsSelected(layer: L.Layer): boolean {
     return this._selectedLayers.indexOf(layer) > -1;
   }
 
@@ -51,11 +56,11 @@ export class LayerSelector {
     this._selectedLocation = [];
   }
 
-  private highlight(layer: L.Polygon) {
-    MapUtils.addClass(layer, 'selected');
+  private highlight(layer: L.Layer) {
+    MapUtils.addClass(<L.Polygon> layer, 'selected');
   }
 
-  private fade(layer: L.Polygon) {
-    MapUtils.removeClass(layer, 'selected');
+  private fade(layer: L.Layer) {
+    MapUtils.removeClass(<L.Polygon> layer, 'selected');
   }
 }

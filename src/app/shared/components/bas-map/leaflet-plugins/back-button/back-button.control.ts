@@ -7,6 +7,7 @@ export const BackButtonControl: typeof L.Control = L.Control.extend({
     container.innerHTML = template;
     container.addEventListener('click', () => {
       map.fire('level-back');
+      event.stopPropagation();
     });
     return container;
   },

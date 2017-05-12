@@ -6,12 +6,17 @@ import {
   state,
   style,
   transition,
-  animate
+  animate,
+  SimpleChanges
 } from '@angular/core';
 import { StateService } from '../../providers/state.service';
+import { OnChanges } from '@angular/core';
+import { LocationService } from '../../../../providers/resource-services/location.service';
+import { DeviceService } from '../../../../providers/resource-services/device.service';
+import { Location } from '../../../../models/location.interface';
+import { Thing } from '../../../../models/thing.interface';
 
-export interface DeviceCheck {
-  deviceID: string;
+export interface DeviceCheck extends Thing {
   checked: boolean;
 }
 
@@ -34,17 +39,14 @@ export class DevicePickerCmp {
   @Input()
   public active: boolean;
 
-  public deviceList: DeviceCheck[] = [{
-    deviceID: '0807W-W01001',
-    checked: false
-  }, {
-    deviceID: '0807W-W01002',
-    checked: false
-  }];
+  public deviceList: DeviceCheck[] = [];
 
   @Input() public locations: Location[];
 
   constructor(
-    private myState: StateService
+    private myState: StateService,
+    private _locationService: LocationService,
+    private _deviceService: DeviceService
   ) { }
+
 }

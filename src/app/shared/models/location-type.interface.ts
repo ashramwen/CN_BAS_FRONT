@@ -42,6 +42,9 @@ export class LocationType implements SyncRecord {
   @Column()
   public displayNameEN: string;
 
+  @Column()
+  public expendAll: boolean;
+
   @OneToMany((type) => Location, (location) => location.locationType)
   public locations: Location[];
 

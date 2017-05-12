@@ -5,12 +5,14 @@ import { BasORM } from '../../orm/orm.service';
 import { SyncronizeService } from '../../orm/services/syncronize.service';
 import { RootState } from '../../redux/index';
 import { StateSelectors } from '../../redux/selectors';
-import { MetaInitSuccessAction } from '../../redux/global/actions';
+import { MetaInitSuccessAction, AddLocationAction } from '../../redux/global/actions';
 import { ShowAppSpinnerAction, HideAppSpinnerAction } from '../../redux/layout/actions';
 import {
   CanActivate, CanActivateChild,
   ActivatedRouteSnapshot, RouterStateSnapshot, Router, NavigationExtras
 } from '@angular/router';
+import { Location } from '../../models/location.interface';
+import { Repository } from 'bas-typeorm';
 
 @Injectable()
 export class MetaGuard implements CanActivate, CanActivateChild {
@@ -50,4 +52,11 @@ export class MetaGuard implements CanActivate, CanActivateChild {
       });
     });
   }
+
+  // private async loadTreeNode(n: Location, repo: Repository<Location>) {
+  //   n.subLocations = await repo.find({ parentID: n.id });
+  //   for (let l of n.subLocations) {
+  //     await this.loadTreeNode(l, repo);
+  //   }
+  // }
 }

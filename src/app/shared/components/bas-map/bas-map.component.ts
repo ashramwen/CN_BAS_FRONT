@@ -13,6 +13,7 @@ import {
   NgZone
 } from '@angular/core';
 import * as L from 'leaflet';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs';
 import { MdSidenav } from '@angular/material';
@@ -31,6 +32,7 @@ import { LayerSelector } from './providers/layer-selector.service';
 import { RootState } from '../../redux/index';
 import { StateSelectors } from '../../redux/selectors';
 import { StateService } from './providers/state.service';
+import { MarkerControl } from './providers/marker-control.service';
 
 @Component({
   selector: 'bas-map',
@@ -39,7 +41,7 @@ import { StateService } from './providers/state.service';
     './bas-map.component.scss'
   ],
   encapsulation: ViewEncapsulation.None,
-  providers: [LayerControl, LayerSelector, StateService],
+  providers: [LayerControl, LayerSelector, StateService, MarkerControl],
 })
 export class BasMap implements AfterViewInit, OnInit {
 
@@ -60,61 +62,41 @@ export class BasMap implements AfterViewInit, OnInit {
    * @description back button is visible or not
    */
   public get backButtonIsVisible(): boolean {
-    return !!this.myState.currentLocation.parent;
+    return !this.myState.selectionMode
+      && _.isNumber(this.myState.currentLocation.parentID);
   }
 
   constructor(
     public myState: StateService,
     private layerControl: LayerControl,
     private layerSelector: LayerSelector,
+    private markerControl: MarkerControl,
     private zone: NgZone,
     private store: Store< RootState>
   ) { }
 
   public ngOnInit() {
-    this.myState.onCurrentLocationChange.subscribe((location) => {
-      this.onLocationChange();
-    });
-    this.myState.onLayerLoad.subscribe(() => {
-      this.layerControl.init();
+    this.myState.onStateChanged.subscribe((location) => {
+      this._onStateChange();
     });
     this.myState.onSelectionModeChange.subscribe(() => {
       this.layerSelector.clear();
-      // if (this.myState.selectionMode) {
-      //   this.sidenav.open().then(() => {
-      //     this.resizeMap();
-      //   });
-      // } else {
-      //   this.sidenav.close().then(() => {
-      //     this.resizeMap();
-      //   });
-      // }
+    });
+    this.myState.onLayerChanged.subscribe(() => {
+      this._updateView();
+    });
+    this.layerControl.onLayerClick.subscribe((layer) => {
+      this._onLayerClick(layer);
     });
   }
 
   public ngAfterViewInit() {
-    this.initMap();
-  }
-
-  public init(geoData: Building[], locationTree: Location) {
-    this.myState.init(locationTree, geoData);
-    this.myState.onMapReady.subscribe((state) => {
-      if (!state) {
-        return;
-      }
-      let layers = this.loadBuildingFeatures();
-      this.myState.loadLayer(layers);
-      let bounds = this.findBounds();
-      let mapBounds
-        = new L.LatLngBounds([
-          bounds.bottom + 0.001,
-          bounds.left - 0.001
-        ], [
-          bounds.top - 0.001,
-          bounds.right + 0.001
-        ]);
-      this.map.setMaxBounds(mapBounds);
+    this.myState.onMapReady.subscribe(async () => {
+      await this._init();
+      this.layerControl.init();
+      this.markerControl.init();
     });
+    this.initMap();
   }
 
   public resizeMap() {
@@ -122,6 +104,10 @@ export class BasMap implements AfterViewInit, OnInit {
       animate: true
     };
     this.map.invalidateSize(opt);
+  }
+
+  private async _init() {
+    await this.myState.init();
   }
 
   private initMap() {
@@ -134,14 +120,13 @@ export class BasMap implements AfterViewInit, OnInit {
       maxZoom: 23,
       minZoom: 17
     });
-    window['map'] = this.map;
     this.map.removeControl(this.map['zoomControl']);
     let CompassControl = L.Control['Compass'];
     this.backButtonControl = new BackButtonControl({ position: 'topleft' });
     this.selectionButtonControl = new SelectionButtonControl({ position: 'bottomright' });
     this.map.addControl(this.selectionButtonControl);
-    this.map.on('level-back', () => {
-      this.layerControl.goBack();
+    this.map.on('level-back', async () => {
+      await this.layerControl.goBack();
     });
     this.map.on('selection-mode-change', (event) => {
       this.myState.setSelectionMode(event['state']);
@@ -152,32 +137,20 @@ export class BasMap implements AfterViewInit, OnInit {
       attribution: '',
       id: 'mapbox.streets'
     }).addTo(this.map);
+    this.myState.setMap(this.map);
     this.myState.setMapState(true);
   }
 
-  private loadBuildingFeatures() {
-    let featureLayers = this.myState.geoData
-      .reduce((s: AreaFeature[], d) => {
-        return s.concat(d.data);
-      }, [])
-      .map((l) => this.initFeature(l));
-    featureLayers.forEach((f) => {
-      f.addTo(this.map);
-    });
-
-    return featureLayers;
-  }
-
-  private onLayerClick(feature: L.Polygon) {
-    let locationID = (<AreaFeature> feature.feature).properties.tag;
+  private _onLayerClick(feature: L.Layer) {
+    let location: Location = feature['location'];
     if (this.myState.selectionMode) {
       this.layerSelector.toggleLayer(feature);
     } else {
-      this.layerControl.setLocation(locationID);
+      this.myState.setCurrentLocation(location);
     }
   }
 
-  private onLocationChange() {
+  private _onStateChange() {
     if (!this.myState.currentLocation) {
       return;
     }
@@ -188,30 +161,25 @@ export class BasMap implements AfterViewInit, OnInit {
         this.map.removeControl(this.backButtonControl);
       }
     }
-    this.updateView();
   }
 
-  private initFeature(d: AreaFeature) {
-    let layerOptions: L.PolylineOptions = {
-      className: 'loc-layer'
-    };
-
-    let feature = L.polygon(d.geometry.coordinates[0], layerOptions)
-      .on('click', (event) => {
-        this.onLayerClick(feature);
-      });
-    feature.feature = d;
-    return feature;
-  }
-
-  private updateView() {
-    let bounds = this.findBounds();
+  private _updateView() {
+    let bounds = this._findBounds();
     let center: L.LatLngExpression =
       [(bounds.top + bounds.bottom) / 2, (bounds.left + bounds.right) / 2];
     let zoom = this.findZoom();
     this.map.setView(center, zoom, {
       animate: true
     });
+    let mapBounds
+      = new L.LatLngBounds([
+        bounds.bottom + 0.001,
+        bounds.left - 0.001
+      ], [
+        bounds.top - 0.001,
+        bounds.right + 0.001
+      ]);
+    this.map.setMaxBounds(mapBounds);
   }
 
   private get tileUrl(): string{
@@ -224,16 +192,11 @@ export class BasMap implements AfterViewInit, OnInit {
     if (!this.myState.currentLocation) {
       return 18;
     }
-    let i = 0;
-    let location = this.myState.currentLocation;
-    while (!!location.parent) {
-      location = location.parent;
-      i++;
-    }
+    let i = this.myState.path.length - 1;
     return 18 + i;
   }
 
-  private findBounds() {
+  private _findBounds() {
     let left = null;
     let right = null;
     let top = null;
@@ -241,7 +204,7 @@ export class BasMap implements AfterViewInit, OnInit {
 
     this.myState.currentLocation.subLocations.forEach((l) => {
       let child = this.myState.layers
-        .find((f) => (<AreaFeature> f.feature).properties.tag === l.location);
+        .find((f) => (f['location'] as Location).location === l.location);
       if (!child) {
         return;
       }
@@ -270,8 +233,17 @@ export class BasMap implements AfterViewInit, OnInit {
     // no child layer found
     if (left === null) {
       let layer = this.myState.layers.find((f) => {
-        return (<AreaFeature> f.feature).properties.tag === this.myState.currentLocation.location;
+        return (f['location'] as Location).location === this.myState.currentLocation.location;
       });
+      if (!layer) {
+        let bounds = this.map.getBounds();
+        return {
+          left: bounds.getWest(),
+          right: bounds.getEast(),
+          top: bounds.getNorth(),
+          bottom: bounds.getSouth()
+        };
+      }
       let bounds = layer.getBounds();
       left = bounds.getWest();
       top = bounds.getNorth();
@@ -283,5 +255,4 @@ export class BasMap implements AfterViewInit, OnInit {
       left, right, top, bottom
     };
   }
-
 }

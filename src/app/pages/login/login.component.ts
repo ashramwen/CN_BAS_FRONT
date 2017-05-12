@@ -55,44 +55,41 @@ export class LoginCmp implements OnInit {
       if (tokenState && tokenState.loggedIn) {
         this.store.dispatch(go(['portal']));
       }
-    });
+    }).unsubscribe();
   }
 
-  public login() {
+  public async login() {
     this.processing = true;
     Object.assign(this.credentials, this.loginForm.value);
-    let subscription = this.loginService
-      .login(this.credentials)
-      .map((res) => {
-        return <Token> res.json();
-      })
-      .catch((err: Response) => {
-        let msg: HttpError = <any> err.json();
-        this.alert.failure('Login.userNamePasswordNotMatch');
-        this.store.dispatch(new LoginFailureAction({
-          statusCode: err.status,
-          errorCode: msg.errorCode,
-          errorMessage: msg.errorMessage
-        }));
-        return Observable.empty();
-      })
-      .finally(() => {
-        subscription.unsubscribe();
-        this.processing = false;
-      })
-      .subscribe((token: Token) => {
-        this.store.dispatch(new LoginSuccessAction(token));
-        this.router.queryParams.subscribe((params) => {
-          let redirectUrl = params['redirectUrl'];
-          let newParams = Object.assign({}, params);
-          delete newParams['redirectUrl'];
+    try {
+      let token = await this.loginService
+        .login(this.credentials)
+        .map((res) => {
+          return <Token> res.json();
+        }).toPromise();
 
-          if (redirectUrl) {
-            this.store.dispatch(go([redirectUrl], newParams));
-          } else {
-            this.store.dispatch(go(['portal/landing']));
-          }
-        });
+      this.store.dispatch(new LoginSuccessAction(token));
+      this.router.queryParams.subscribe(async (params) => {
+        let redirectUrl = params['redirectUrl'];
+        let newParams = Object.assign({}, params);
+        delete newParams['redirectUrl'];
+
+        if (redirectUrl) {
+          this.store.dispatch(go([redirectUrl], newParams));
+        } else {
+          this.store.dispatch(go(['portal/landing']));
+        }
       });
+    } catch (err) {
+      let msg: HttpError = <any> err.json();
+      this.alert.failure('Login.userNamePasswordNotMatch');
+      this.store.dispatch(new LoginFailureAction({
+        statusCode: err.status,
+        errorCode: msg.errorCode,
+        errorMessage: msg.errorMessage
+      }));
+    } finally {
+      this.processing = false;
+    }
   }
 }

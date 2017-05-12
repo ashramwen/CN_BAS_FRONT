@@ -71,7 +71,7 @@ export class SqlHelper {
    */
   private convertValue(value: any) {
     return _.isNumber(value) ? value :
-      (_.isString(value) ? `'${this.escapeString(value)}'` :
+      (_.isString(value) ? `'${value}'` :
         (_.isUndefined(value) || _.isNull ? `''` : (
           _.isBoolean(value) ? (value ? 1 : 0) : `''`
         )));

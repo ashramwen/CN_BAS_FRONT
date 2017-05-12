@@ -1,5 +1,6 @@
 import { SyncRecord } from './sync_record.interface';
 import { LocationType } from './location-type.interface';
+import { Thing } from './thing.interface';
 import {
   ConnectionOptions,
   createConnection,
@@ -8,6 +9,9 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  Index,
+  ManyToMany,
+  JoinTable
 } from 'bas-typeorm';
 
 // export type LocationLevel = undefined | 'building' | 'floor' | 'partition' | 'area' | 'site';
@@ -21,7 +25,10 @@ import {
 //   subLocations: Location[];
 // }
 
-@Entity()
+@Entity('location')
+@Index('location_index', ['location'])
+@Index('parent_id_index', ['parentID'])
+@Index('location_type_index', ['locationType'])
 export class Location implements SyncRecord {
   @PrimaryGeneratedColumn()
   public id: number;
@@ -56,7 +63,11 @@ export class Location implements SyncRecord {
   @Column()
   public order: number;
 
+  @Column()
+  public level: number;
+
   @ManyToOne((type) => Location, (location) => location.subLocations)
+  @Column()
   public parentID: number;
 
   @OneToMany((type) => Location, (location) => location.parentID)
@@ -64,6 +75,24 @@ export class Location implements SyncRecord {
 
   @ManyToOne((type) => LocationType, (locationType) => locationType.locations)
   public locationType: LocationType;
+
+  @ManyToMany((type) => Thing, (thing) => thing.locations, {
+    cascadeInsert: false, // Allow to insert a new photo on album save
+    cascadeUpdate: false, // Allow to update a photo on album save
+    cascadeRemove: false  // Allow to remove a photo on album remove
+  })
+  @JoinTable({
+    name: 'thing_location',
+    joinColumn: {
+      name: 'location',
+      referencedColumnName: 'location'
+    },
+    inverseJoinColumn: {
+      name: 'thingID',
+      referencedColumnName: 'id'
+    }
+  })
+  public things: Thing[];
 
   public set description(value) {
     if (!value) {
@@ -75,5 +104,8 @@ export class Location implements SyncRecord {
     }
   }
 
-  public parent: Location;
+  public get geos(): Array< Array<[number, number]>> {
+    return !!this.geoPolygon ?
+      JSON.parse(this.geoPolygon) : [];
+  }
 }

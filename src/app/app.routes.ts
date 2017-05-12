@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 import { DeviceListCmp } from './pages/+portal/device-list/device-list.component';
 import { portalRoutes } from './pages/+portal/portal.routes';
 import { MetaGuard } from './shared/providers/guards/meta-guard.service';
+import { CacheGuard } from './shared/providers/guards/cache-guard.service';
 
 export const ROUTES: Routes = [
   {
@@ -22,7 +23,7 @@ export const ROUTES: Routes = [
     children: [...portalRoutes],
     canActivate: [
       AuthGuard,
-      MetaGuard
+      MetaGuard,
     ]
   },
   { path: '**', redirectTo: 'login' }

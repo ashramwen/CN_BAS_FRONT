@@ -14,7 +14,8 @@ export const SelectionButtonControl: typeof L.Control = L.Control.extend({
       } else {
         myButton.classList.remove('active');
       }
-      map.fire('selection-mode-change', {state});
+      map.fire('selection-mode-change', { state });
+      event.stopPropagation();
     });
     return container;
   },

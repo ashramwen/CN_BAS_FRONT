@@ -2,6 +2,7 @@ import { type } from '../utils';
 import { Action } from '@ngrx/store';
 import { Credential } from '../../models/credential.interface';
 import { Observable } from 'rxjs/Observable';
+import { Location } from '../../models/location.interface';
 
 export const ActionTypes = {
   META_INIT_SUCCESS: type('[Global] META_INIT_SUCCESS'),

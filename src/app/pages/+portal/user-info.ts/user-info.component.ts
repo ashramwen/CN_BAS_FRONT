@@ -69,9 +69,12 @@ export class UserInfoCmp {
     result.ok.subscribe(async () => {
       try {
         this.store.dispatch(new ShowAppSpinnerAction());
-        await this._orm.connection.dropDatabase();
-        await this._orm.init();
+        await this._orm.connection.syncSchema(true);
         await this._syncService.sync();
+        this._alert.success(`Data Syncronized Successfully, Will Reload the Application.`);
+        setTimeout(() => {
+          history.go(0);
+        }, 2);
       } catch (e) {
         this._alert.failure(`Syncronic Failed, reason: ${e.message}`);
       } finally {

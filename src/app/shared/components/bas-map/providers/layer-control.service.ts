@@ -4,148 +4,88 @@ import { AreaFeature, Building } from '../../../models/building.interface';
 import { MapUtils } from '../utils';
 import { StateService } from './state.service';
 import { LocationWithPath } from '../models/location-width-path.interface';
+import { LocationService } from '../../../providers/resource-services/location.service';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class LayerControl {
 
-  private _currentBuilding: Location = null;
-  private _currentLevel: Location = null;
-  private _currentPartition: Location = null;
-  private _currentArea: Location = null;
+  public onLayerClick: Subject<L.Layer> = new Subject();
+  private _currentPath: Location[];
 
   constructor(
-    private myState: StateService
+    private myState: StateService,
+    private _locationService: LocationService
   ) { }
 
   public init() {
     this.myState.onCurrentLocationChange.subscribe((result) => {
+      console.log('updating layers');
+      this._loadBuildingFeatures();
       this.updateLocationPicker(result.location, result.path);
-      this.updateLayersView();
     });
-    this.setLocation(this.myState.locationTree.location);
   }
 
-  public setLocation(location: string) {
-    let result: LocationWithPath = MapUtils.findLocationWithPath(location,
-      this.myState.locationTree,
-      [this.myState.locationTree]
-    );
-    if (result.location.locationType.displayNameEN === 'building') {
-      let levels = this.myState.geoData.find((b) => b.id === result.path[1].location).levels;
-      if (!levels || !levels[0]) {
-        throw new Error(`level is not existing for building: ${result.path[1].location}`);
-      }
-      let newLocation = result.path[1].subLocations
-        .find((level) => {
-          return level.location === levels[0].id;
-        }).location;
-
-      if (!newLocation) {
-        throw new Error(`level: ${levels[0]} has no defination in locaiton schema`);
-      }
-
-      this.setLocation(newLocation);
-      return;
-    }
-
-    this.myState.setCurrentLocation(result.location, result.path);
+  public async goBack() {
+    let parent = await this._locationService.getParentLocation(this.myState.currentLocation);
+    await this.myState.setCurrentLocation(parent);
   }
 
-  public goBack() {
-    let parentLocation: string = '';
-    switch (this.myState.currentLocation.locationType.displayNameEN) {
-      case 'area':
-        parentLocation = this.myState.currentLocation.parent.location;
-        break;
-      case 'site':
-        parentLocation = this.myState.currentLocation.parent.parent.location;
-        break;
-      case 'partition':
-        parentLocation = this.myState.currentLocation.parent.parent.location;
-        break;
-      case 'floor':
-        parentLocation = this.myState.currentLocation.parent.parent.location;
-        break;
-      default:
-        break;
+  private _clearLayers() {
+    this.myState.layers.forEach((l) => {
+      l.remove();
+    });
+  }
+
+  private _loadBuildingFeatures() {
+    this._clearLayers();
+    let siblings: Location[] = [];
+    if (this.myState.path.length > 1) {
+      siblings = this.myState.path[this.myState.path.length - 2].subLocations;
+    } else {
+      siblings = [this.myState.currentLocation];
     }
-    this.setLocation(parentLocation);
+    let featureLayers = this.myState.currentLocation
+      .subLocations
+      .reduce((ar, l) => ar.concat(this._initFeature(l)), [] as L.Polygon[]);
+
+    let siblingLayers = siblings
+      .reduce((ar, l) => ar.concat(this._initFeature(l)), [] as L.Polygon[]);
+
+    featureLayers = featureLayers.concat(siblingLayers);
+
+    featureLayers.forEach((f) => {
+      f.addTo(this.myState.map);
+    });
+
+    siblingLayers.forEach((l) => {
+      this.fadeAndDisableLayer(l);
+    });
+
+    this.myState.loadLayers(featureLayers);
+  }
+
+  private _initFeature(d: Location) {
+    let layerOptions: L.PolylineOptions = {
+      className: 'loc-layer'
+    };
+
+    let features = [];
+
+    d.geos.forEach((polygon) => {
+      let feature = L.polygon(polygon, layerOptions)
+        .on('click', (event) => {
+          this.onLayerClick.next(feature);
+        });
+      feature['location'] = d;
+      features.push(feature);
+    });
+
+    return features;
   }
 
   private updateLocationPicker(location: Location, path: Location[]) {
-    switch (this.myState.currentLocation.locationType.displayNameEN) {
-      case 'site':
-      case 'area':
-        this._currentArea = path[4];
-      case 'partition':
-        this._currentPartition = path[3];
-        if (this.myState.currentLocation.locationType.displayNameEN === 'partition') {
-          this._currentArea = null;
-        }
-      case 'floor':
-        this._currentLevel = path[2];
-        if (this.myState.currentLocation.locationType.displayNameEN === 'floor') {
-          this._currentArea = null;
-          this._currentPartition = null;
-        }
-      case 'building':
-        this._currentBuilding = path[1];
-      case undefined:
-      default:
-        this._currentBuilding = null;
-        this._currentArea = null;
-        this._currentLevel = null;
-        this._currentPartition = null;
-        break;
-    }
-  }
-
-  private updateLayersView() {
-
-    // if current location is floor level then
-    //  display all partition level area of this floor, hide other buildings/levels/areas
-    // else if current location is partition level then
-    //  display all area level areas of this partition, hide all buildings/levels,
-    //  and fade other partitions in the same level
-    if (!this.myState.currentLocation.locationType.displayNameEN) {
-      this.myState.layers.forEach((l) => {
-        if ((<AreaFeature> l.feature).properties.parentID
-          === this.myState.currentLocation.location) {
-          this.hightlightLayer(l);
-        } else {
-          this.hideLayer(l);
-        }
-      });
-    } else if (this.myState.currentLocation.locationType.displayNameEN === 'floor') {
-      this.myState.layers.forEach((l) => {
-        let feature: AreaFeature = <AreaFeature> l.feature;
-        if (feature.properties.parentID === this.myState.currentLocation.location) {
-          this.hightlightLayer(l);
-        } else if (feature.properties.tag === this.myState.currentLocation.parent.location) {
-          this.fadeAndDisableLayer(l);
-        } else {
-          this.hideLayer(l);
-        }
-      });
-    } else if (this.myState.currentLocation.locationType.displayNameEN === 'partition') {
-      this.myState.layers.forEach((l) => {
-        if ((<AreaFeature> l.feature).properties.parentID
-            === this.myState.currentLocation.location) {
-          this.hightlightLayer(l);
-        } else if ((<AreaFeature> l.feature).properties.role === 'partition'
-          && (<AreaFeature> l.feature).properties.parentID
-          === this.myState.currentLocation.parent.location
-        ) {
-          if ((<AreaFeature> l.feature).properties.tag === this.myState.currentLocation.location) {
-            this.fadeAndDisableLayer(l);
-          } else {
-            this.fadeAndEnableLayer(l);
-          }
-        } else {
-          this.hideLayer(l);
-        }
-      });
-    }
+    this._currentPath = path;
   }
 
   private hightlightLayer(layer: L.Polygon) {

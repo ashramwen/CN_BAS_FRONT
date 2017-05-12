@@ -19,6 +19,16 @@
   }
 }
 
+.device-icon {
+  background:transparent;
+  border: none;
+  svg{
+    path{
+      fill: red;
+    }
+  }
+}
+
 svg{
   path.loc-layer{
     fill: grey;

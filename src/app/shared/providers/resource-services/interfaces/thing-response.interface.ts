@@ -13,4 +13,5 @@ export interface ThingResponse {
   schemaName: string;
   schemaVersion: string;
   kiiThingID: string;
+  locations: string[];
 }

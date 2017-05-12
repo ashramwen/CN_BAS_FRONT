@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ContactsService } from './contacts.service';
 import { Location } from '../../models/location.interface';
-import { LocationService } from '../location.service';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { RootState } from '../../redux/index';

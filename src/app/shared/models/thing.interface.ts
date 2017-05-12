@@ -1,15 +1,18 @@
 import { ThingState } from './thing-state.interface';
 import { SyncRecord } from './sync_record.interface';
+import { Location } from './location.interface';
 
 import {
   ConnectionOptions,
   createConnection,
   Entity,
   PrimaryGeneratedColumn,
-  Column
+  Column,
+  ManyToMany,
+  JoinTable
 } from 'bas-typeorm';
 
-@Entity()
+@Entity('thing')
 export class Thing implements SyncRecord {
 
   @PrimaryGeneratedColumn()
@@ -50,6 +53,17 @@ export class Thing implements SyncRecord {
 
   @Column()
   public kiiThingID: string;
+
+  @Column({type: 'json'})
+  public geos: [number, number];
+
+  @ManyToMany((type) => Location, (location) => location.things, {
+    cascadeInsert: false, // Allow to insert a new photo on album save
+    cascadeUpdate: false, // Allow to update a photo on album save
+    cascadeRemove: false  // Allow to remove a photo on album remove
+  })
+  @Column({type: 'json'})
+  public locations: Location[];
 
   public connectivity: any;
   public status: ThingState = {};

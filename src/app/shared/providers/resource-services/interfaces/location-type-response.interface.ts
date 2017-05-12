@@ -7,8 +7,9 @@ export interface LocationTypeResponse {
   modifyBy: string;
   isDeleted: boolean;
   level: number;
+  expendAll: boolean;
   description: {
     displayNameCN: string;
     displayNameEN: string;
-  }
+  };
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StateService } from '../../providers/state.service';
 import { Location } from '../../../../models/location.interface';
+import { LocationService } from '../../../../providers/resource-services/location.service';
 
 interface LocationNode {
   selected: Location;
@@ -20,7 +21,7 @@ interface LocationNode {
       <md-option 
         *ngFor="let option of locationNode.options" 
         [value]="option.location">
-          {{option.locationName}}
+          {{option.displayNameCN}}
       </md-option>
     </md-select>
   `
@@ -30,14 +31,13 @@ export class LocationPickerCmp implements OnInit {
   public locationArr: LocationNode[] = [];
 
   constructor(
-    private myState: StateService
+    private myState: StateService,
   ) { }
 
   public ngOnInit() {
-    this.myState.onCurrentLocationChange.subscribe(() => {
+    this.myState.onCurrentLocationChange.subscribe(async(locationWithPath) => {
       this.locationArr = [];
-      this.updateLocationArr(this.myState.currentLocation);
-      this.locationArr.reverse();
+      this.updateLocationArr(locationWithPath.path);
       if (!!this.myState.currentLocation.subLocations
         && this.myState.currentLocation.subLocations.length) {
           this.locationArr.push({
@@ -52,18 +52,17 @@ export class LocationPickerCmp implements OnInit {
   public selectOnChange(locationNode: LocationNode, selectedLocation: string) {
     let selectedNode = locationNode.options
       .find((location) => location.location === selectedLocation);
-    this.myState.setCurrentLocation(selectedNode, []);
+    this.myState.setCurrentLocation(selectedNode);
   }
 
-  private updateLocationArr(location: Location) {
-    if (!location.parent) { return; }
-    this.locationArr.push({
-      selected: location,
-      selectedValue: location.location,
-      options: location.parent.subLocations
-    });
-    if (!!location.parent.location && location.parent.location !== '.') {
-      this.updateLocationArr(location.parent);
+  private updateLocationArr(path: Location[]) {
+    for (let i = 0; i < path.length - 1; i++) {
+      let selectedLocation = path[i + 1];
+      this.locationArr.push({
+        selected: selectedLocation,
+        selectedValue: selectedLocation.location,
+        options: path[i].subLocations
+      });
     }
   }
 }

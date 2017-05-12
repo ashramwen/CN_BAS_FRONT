@@ -8,6 +8,7 @@ import { SessionService } from './session.service';
 import { StompService } from './stomp.service';
 import { EsQueryService } from './resource-services/es-query.service';
 import { DeviceService } from './resource-services/device.service';
+import { LocationResourceService } from './resource-services/location-resource.service';
 import { LocationService } from './resource-services/location.service';
 
 export const SHARED_PROVIDERS = [
@@ -16,6 +17,7 @@ export const SHARED_PROVIDERS = [
 
   // shared services
   SessionService,
+  LocationResourceService,
   LocationService,
   MapService,
   DeviceService,

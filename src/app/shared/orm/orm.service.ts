@@ -16,7 +16,7 @@ import {
 let options: ConnectionOptions = {
   driver: {
     type: 'websql',
-    database: 'bas-db',
+    database: 'basdb',
     extra: {
       version: 1,
       description: 'BAS local database',
@@ -37,6 +37,10 @@ export class BasORM {
 
   public get thingRepo() {
     return this.connection.getRepository(Thing);
+  }
+
+  public get locationRepo() {
+    return this.connection.getRepository(Location);
   }
 
   public async init() {

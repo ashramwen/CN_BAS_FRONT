@@ -10,6 +10,7 @@ import { RequestHelper } from '../helpers/request-helper';
 import { BasORM } from '../../orm/orm.service';
 import { Thing } from '../../models/thing.interface';
 import { ThingResponse } from './interfaces/thing-response.interface';
+import { Location } from '../../models/location.interface';
 
 @Injectable()
 export class DeviceService {
@@ -20,6 +21,49 @@ export class DeviceService {
     private requestHelper: RequestHelper,
     private _orm: BasORM
   ) { }
+
+  public async getThingsCountByLocation(
+    location: Location | string, withSubLocations: boolean = false
+  ) {
+    let _location = location instanceof Location ? location.location : location;
+    let quertRunner = await this._orm.connection
+      .driver.createQueryRunner();
+    let result: Object[];
+    try {
+      if (withSubLocations) {
+        let queryStr = 'select count(*) as count from thing_location where location like $1';
+        result = await quertRunner.query(queryStr, [`${_location}%`]);
+      } else {
+        let queryStr = 'select count(*) as count from thing_location where location = $1';
+        result = await quertRunner.query(queryStr, [_location]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    return result[0]['count'];
+  }
+
+  public async getThingsByLocation(location: Location | string, withSubLocations: boolean = false) {
+    let devices: Thing[] = [];
+    try {
+      let query = this._orm.thingRepo
+        .createQueryBuilder('thing')
+        .innerJoin('thing_location', 'thingLocation', 'thingLocation.thingID = thing.id');
+
+      let _location = location instanceof Location ? location.location : location;
+
+      if (withSubLocations) {
+        query = query.where('thingLocation.location LIKE :keyword', { keyword: `${_location}%` });
+      } else {
+        query = query.where('thingLocation.location = :location', { location: _location });
+      }
+
+      devices = await query.getMany();
+    } catch (e) {
+      console.log(e);
+    }
+    return devices;
+  }
 
   /**
    * get things by type

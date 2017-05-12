@@ -17,6 +17,8 @@ import { TokenEffects } from './redux/token/effects';
 import { schema } from '../configs/db';
 import { MatCustomModule } from '../../mat-custom/mat-custom.module';
 import { BasORMModule } from './orm/orm.module';
+import { SHARED_PIPES } from './pipes/index';
+import { PipesModule } from './pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -29,9 +31,10 @@ import { BasORMModule } from './orm/orm.module';
     ...SHARED_COMPONENTS,
     MatCustomModule,
     SHARED_MODULES,
-    BasORMModule
+    BasORMModule,
+    PipesModule
   ],
-  exports: [SHARED_COMPONENTS, SHARED_DIRECTIVES, SHARED_MODULES],
+  exports: [SHARED_COMPONENTS, SHARED_DIRECTIVES, SHARED_MODULES, PipesModule],
   declarations: [...SHARED_DIRECTIVES],
   providers: [...SHARED_PROVIDERS],
 })
