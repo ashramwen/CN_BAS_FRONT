@@ -5,7 +5,7 @@ import { Location } from '../models/location.interface';
 @Pipe({
   name: 'location',
 })
-export class LocationPipe implements PipeTransform{
+export class LocationPipe implements PipeTransform {
 
   constructor(
     private _locationService: LocationService

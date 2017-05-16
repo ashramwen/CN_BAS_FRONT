@@ -25,14 +25,17 @@ import {
 import { AreaFeature, Building } from '../../models/building.interface';
 import { ViewLevel } from './view-level.type';
 import { Location } from '../../models/location.interface';
-import { LayerControl } from './providers/layer-control.service';
 import { BackButtonControl } from './leaflet-plugins/back-button/back-button.control';
 import 'leaflet-compass/dist/leaflet-compass.min.js';
 import { LayerSelector } from './providers/layer-selector.service';
 import { RootState } from '../../redux/index';
 import { StateSelectors } from '../../redux/selectors';
 import { StateService } from './providers/state.service';
-import { MarkerControl } from './providers/marker-control.service';
+import { LocationService } from '../../providers/resource-services/location.service';
+import { DeviceService } from '../../providers/resource-services/device.service';
+import { BMLocation } from '../map-view/models/location.interface';
+
+const MAX_DEVICES = 200;
 
 @Component({
   selector: 'bas-map',
@@ -41,22 +44,21 @@ import { MarkerControl } from './providers/marker-control.service';
     './bas-map.component.scss'
   ],
   encapsulation: ViewEncapsulation.None,
-  providers: [LayerControl, LayerSelector, StateService, MarkerControl],
+  providers: [LayerSelector, StateService],
 })
-export class BasMap implements AfterViewInit, OnInit {
+export class BasMap implements OnInit {
 
   @ViewChild('mapTarget')
   public mapTarget: ElementRef;
   @ViewChild('sidenav')
   public sidenav: MdSidenav;
 
-  private map: L.Map;
+  public get zoom() {
+    return !this.myState.path ? 18 : (this.myState.path.length + 16);
+  }
+
   private backButtonControl: L.Control;
   private selectionButtonControl: L.Control;
-
-  public get selectedLocations() {
-    return this.layerSelector.selectedLocations;
-  }
 
   /**
    * @description back button is visible or not
@@ -68,191 +70,135 @@ export class BasMap implements AfterViewInit, OnInit {
 
   constructor(
     public myState: StateService,
-    private layerControl: LayerControl,
     private layerSelector: LayerSelector,
-    private markerControl: MarkerControl,
-    private zone: NgZone,
-    private store: Store< RootState>
+    private store: Store<RootState>,
+    private _locationService: LocationService,
+    private _deviceService: DeviceService,
   ) { }
 
+  public mapInited(map: L.Map) {
+    this.myState.setMap(map);
+  }
+
   public ngOnInit() {
+    this.myState.onCurrentLocationChange.subscribe(() => {
+      this._onLocationChanged();
+    });
     this.myState.onStateChanged.subscribe((location) => {
       this._onStateChange();
     });
     this.myState.onSelectionModeChange.subscribe(() => {
       this.layerSelector.clear();
     });
-    this.myState.onLayerChanged.subscribe(() => {
-      this._updateView();
-    });
-    this.layerControl.onLayerClick.subscribe((layer) => {
-      this._onLayerClick(layer);
-    });
-  }
-
-  public ngAfterViewInit() {
     this.myState.onMapReady.subscribe(async () => {
       await this._init();
-      this.layerControl.init();
-      this.markerControl.init();
     });
-    this.initMap();
-  }
-
-  public resizeMap() {
-    let opt: L.ZoomPanOptions = {
-      animate: true
-    };
-    this.map.invalidateSize(opt);
   }
 
   private async _init() {
     await this.myState.init();
-  }
-
-  private initMap() {
-    this.map = L.map(this.mapTarget.nativeElement, {
-      center: [
-        30.28084740214,
-        120.02401130217
-      ],
-      zoom: 18,
-      maxZoom: 23,
-      minZoom: 17
-    });
-    this.map.removeControl(this.map['zoomControl']);
+    this.myState.map.removeControl(this.myState.map['zoomControl']);
     let CompassControl = L.Control['Compass'];
     this.backButtonControl = new BackButtonControl({ position: 'topleft' });
     this.selectionButtonControl = new SelectionButtonControl({ position: 'bottomright' });
-    this.map.addControl(this.selectionButtonControl);
-    this.map.on('level-back', async () => {
-      await this.layerControl.goBack();
+    this.myState.map.addControl(this.selectionButtonControl);
+    this.myState.map.on('level-back', () => {
+      this._goBack();
     });
-    this.map.on('selection-mode-change', (event) => {
+    this.myState.map.on('selection-mode-change', (event) => {
       this.myState.setSelectionMode(event['state']);
     });
-
-    L.tileLayer(this.tileUrl, {
-      maxZoom: 18,
-      attribution: '',
-      id: 'mapbox.streets'
-    }).addTo(this.map);
-    this.myState.setMap(this.map);
-    this.myState.setMapState(true);
   }
 
-  private _onLayerClick(feature: L.Layer) {
-    let location: Location = feature['location'];
+  /**
+   * when any layer is clicked
+   * 
+   * @param {BMLocation} location 
+   * 
+   * @memberOf BasMap
+   */
+  public onLayerClick(location: BMLocation) {
     if (this.myState.selectionMode) {
-      this.layerSelector.toggleLayer(feature);
+      location.selected = !location.selected;
+      this.myState.setLocations(this.myState.locations.concat([]));
     } else {
       this.myState.setCurrentLocation(location);
     }
   }
 
+  /**
+   * update location and devices display on map
+   * 
+   * @private
+   * 
+   * @memberOf BasMap
+   */
+  private _onLocationChanged() {
+    let siblings: BMLocation[] = [];
+    let children: BMLocation[] = [];
+    let currentLocation = this.myState.currentLocation;
+
+    if (this.myState.path[this.myState.path.length - 2]) {
+      let _siblings = this.myState.path[this.myState.path.length - 2].subLocations || [];
+      siblings = _siblings.map((l) => Object.assign(l, {
+        disabled: true
+      }));
+    }
+    if (currentLocation) {
+      children = currentLocation.subLocations || [];
+    }
+    this.myState.setLocations([...siblings, ...children]);
+    this._getDevices();
+  }
+
+  /**
+   * get location related devices
+   * 
+   * @private
+   * 
+   * @memberOf BasMap
+   */
+  private async _getDevices() {
+    let currentLocation = this.myState.currentLocation;
+    let devicesCount = await this._deviceService.getThingsCountByLocation(currentLocation, true);
+    if (devicesCount > MAX_DEVICES) {
+      this.myState.setDevices([]);
+    } else {
+      let devices = await this._deviceService.getThingsByLocation(currentLocation, true);
+      this.myState.setDevices(devices);
+    }
+  }
+
+  /**
+   * go previous level
+   * 
+   * @private
+   * 
+   * @memberOf BasMap
+   */
+  private async _goBack() {
+    let parent = await this._locationService.getParentLocation(this.myState.currentLocation);
+    await this.myState.setCurrentLocation(parent);
+  }
+
+  /**
+   * when any state changed
+   * 
+   * @private
+   * @returns 
+   * 
+   * @memberOf BasMap
+   */
   private _onStateChange() {
     if (!this.myState.currentLocation) {
       return;
     }
     if (this.backButtonControl) {
       if (this.backButtonIsVisible) {
-        this.map.addControl(this.backButtonControl);
+        this.myState.map.addControl(this.backButtonControl);
       } else {
-        this.map.removeControl(this.backButtonControl);
+        this.myState.map.removeControl(this.backButtonControl);
       }
     }
-  }
-
-  private _updateView() {
-    let bounds = this._findBounds();
-    let center: L.LatLngExpression =
-      [(bounds.top + bounds.bottom) / 2, (bounds.left + bounds.right) / 2];
-    let zoom = this.findZoom();
-    this.map.setView(center, zoom, {
-      animate: true
-    });
-    let mapBounds
-      = new L.LatLngBounds([
-        bounds.bottom + 0.001,
-        bounds.left - 0.001
-      ], [
-        bounds.top - 0.001,
-        bounds.right + 0.001
-      ]);
-    this.map.setMaxBounds(mapBounds);
-  }
-
-  private get tileUrl(): string{
-    return 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?'
-      + 'access_token=pk.eyJ1IjoieXR5c3p4ZiIsImEiOiJjaXo'
-      + '1OHN3OTcwNmJpMzNwaHVycmo5djllIn0.aBzti__T5lS8LDQhjyYsGA';
-  }
-
-  private findZoom() {
-    if (!this.myState.currentLocation) {
-      return 18;
-    }
-    let i = this.myState.path.length - 1;
-    return 18 + i;
-  }
-
-  private _findBounds() {
-    let left = null;
-    let right = null;
-    let top = null;
-    let bottom = null;
-
-    this.myState.currentLocation.subLocations.forEach((l) => {
-      let child = this.myState.layers
-        .find((f) => (f['location'] as Location).location === l.location);
-      if (!child) {
-        return;
-      }
-      if (left === null) {
-        left = child.getBounds().getWest();
-      } else if (left > child.getBounds().getWest()) {
-        left = child.getBounds().getWest();
-      }
-      if (right === null) {
-        right = child.getBounds().getEast();
-      } else if (right < child.getBounds().getEast()) {
-        right = child.getBounds().getEast();
-      }
-      if (top === null) {
-        top = child.getBounds().getNorth();
-      } else if (top > child.getBounds().getNorth()) {
-        top = child.getBounds().getNorth();
-      }
-      if (bottom === null) {
-        bottom = child.getBounds().getSouth();
-      } else if (bottom < child.getBounds().getSouth()) {
-        bottom = child.getBounds().getSouth();
-      }
-    });
-
-    // no child layer found
-    if (left === null) {
-      let layer = this.myState.layers.find((f) => {
-        return (f['location'] as Location).location === this.myState.currentLocation.location;
-      });
-      if (!layer) {
-        let bounds = this.map.getBounds();
-        return {
-          left: bounds.getWest(),
-          right: bounds.getEast(),
-          top: bounds.getNorth(),
-          bottom: bounds.getSouth()
-        };
-      }
-      let bounds = layer.getBounds();
-      left = bounds.getWest();
-      top = bounds.getNorth();
-      bottom = bounds.getSouth();
-      right = bounds.getEast();
-    }
-
-    return {
-      left, right, top, bottom
-    };
   }
 }

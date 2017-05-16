@@ -3,8 +3,10 @@ import { Subject } from 'rxjs';
 
 import { Location } from '../../../models/location.interface';
 import { Building } from '../../../models/building.interface';
-import { LocationWithPath } from '../models/location-width-path.interface';
 import { LocationService } from '../../../providers/resource-services/location.service';
+import { Thing } from '../../../models/thing.interface';
+import { BMLocation } from '../../map-view/models/location.interface';
+import { LocationWithPath } from '../models/location-with-path.interface';
 
 @Injectable()
 export class StateService {
@@ -12,16 +14,32 @@ export class StateService {
   public onMapReady: Subject<boolean>;
   public onSelectionModeChange: Subject<boolean>;
   public onCurrentLocationChange: Subject<LocationWithPath>;
-  public onCurrentLocationChanged: Subject<void>;
   public onStateChanged: Subject<void>;
-
+  
+  private _devices: Thing[] = [];
   private _map: L.Map;
   private _selectionMode: boolean = false;
-  private _currentLocation: Location;
-  private _locationTree: Location;
+  private _currentLocation: BMLocation;
   private _mapState: boolean = false;
   private _layers: L.Polygon[] = [];
-  private _path: Location[] = [];
+  private _path: BMLocation[] = [];
+  private _locations: BMLocation[];
+
+  public get locations() {
+    return this._locations;
+  }
+
+  public setLocations(locations: BMLocation[]) {
+    this._locations = locations;
+  }
+
+  public get devices() {
+    return this._devices;
+  }
+
+  public setDevices(devices: Thing[]) {
+    this._devices = devices;
+  }
 
   constructor(
     private _locationService: LocationService
@@ -35,9 +53,7 @@ export class StateService {
 
   public async init() {
     try {
-      this._locationTree = await this._locationService.root;
-      this.setCurrentLocation(this._locationTree);
-      this._currentLocation = this._locationTree;
+      this.setCurrentLocation(await this._locationService.root);
     } catch (e) {
       console.log(e);
     }
@@ -53,10 +69,6 @@ export class StateService {
 
   public get currentLocation() {
     return this._currentLocation;
-  }
-
-  public get locationTree() {
-    return this._locationTree;
   }
 
   public get map() {
@@ -87,7 +99,7 @@ export class StateService {
     this.onStateChanged.next();
   }
 
-  public async setCurrentLocation(location: Location) {
+  public async setCurrentLocation(location: BMLocation) {
     this._currentLocation = await this._locationService.getLocation(location.location);
     if (!this._currentLocation.subLocations
       || !this._currentLocation.subLocations.length
@@ -102,5 +114,6 @@ export class StateService {
 
   public setMap(map: L.Map) {
     this._map = map;
+    this.onMapReady.next(true);
   }
 }

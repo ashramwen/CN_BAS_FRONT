@@ -9,16 +9,17 @@ import {
   AfterViewInit,
   HostListener
 } from '@angular/core';
-import { Thing } from '../../../../models/thing.interface';
 import { BasArea } from './models/area.interface';
 import { BasMarker } from './models/marker.interface';
-import { Location } from '../../../../models/location.interface';
 import { MapUtils } from './utils';
 import { LayerControlService } from './services/layer-control.service';
 import { OnChanges, SimpleChanges } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { BMLocation } from './models/location.interface';
 import { Observable } from 'rxjs/Observable';
+import { MarkerControlService } from './services/marker-control.service';
+import { Thing } from '../../models/thing.interface';
+import { Location } from '../../models/location.interface';
 
 @Component({
   selector: 'bm-map-view',
@@ -26,7 +27,7 @@ import { Observable } from 'rxjs/Observable';
     <div class="bas-map-target" #mapTarget></div>
   `,
   styleUrls: ['./map-view.component.scss'],
-  providers: [LayerControlService]
+  providers: [LayerControlService, MarkerControlService]
 })
 export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
   @Output()
@@ -43,8 +44,9 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
 
   @Input()
   public set zoom(value) {
+    if (this._zoom === value) { return; }
     this._zoom = value;
-    this._updateView();
+    this._mapViewChanged.next(void 0);
   }
 
   @Input()
@@ -58,11 +60,13 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
   private _layers: BasArea[];
   private _markers: BasMarker[];
   private _mapInited: Subject<boolean> = new Subject();
-  private _locationChanged: Subject<BMLocation[]> = new Subject();
-  private _devicesChanged: Subject<Thing[]> = new Subject();
+  private _locationChanged: BehaviorSubject<BMLocation[]> = new BehaviorSubject<BMLocation[]>([]);
+  private _devicesChanged: BehaviorSubject<Thing[]> = new BehaviorSubject([]);
+  private _mapViewChanged: BehaviorSubject<void> = new BehaviorSubject<void>(void 0);
 
   constructor(
-    private _layerControl: LayerControlService
+    private _layerControl: LayerControlService,
+    private _markerControl: MarkerControlService
   ) { }
 
   /**
@@ -73,25 +77,32 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
    */
   @HostListener('window:resize')
   public windowResize() {
-    this._updateView();
+    let opt: L.ZoomPanOptions = {
+      animate: true
+    };
+    this._map.invalidateSize(opt);
   }
 
   public ngOnInit() {
-    Observable
-      .forkJoin(this._mapInited, this._locationChanged)
-      .subscribe((result) => {
-        if (!result[0]) { return; }
-        this._loadLocations(result[1]);
+    this._mapInited.subscribe(() => {
+      this._locationChanged.subscribe((result) => {
+        this._loadLocations(result);
+      });
+      this._mapViewChanged.subscribe(() => {
         this._updateView();
       });
-    // this._devicesChanged.subscribe((devices) => {
-      
-    // });
+      this._devicesChanged.subscribe((result) => {
+        this._loadMarkers(result);
+      });
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes['locations'].currentValue != changes['locations'].previousValue) {
+    if (changes['locations'] && changes['locations'].currentValue != changes['locations'].previousValue) {
       this._locationChanged.next(this.locations);
+    }
+    if (changes['devices'] && changes['devices'].currentValue != changes['devices'].previousValue) {
+      this._devicesChanged.next(this.devices);
     }
   }
 
@@ -109,7 +120,7 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
    */
   private _loadLocations(locations: BMLocation[]) {
     this._layerControl.clearLayers(this._layers);
-    this._layers = this._layerControl.loadBuildingFeatures(locations);
+    this._layers = this._layerControl.loadBuildingFeatures(locations, this._map);
     this._layers.forEach((l) => {
       l.addEventListener('click', () => {
         this.layerClick.emit(l.location);
@@ -147,6 +158,16 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
     this.mapInit.emit(this._map);
   }
 
+  private _loadMarkers(devices: Thing[]) {
+    this._markerControl
+      .loadMarkers(devices, this._map)
+      .forEach((marker) => {
+        marker.addEventListener('click', () => {
+          this.markerClick.emit(marker.device);
+        });
+      });
+  }
+
   /**
    * update map view 
    * 
@@ -160,17 +181,18 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
       [(bounds.top + bounds.bottom) / 2, (bounds.left + bounds.right) / 2];
     let zoom = this._zoom;
     this._map.setView(center, zoom, {
-      animate: true
+      animate: true,
+      duration: 1000
     });
-    let mapBounds
-      = new L.LatLngBounds([
-        bounds.bottom + 0.001,
-        bounds.left - 0.001
-      ], [
-        bounds.top - 0.001,
-        bounds.right + 0.001
-      ]);
-    this._map.setMaxBounds(mapBounds);
+    // let mapBounds
+    //   = new L.LatLngBounds([
+    //     bounds.bottom + 0.001,
+    //     bounds.left - 0.001
+    //   ], [
+    //     bounds.top - 0.001,
+    //     bounds.right + 0.001
+    //   ]);
+    // this._map.setMaxBounds(mapBounds);
   }
 
   /**
@@ -209,6 +231,9 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
       top = bounds.getNorth();
       bottom = bounds.getSouth();
       right = bounds.getEast();
+      return {
+        left, top, bottom, right
+      };
     } else {
       return MapUtils.findBounds(layers);
     }

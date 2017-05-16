@@ -16,7 +16,6 @@ import { BasMap } from '../../../../shared/components/bas-map/bas-map.component'
   templateUrl: './map-view.component.html',
   styles: [
     `
-    
     `
   ]
 })

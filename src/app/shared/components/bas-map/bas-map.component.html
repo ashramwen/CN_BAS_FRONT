@@ -1,6 +1,12 @@
 <div class="bas-map-container">
 
-  <div class="bas-map-target" #mapTarget></div>
+  <bm-map-view 
+    (mapInit)="mapInited($event)"
+    (layerClick)="onLayerClick($event)"
+    [locations]="myState.locations"
+    [zoom]="zoom"
+    [devices]="myState.devices"
+  ></bm-map-view>
   
   <bm-device-picker [locations]="selectedLocations || []" [active]="myState.selectionMode"></bm-device-picker>
   <md-card class="location-picker">

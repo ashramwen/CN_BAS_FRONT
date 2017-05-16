@@ -13,16 +13,17 @@ export class LayerControlService {
     });
   }
 
-  public loadBuildingFeatures(locations: BMLocation[]) {
+  public loadBuildingFeatures(locations: BMLocation[], map: L.Map) {
 
     let featureLayers = locations
       .reduce((ar, l) => ar.concat(this._initFeature(l)), [] as BasArea[]);
-
-    featureLayers
-      .filter((l) => l.location.disabled)
-      .forEach((l) => {
+    
+    featureLayers.forEach((l) => {
+      l.addTo(map);
+      if (l.location.disabled) {
         this.fadeAndDisableLayer(l);
-      });
+      }
+    });
     
     return featureLayers;
   }

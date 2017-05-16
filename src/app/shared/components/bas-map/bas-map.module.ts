@@ -13,7 +13,7 @@ import {
   LocationSelectorCmp
 } from './components/device-picker/location-selector/location-selector.component';
 import { PipesModule } from '../../pipes/pipes.module';
-import { MapViewCmp } from './components/map-view/map-view.component';
+import { MapViewModule } from '../map-view/map-view.mdoule';
 
 @NgModule({
   declarations: [
@@ -22,14 +22,14 @@ import { MapViewCmp } from './components/map-view/map-view.component';
     LocationPickerCmp,
     LocationSelectorCmp,
     DeviceSelectorCmp,
-    MapViewCmp
   ],
   imports: [
     MaterialModule,
     CommonModule,
     FormsModule,
     FlexLayoutModule,
-    PipesModule
+    PipesModule,
+    MapViewModule
   ],
   providers: [],
   exports: [BasMap]
