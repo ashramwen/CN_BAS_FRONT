@@ -1,3 +1,8 @@
+<md-card class="location-selector-toggle" [@flyInOut]="active? 'active': 'inactive'">
+  <md-card-content>
+    <div><md-checkbox [(ngModel)]="isLocationSelector" [disabled]="isCascade">select location</md-checkbox></div>
+  </md-card-content>
+</md-card>
 <md-card class="device-picker" [@flyInOut]="active? 'active': 'inactive'">
   <md-card-content>
     <md-tab-group full-ink-bar>
@@ -43,8 +48,8 @@
       </md-tab>
       <md-tab label="Selection" color="primary">
         <div class="tab-container">
-          <bm-device-seletor *ngIf="locations && locations.length<2" [location]="locations[0]"></bm-device-seletor>
-          <bm-location-selector *ngIf="locations && locations.length>1" [locations]="locations"></bm-location-selector>
+          <bm-device-seletor *ngIf="!isLocationSelector" [location]="locations[0]"></bm-device-seletor>
+          <bm-location-selector *ngIf="isLocationSelector" [locations]="locations"></bm-location-selector>
         </div>
       </md-tab>
     </md-tab-group>

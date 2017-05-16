@@ -27,15 +27,13 @@ import { ViewLevel } from './view-level.type';
 import { Location } from '../../models/location.interface';
 import { BackButtonControl } from './leaflet-plugins/back-button/back-button.control';
 import 'leaflet-compass/dist/leaflet-compass.min.js';
-import { LayerSelector } from './providers/layer-selector.service';
 import { RootState } from '../../redux/index';
 import { StateSelectors } from '../../redux/selectors';
 import { StateService } from './providers/state.service';
 import { LocationService } from '../../providers/resource-services/location.service';
 import { DeviceService } from '../../providers/resource-services/device.service';
 import { BMLocation } from '../map-view/models/location.interface';
-
-const MAX_DEVICES = 200;
+import { LocationSelector } from './providers/location-selector.service';
 
 @Component({
   selector: 'bas-map',
@@ -44,7 +42,7 @@ const MAX_DEVICES = 200;
     './bas-map.component.scss'
   ],
   encapsulation: ViewEncapsulation.None,
-  providers: [LayerSelector, StateService],
+  providers: [StateService, LocationSelector],
 })
 export class BasMap implements OnInit {
 
@@ -70,10 +68,10 @@ export class BasMap implements OnInit {
 
   constructor(
     public myState: StateService,
-    private layerSelector: LayerSelector,
     private store: Store<RootState>,
     private _locationService: LocationService,
     private _deviceService: DeviceService,
+    private _locationSelector: LocationSelector
   ) { }
 
   public mapInited(map: L.Map) {
@@ -86,9 +84,6 @@ export class BasMap implements OnInit {
     });
     this.myState.onStateChanged.subscribe((location) => {
       this._onStateChange();
-    });
-    this.myState.onSelectionModeChange.subscribe(() => {
-      this.layerSelector.clear();
     });
     this.myState.onMapReady.subscribe(async () => {
       await this._init();
@@ -119,7 +114,7 @@ export class BasMap implements OnInit {
    */
   public onLayerClick(location: BMLocation) {
     if (this.myState.selectionMode) {
-      location.selected = !location.selected;
+      this._locationSelector.toggleLocation(location);
       this.myState.setLocations(this.myState.locations.concat([]));
     } else {
       this.myState.setCurrentLocation(location);
@@ -159,13 +154,17 @@ export class BasMap implements OnInit {
    * @memberOf BasMap
    */
   private async _getDevices() {
-    let currentLocation = this.myState.currentLocation;
-    let devicesCount = await this._deviceService.getThingsCountByLocation(currentLocation, true);
-    if (devicesCount > MAX_DEVICES) {
-      this.myState.setDevices([]);
-    } else {
-      let devices = await this._deviceService.getThingsByLocation(currentLocation, true);
-      this.myState.setDevices(devices);
+    try {
+      let currentLocation = this.myState.currentLocation;
+      if (this.myState.isCascade) {
+        let devices = await this._deviceService.getThingsByLocation(currentLocation, false);
+        this.myState.setDevices(devices);
+      } else {
+        let devices = await this._deviceService.getThingsByLocation(currentLocation, true);
+        this.myState.setDevices(devices);
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
 

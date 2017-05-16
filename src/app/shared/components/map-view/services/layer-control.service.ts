@@ -23,6 +23,9 @@ export class LayerControlService {
       if (l.location.disabled) {
         this.fadeAndDisableLayer(l);
       }
+      if (l.location.selected) {
+        this.hightlightLayer(l);
+      }
     });
     
     return featureLayers;
@@ -47,6 +50,7 @@ export class LayerControlService {
   private hightlightLayer(layer: BasArea) {
     MapUtils.removeClass(layer, 'fade');
     MapUtils.removeClass(layer, 'hide');
+    MapUtils.addClass(layer, 'selected');
     this.enableLayer(layer);
   }
 

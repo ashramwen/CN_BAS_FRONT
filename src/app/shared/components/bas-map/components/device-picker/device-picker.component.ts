@@ -15,6 +15,7 @@ import { LocationService } from '../../../../providers/resource-services/locatio
 import { DeviceService } from '../../../../providers/resource-services/device.service';
 import { Location } from '../../../../models/location.interface';
 import { Thing } from '../../../../models/thing.interface';
+import { LocationSelector } from '../../providers/location-selector.service';
 
 export interface DeviceCheck extends Thing {
   checked: boolean;
@@ -39,14 +40,28 @@ export class DevicePickerCmp {
   @Input()
   public active: boolean;
 
-  public deviceList: DeviceCheck[] = [];
+  public set isLocationSelector(value) {
+    this.myState.setIsLocationSelector(value);
+  }
 
-  @Input() public locations: Location[];
+  public get isLocationSelector() {
+    return this.myState.isLocationSelector;
+  }
+
+  public deviceList: DeviceCheck[] = [];
 
   constructor(
     private myState: StateService,
     private _locationService: LocationService,
-    private _deviceService: DeviceService
+    private _deviceService: DeviceService,
+    private locationSelector: LocationSelector
   ) { }
 
+  public get locations() {
+    return this.locationSelector.selectedLocations || [];
+  }
+
+  public get isCascade() {
+    return this.myState.isCascade;
+  }
 }

@@ -7,10 +7,20 @@ bm-device-picker {
     overflow: auto;
   }
 
+  md-card.location-selector-toggle{
+    z-index: 3;
+    position: absolute;
+    top: 1rem;
+    right: 20px;
+    padding: 0px;
+    width: 14rem;
+    padding: 1rem;
+  }
+
   md-card.device-picker{
     z-index: 3;
     position: absolute;
-    top: 60px;
+    top: 5rem;
     right: 20px;
     padding: 0px;
   }

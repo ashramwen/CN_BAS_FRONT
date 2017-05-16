@@ -18,8 +18,8 @@ import { Subject, BehaviorSubject } from 'rxjs';
 import { BMLocation } from './models/location.interface';
 import { Observable } from 'rxjs/Observable';
 import { MarkerControlService } from './services/marker-control.service';
-import { Thing } from '../../models/thing.interface';
 import { Location } from '../../models/location.interface';
+import { BMThing } from './models/thing.interface';
 
 @Component({
   selector: 'bm-map-view',
@@ -29,18 +29,22 @@ import { Location } from '../../models/location.interface';
   styleUrls: ['./map-view.component.scss'],
   providers: [LayerControlService, MarkerControlService]
 })
-export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
+export class MapViewCmp implements OnInit, AfterViewInit {
   @Output()
   public layerClick: EventEmitter<BMLocation> = new EventEmitter();
 
   @Output()
-  public markerClick: EventEmitter<Thing> = new EventEmitter();
+  public markerClick: EventEmitter<BMThing> = new EventEmitter();
 
   @Output()
   public mapInit: EventEmitter<L.Map> = new EventEmitter();
 
   @Input()
-  public locations: Location[];
+  public set locations(value: BMLocation[]) {
+    if (this._locations === value) { return; }
+    this._locations = value;
+    this._locationChanged.next(this._locations);
+  }
 
   @Input()
   public set zoom(value) {
@@ -50,18 +54,24 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
   }
 
   @Input()
-  public devices: Thing[];
+  public set devices(value: BMThing[]) {
+    if (this._devices === value) { return; }
+    this._devices = value;
+    this._devicesChanged.next(this._devices);
+  }
 
   @ViewChild('mapTarget')
   public mapTarget: ElementRef;
 
+  private _locations: BMLocation[];
+  private _devices: BMThing[];
   private _zoom: number;  
   private _map: L.Map;
   private _layers: BasArea[];
   private _markers: BasMarker[];
   private _mapInited: Subject<boolean> = new Subject();
   private _locationChanged: BehaviorSubject<BMLocation[]> = new BehaviorSubject<BMLocation[]>([]);
-  private _devicesChanged: BehaviorSubject<Thing[]> = new BehaviorSubject([]);
+  private _devicesChanged: BehaviorSubject<BMThing[]> = new BehaviorSubject([]);
   private _mapViewChanged: BehaviorSubject<void> = new BehaviorSubject<void>(void 0);
 
   constructor(
@@ -95,15 +105,6 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
         this._loadMarkers(result);
       });
     });
-  }
-
-  public ngOnChanges(changes: SimpleChanges) {
-    if (changes['locations'] && changes['locations'].currentValue != changes['locations'].previousValue) {
-      this._locationChanged.next(this.locations);
-    }
-    if (changes['devices'] && changes['devices'].currentValue != changes['devices'].previousValue) {
-      this._devicesChanged.next(this.devices);
-    }
   }
 
   public ngAfterViewInit() {
@@ -158,7 +159,7 @@ export class MapViewCmp implements OnInit, AfterViewInit, OnChanges {
     this.mapInit.emit(this._map);
   }
 
-  private _loadMarkers(devices: Thing[]) {
+  private _loadMarkers(devices: BMThing[]) {
     this._markerControl
       .loadMarkers(devices, this._map)
       .forEach((marker) => {

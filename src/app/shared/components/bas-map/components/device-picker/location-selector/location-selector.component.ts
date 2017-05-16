@@ -1,6 +1,6 @@
 import { Component, Input, Output } from '@angular/core';
-import { LayerSelector } from '../../../providers/layer-selector.service';
 import { Location } from '../../../../../models/location.interface';
+import { LocationSelector } from '../../../providers/location-selector.service';
 
 @Component({
   selector: 'bm-location-selector',
@@ -11,7 +11,7 @@ export class LocationSelectorCmp {
   @Input() public locations: Location[];
 
   constructor(
-    private layerSelector: LayerSelector,
+    private layerSelector: LocationSelector,
   ) { }
 
   public remove(location: Location) {

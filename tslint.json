@@ -7,6 +7,7 @@
   ],
   "rules": {
     // Custom
+    "trailing-whitespace": false,
     "trailing-comma": [false, {"multiline": "always", "singleline": "never"}],
     "interface-name": [false, "always-prefix"],
     // Angular 2

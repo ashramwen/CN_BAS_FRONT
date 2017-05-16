@@ -11,10 +11,7 @@
   </md-list-item>
   <md-divider></md-divider>
 </md-list>
-<div *ngIf="!showDevices" class="message">
-  {{deviceCount}} Devices impacted.
-</div>
-<md-list *ngIf="showDevices" class="location-list sm">
+<md-list class="location-list sm">
   <md-list-item *ngFor="let device of deviceList" >
     <label fxLayout full-width>
       <md-checkbox #check>

@@ -55,6 +55,15 @@ export class LocationService {
     }
   }
 
+  public async isCascade(location: Location) {
+    return await this._orm.locationRepo
+      .createQueryBuilder('location')
+      .innerJoin('locationType', 'locationType', 'locationType.id = location.locationType')
+      .where(`locationType.expendAll = 0 
+        and location.location LIKE (:location || "%")`, { location: location.location })
+      .getCount() > 0;
+  }
+
   public async isLeaf(location: Location) {
     let subLocations = await this.getSubLocations(location);
     return !subLocations.length;

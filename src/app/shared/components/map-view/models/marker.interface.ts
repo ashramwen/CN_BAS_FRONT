@@ -1,5 +1,5 @@
-import { Thing } from '../../../models/thing.interface';
+import { BMThing } from './thing.interface';
 
 export interface BasMarker extends L.Marker {
-  device?: Thing;
+  device?: BMThing;
 }

@@ -12,7 +12,7 @@ import {
   OneToMany
 } from 'bas-typeorm';
 
-@Entity()
+@Entity('locationType')
 export class LocationType implements SyncRecord {
 
   @PrimaryGeneratedColumn()

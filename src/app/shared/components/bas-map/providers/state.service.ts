@@ -15,6 +15,7 @@ export class StateService {
   public onSelectionModeChange: Subject<boolean>;
   public onCurrentLocationChange: Subject<LocationWithPath>;
   public onStateChanged: Subject<void>;
+  public onIsLocationSelectorChange: Subject<boolean>;
   
   private _devices: Thing[] = [];
   private _map: L.Map;
@@ -24,6 +25,8 @@ export class StateService {
   private _layers: L.Polygon[] = [];
   private _path: BMLocation[] = [];
   private _locations: BMLocation[];
+  private _isCascade: boolean;
+  private _isLocationSelector: boolean = true;
 
   public get locations() {
     return this._locations;
@@ -41,6 +44,14 @@ export class StateService {
     this._devices = devices;
   }
 
+  public get isCascade() {
+    return this._isCascade;
+  }
+
+  public get isLocationSelector() {
+    return this._isLocationSelector;
+  }
+
   constructor(
     private _locationService: LocationService
   ) {
@@ -49,6 +60,7 @@ export class StateService {
     this.onSelectionModeChange = new Subject<boolean>();
     this.onCurrentLocationChange = new Subject<LocationWithPath>();
     this.onStateChanged = new Subject<void>();
+    this.onIsLocationSelectorChange = new Subject();
   }
 
   public async init() {
@@ -77,6 +89,11 @@ export class StateService {
 
   public get path() {
     return this._path;
+  }
+
+  public setIsLocationSelector(value: boolean) {
+    this._isLocationSelector = value;
+    this.onIsLocationSelectorChange.next(value);
   }
 
   public loadLayers(layers: L.Polygon[]) {
@@ -108,6 +125,8 @@ export class StateService {
     }
     let path = await this._locationService.getLocationPath(location);
     this._path = path;
+    this._isCascade = await this._locationService.isCascade(this._currentLocation);
+    this._isLocationSelector = this._isCascade ? true : this._isLocationSelector;
     this.onCurrentLocationChange.next({ location, path });
     this.onStateChanged.next();
   }
