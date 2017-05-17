@@ -63,12 +63,10 @@ export class MapViewCmp implements OnInit, AfterViewInit {
   @ViewChild('mapTarget')
   public mapTarget: ElementRef;
 
-  private _locations: BMLocation[];
-  private _devices: BMThing[];
-  private _zoom: number;  
+  private _locations: BMLocation[] = [];
+  private _devices: BMThing[] = [];
+  private _zoom: number;
   private _map: L.Map;
-  private _layers: BasArea[];
-  private _markers: BasMarker[];
   private _mapInited: Subject<boolean> = new Subject();
   private _locationChanged: BehaviorSubject<BMLocation[]> = new BehaviorSubject<BMLocation[]>([]);
   private _devicesChanged: BehaviorSubject<BMThing[]> = new BehaviorSubject([]);
@@ -111,6 +109,13 @@ export class MapViewCmp implements OnInit, AfterViewInit {
     this._initMap();
   }
 
+  public updateView() {
+    let newMarkers = this._markerControl.updateMarkers(this._map);
+    let newLayers = this._layerControl.updateLayers(this._map);
+    this._initLayers(newLayers);
+    this._initMarkers(newMarkers);
+  }
+
   /**
    * clear & load location layers on map
    * 
@@ -120,15 +125,11 @@ export class MapViewCmp implements OnInit, AfterViewInit {
    * @memberOf MapViewCmp
    */
   private _loadLocations(locations: BMLocation[]) {
-    this._layerControl.clearLayers(this._layers);
-    this._layers = this._layerControl.loadBuildingFeatures(locations, this._map);
-    this._layers.forEach((l) => {
-      l.addEventListener('click', () => {
-        this.layerClick.emit(l.location);
-      });
-    });
+    this._layerControl.clearLayers();
+    if (!locations) { return; }
+    let layers = this._layerControl.loadBuildingFeatures(locations, this._map);
+    this._initLayers(layers);
   }
-
 
   /**
    * init map
@@ -159,14 +160,26 @@ export class MapViewCmp implements OnInit, AfterViewInit {
     this.mapInit.emit(this._map);
   }
 
-  private _loadMarkers(devices: BMThing[]) {
-    this._markerControl
-      .loadMarkers(devices, this._map)
-      .forEach((marker) => {
-        marker.addEventListener('click', () => {
-          this.markerClick.emit(marker.device);
-        });
+  private _initLayers(layers: BasArea[]) {
+    layers.forEach((l) => {
+      l.addEventListener('click', () => {
+        this.layerClick.emit(l.location);
       });
+    });
+  }
+
+  private _initMarkers(markers: BasMarker[]) {
+    markers.forEach((marker) => {
+      marker.addEventListener('click', () => {
+        this.markerClick.emit(marker.device);
+      });
+    });
+  }
+
+  private _loadMarkers(devices: BMThing[]) {
+    let markers = this._markerControl
+      .loadMarkers(devices, this._map);
+    this._initMarkers(markers);
   }
 
   /**
@@ -177,7 +190,7 @@ export class MapViewCmp implements OnInit, AfterViewInit {
    * @memberOf MapViewCmp
    */
   private _updateView() {
-    let bounds = this._findBounds();
+    let bounds = this._layerControl.findBounds(this._map);
     let center: L.LatLngExpression =
       [(bounds.top + bounds.bottom) / 2, (bounds.left + bounds.right) / 2];
     let zoom = this._zoom;
@@ -209,34 +222,5 @@ export class MapViewCmp implements OnInit, AfterViewInit {
     return 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?'
       + 'access_token=pk.eyJ1IjoieXR5c3p4ZiIsImEiOiJjaXo'
       + '1OHN3OTcwNmJpMzNwaHVycmo5djllIn0.aBzti__T5lS8LDQhjyYsGA';
-  }
-
-  /**
-   * find layer bounds
-   * 
-   * @private
-   * @returns 
-   * 
-   * @memberOf MapViewCmp
-   */
-  private _findBounds() {
-    let left = null;
-    let right = null;
-    let top = null;
-    let bottom = null;
-
-    let layers = this._layers;
-    if (!layers || !layers.length) {
-      let bounds = this._map.getBounds();
-      left = bounds.getWest();
-      top = bounds.getNorth();
-      bottom = bounds.getSouth();
-      right = bounds.getEast();
-      return {
-        left, top, bottom, right
-      };
-    } else {
-      return MapUtils.findBounds(layers);
-    }
   }
 }

@@ -63,7 +63,7 @@ export class Thing implements SyncRecord {
     cascadeRemove: false  // Allow to remove a photo on album remove
   })
   @Column({type: 'json'})
-  public locations: Location[];
+  public locations: string[];
 
   public connectivity: any;
   public status: ThingState = {};

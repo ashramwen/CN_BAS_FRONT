@@ -15,6 +15,8 @@ import {
   ThingResponse
 } from '../../providers/resource-services/interfaces/thing-response.interface';
 
+export const LOCATION_STORAGE = 'bas-location';
+
 @Injectable()
 export class SyncronizeService {
 
@@ -127,7 +129,6 @@ export class SyncronizeService {
       ]);
 
     await this._sqlHelper.insertMultiRows('location', columns, rows);
-    console.log('done');
   }
 
   /**

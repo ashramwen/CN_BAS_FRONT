@@ -10,6 +10,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Building } from '../../../../shared/models/building.interface';
 import { Location } from '../../../../shared/models/location.interface';
 import { BasMap } from '../../../../shared/components/bas-map/bas-map.component';
+import { Thing } from '../../../../shared/models/thing.interface';
+import {
+  DeviceDetailInputData,
+  DeviceDetailCmp
+} from '../device-list/device-detail/device-detail.component';
+import {
+  PortalModal
+} from '../../../../../mat-custom/components/portal-modal/portal-modal.service';
 
 @Component({
   selector: 'bas-map-view',
@@ -27,10 +35,22 @@ export class MapViewCmp implements OnInit {
   constructor(
     private store: Store<RootState>,
     private mapService: MapService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private portalModal: PortalModal
   ) { }
 
   public ngOnInit() {
     //
+  }
+
+  public onDeviceClick(device: Thing) {
+    console.log('go device detail');
+    // this.store.dispatch(go(['/portal/device-list', item.vendorThingID]));
+    // this.router.navigate(['/portal/device-list', item.vendorThingID]);
+    let data: DeviceDetailInputData = {
+      thing: device
+    };
+
+    this.portalModal.show(DeviceDetailCmp, data);
   }
 }

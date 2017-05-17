@@ -13,7 +13,7 @@
         <md-icon md-list-icon>place</md-icon>
         {{'DeviceList.Location' | translate}}
         </label>
-      <p>{{ thing.vendorThingID }}</p>
+      <p bas-device-map-popover [device]="thing">{{ thing.locations | location | async }}</p>
     </section>
     <section>
       <label>

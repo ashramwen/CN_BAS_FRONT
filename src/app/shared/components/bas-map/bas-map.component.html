@@ -3,6 +3,7 @@
   <bm-map-view 
     (mapInit)="mapInited($event)"
     (layerClick)="onLayerClick($event)"
+    (markerClick)="onMarkerClick($event)"
     [locations]="myState.locations"
     [zoom]="zoom"
     [devices]="myState.devices"

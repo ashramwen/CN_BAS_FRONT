@@ -48,7 +48,7 @@
       </md-tab>
       <md-tab label="Selection" color="primary">
         <div class="tab-container">
-          <bm-device-seletor *ngIf="!isLocationSelector" [location]="locations[0]"></bm-device-seletor>
+          <bm-device-seletor *ngIf="!isLocationSelector"></bm-device-seletor>
           <bm-location-selector *ngIf="isLocationSelector" [locations]="locations"></bm-location-selector>
         </div>
       </md-tab>

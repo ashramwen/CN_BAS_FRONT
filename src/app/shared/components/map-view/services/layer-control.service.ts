@@ -6,45 +6,107 @@ import { BMLocation } from '../models/location.interface';
 @Injectable()
 export class LayerControlService {
 
-  public clearLayers(layers: BasArea[]) {
-    if (!layers) { return; }
-    layers.forEach((l) => {
+  private _layers: BasArea[];
+
+  public clearLayers() {
+    if (!this._layers) { return; }
+    this._layers.forEach((l) => {
       l.remove();
     });
+    this._layers = [];
   }
 
   public loadBuildingFeatures(locations: BMLocation[], map: L.Map) {
 
     let featureLayers = locations
-      .reduce((ar, l) => ar.concat(this._initFeature(l)), [] as BasArea[]);
-    
+      .reduce((ar, l) => ar.concat(this._initFeatures(l)), [] as BasArea[]);
+
     featureLayers.forEach((l) => {
       l.addTo(map);
-      if (l.location.disabled) {
-        this.fadeAndDisableLayer(l);
-      }
-      if (l.location.selected) {
-        this.hightlightLayer(l);
-      }
+      this._updateLayerState(l);
     });
-    
+    this._layers = featureLayers;
     return featureLayers;
   }
 
-  private _initFeature(d: BMLocation) {
+  public updateLayers(map: L.Map) {
+    let updatedLayers = this._findUpdatedLayers(this._layers);
+    return updatedLayers.map((l) => {
+      let index = this._layers.indexOf(l);
+      l.remove();
+      let newFeature = this._initFeature(l.polygon, l.location);
+      this._layers[index] = newFeature;
+      newFeature.addTo(map);
+      this._updateLayerState(newFeature);
+      return newFeature;
+    });
+  }
+
+  /**
+   * find layer bounds
+   * 
+   * @private
+   * @returns 
+   * 
+   * @memberOf MapViewCmp
+   */
+  public findBounds(map: L.Map) {
+    let left = null;
+    let right = null;
+    let top = null;
+    let bottom = null;
+
+    let layers = this._layers;
+    if (!layers || !layers.length) {
+      let bounds = map.getBounds();
+      left = bounds.getWest();
+      top = bounds.getNorth();
+      bottom = bounds.getSouth();
+      right = bounds.getEast();
+      return {
+        left, top, bottom, right
+      };
+    } else {
+      return MapUtils.findBounds(layers);
+    }
+  }
+
+  private _updateLayerState(layer: BasArea) {
+    if (layer.location.disabled) {
+      this.fadeAndDisableLayer(layer);
+    }
+    if (layer.location.selected) {
+      this.hightlightLayer(layer);
+    }
+  }
+
+  private _findUpdatedLayers(layers: BasArea[]) {
+    return layers.filter((l) => {
+      return l.disabled !== l.location.disabled
+        || l.selected !== l.location.selected
+        || l.highlighted !== l.location.highlighted;
+    });
+  }
+
+  private _initFeatures(d: BMLocation) {
+    let features = d.geos.map((polygon) => {
+      return this._initFeature(polygon, d);
+    });
+    return features;
+  }
+
+  private _initFeature(polygon: Array<[number, number]>, location: BMLocation) {
     let layerOptions: L.PolylineOptions = {
       className: 'loc-layer'
     };
+    let feature: BasArea = L.polygon(polygon, layerOptions);
+    feature.location = location;
+    feature.disabled = location.disabled;
+    feature.highlighted = location.highlighted;
+    feature.selected = location.selected;
+    feature.polygon = polygon;
 
-    let features = [];
-
-    d.geos.forEach((polygon) => {
-      let feature: BasArea = L.polygon(polygon, layerOptions);
-      feature.location = d;
-      features.push(feature);
-    });
-
-    return features;
+    return feature;
   }
 
   private hightlightLayer(layer: BasArea) {

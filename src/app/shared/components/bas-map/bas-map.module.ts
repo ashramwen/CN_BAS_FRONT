@@ -14,6 +14,9 @@ import {
 } from './components/device-picker/location-selector/location-selector.component';
 import { PipesModule } from '../../pipes/pipes.module';
 import { MapViewModule } from '../map-view/map-view.mdoule';
+import {
+  DeviceSelectorItemCmp
+} from './components/device-picker/device-selector/device-selector-item.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,7 @@ import { MapViewModule } from '../map-view/map-view.mdoule';
     LocationPickerCmp,
     LocationSelectorCmp,
     DeviceSelectorCmp,
+    DeviceSelectorItemCmp
   ],
   imports: [
     MaterialModule,

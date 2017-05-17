@@ -7,6 +7,7 @@ import { LocationService } from '../../../providers/resource-services/location.s
 import { Thing } from '../../../models/thing.interface';
 import { BMLocation } from '../../map-view/models/location.interface';
 import { LocationWithPath } from '../models/location-with-path.interface';
+import { BMThing } from '../../map-view/models/thing.interface';
 
 @Injectable()
 export class StateService {
@@ -16,8 +17,9 @@ export class StateService {
   public onCurrentLocationChange: Subject<LocationWithPath>;
   public onStateChanged: Subject<void>;
   public onIsLocationSelectorChange: Subject<boolean>;
-  
-  private _devices: Thing[] = [];
+  public onMapViewUpdate: Subject<void>;
+
+  private _devices: BMThing[] = [];
   private _map: L.Map;
   private _selectionMode: boolean = false;
   private _currentLocation: BMLocation;
@@ -32,16 +34,8 @@ export class StateService {
     return this._locations;
   }
 
-  public setLocations(locations: BMLocation[]) {
-    this._locations = locations;
-  }
-
   public get devices() {
     return this._devices;
-  }
-
-  public setDevices(devices: Thing[]) {
-    this._devices = devices;
   }
 
   public get isCascade() {
@@ -50,25 +44,6 @@ export class StateService {
 
   public get isLocationSelector() {
     return this._isLocationSelector;
-  }
-
-  constructor(
-    private _locationService: LocationService
-  ) {
-    this.onLayerChanged = new Subject<L.Polygon[]>();
-    this.onMapReady = new Subject<boolean>();
-    this.onSelectionModeChange = new Subject<boolean>();
-    this.onCurrentLocationChange = new Subject<LocationWithPath>();
-    this.onStateChanged = new Subject<void>();
-    this.onIsLocationSelectorChange = new Subject();
-  }
-
-  public async init() {
-    try {
-      this.setCurrentLocation(await this._locationService.root);
-    } catch (e) {
-      console.log(e);
-    }
   }
 
   public get layers() {
@@ -89,6 +64,34 @@ export class StateService {
 
   public get path() {
     return this._path;
+  }
+
+  constructor(
+    private _locationService: LocationService
+  ) {
+    this.onLayerChanged = new Subject<L.Polygon[]>();
+    this.onMapReady = new Subject<boolean>();
+    this.onSelectionModeChange = new Subject<boolean>();
+    this.onCurrentLocationChange = new Subject<LocationWithPath>();
+    this.onStateChanged = new Subject<void>();
+    this.onIsLocationSelectorChange = new Subject();
+    this.onMapViewUpdate = new Subject<void>();
+  }
+
+  public async init() {
+    try {
+      this.setCurrentLocation(await this._locationService.root);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public setLocations(locations: BMLocation[]) {
+    this._locations = locations;
+  }
+
+  public setDevices(devices: Thing[]) {
+    this._devices = devices;
   }
 
   public setIsLocationSelector(value: boolean) {

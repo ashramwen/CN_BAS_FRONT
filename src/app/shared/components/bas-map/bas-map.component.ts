@@ -16,7 +16,6 @@ import * as L from 'leaflet';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs';
-import { MdSidenav } from '@angular/material';
 import { Store } from '@ngrx/store';
 
 import {
@@ -34,6 +33,11 @@ import { LocationService } from '../../providers/resource-services/location.serv
 import { DeviceService } from '../../providers/resource-services/device.service';
 import { BMLocation } from '../map-view/models/location.interface';
 import { LocationSelector } from './providers/location-selector.service';
+import { DeviceSelectorService } from './providers/device-selector.service';
+import { BMThing } from '../map-view/models/thing.interface';
+import { Output } from '@angular/core';
+import { Thing } from '../../models/thing.interface';
+import { MapViewCmp } from '../map-view/map-view.component';
 
 @Component({
   selector: 'bas-map',
@@ -42,14 +46,15 @@ import { LocationSelector } from './providers/location-selector.service';
     './bas-map.component.scss'
   ],
   encapsulation: ViewEncapsulation.None,
-  providers: [StateService, LocationSelector],
+  providers: [StateService, LocationSelector, DeviceSelectorService],
 })
 export class BasMap implements OnInit {
 
-  @ViewChild('mapTarget')
-  public mapTarget: ElementRef;
-  @ViewChild('sidenav')
-  public sidenav: MdSidenav;
+  @ViewChild(MapViewCmp)
+  public mapTarget: MapViewCmp;
+
+  @Output()
+  public deviceClick: EventEmitter<Thing> = new EventEmitter();
 
   public get zoom() {
     return !this.myState.path ? 18 : (this.myState.path.length + 16);
@@ -71,7 +76,8 @@ export class BasMap implements OnInit {
     private store: Store<RootState>,
     private _locationService: LocationService,
     private _deviceService: DeviceService,
-    private _locationSelector: LocationSelector
+    private _locationSelector: LocationSelector,
+    private _deviceSelector: DeviceSelectorService
   ) { }
 
   public mapInited(map: L.Map) {
@@ -88,6 +94,42 @@ export class BasMap implements OnInit {
     this.myState.onMapReady.subscribe(async () => {
       await this._init();
     });
+    this.myState.onMapViewUpdate.subscribe(() => {
+      this.mapTarget.updateView();
+    });
+  }
+
+  /**
+   * when any layer is clicked
+   * 
+   * @param {BMLocation} location 
+   * 
+   * @memberOf BasMap
+   */
+  public onLayerClick(location: BMLocation) {
+    if (this.myState.selectionMode) {
+      if (this.myState.isLocationSelector) {
+        this._locationSelector.toggleLocation(location);
+      } else {
+        this._deviceSelector.selectLocation(location);
+      }
+    } else {
+      this.myState.setCurrentLocation(location);
+    }
+  }
+
+  public onMarkerClick(device: BMThing) {
+    if (this.myState.selectionMode) {
+      if (this.myState.isCascade) {
+        return;
+      }
+      if (this.myState.isLocationSelector) {
+        this.myState.setIsLocationSelector(false);
+      }
+      this._deviceSelector.toggleDevice(device);
+    } else {
+      this.deviceClick.emit(device);
+    }
   }
 
   private async _init() {
@@ -103,22 +145,6 @@ export class BasMap implements OnInit {
     this.myState.map.on('selection-mode-change', (event) => {
       this.myState.setSelectionMode(event['state']);
     });
-  }
-
-  /**
-   * when any layer is clicked
-   * 
-   * @param {BMLocation} location 
-   * 
-   * @memberOf BasMap
-   */
-  public onLayerClick(location: BMLocation) {
-    if (this.myState.selectionMode) {
-      this._locationSelector.toggleLocation(location);
-      this.myState.setLocations(this.myState.locations.concat([]));
-    } else {
-      this.myState.setCurrentLocation(location);
-    }
   }
 
   /**

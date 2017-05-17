@@ -13,6 +13,7 @@ import {
 } from '@angular/router';
 import { Location } from '../../models/location.interface';
 import { Repository } from 'bas-typeorm';
+import { LocationService } from '../resource-services/location.service';
 
 @Injectable()
 export class MetaGuard implements CanActivate, CanActivateChild {
@@ -20,6 +21,7 @@ export class MetaGuard implements CanActivate, CanActivateChild {
     private router: Router,
     private _orm: BasORM,
     private _sycnService: SyncronizeService,
+    private _locationSerevice: LocationService,
     private store: Store<RootState>
   ) { }
 
@@ -41,6 +43,7 @@ export class MetaGuard implements CanActivate, CanActivateChild {
             await this._orm.init();
           }
           await this._sycnService.sync();
+          await this._locationSerevice.init();
           this.store.dispatch(new MetaInitSuccessAction());
           resolve(true);
         } catch (e) {
@@ -52,11 +55,4 @@ export class MetaGuard implements CanActivate, CanActivateChild {
       });
     });
   }
-
-  // private async loadTreeNode(n: Location, repo: Repository<Location>) {
-  //   n.subLocations = await repo.find({ parentID: n.id });
-  //   for (let l of n.subLocations) {
-  //     await this.loadTreeNode(l, repo);
-  //   }
-  // }
 }

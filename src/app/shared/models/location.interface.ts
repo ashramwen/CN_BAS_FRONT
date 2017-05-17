@@ -108,4 +108,6 @@ export class Location implements SyncRecord {
     return !!this.geoPolygon ?
       JSON.parse(this.geoPolygon) : [];
   }
+
+  public parent: Location;
 }

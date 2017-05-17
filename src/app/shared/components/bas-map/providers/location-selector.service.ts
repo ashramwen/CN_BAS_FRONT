@@ -11,16 +11,16 @@ import { BMLocation } from '../../map-view/models/location.interface';
 @Injectable()
 export class LocationSelector {
 
-  private _selectedLocations: Location[] = [];
+  private _selectedLocations: BMLocation[] = [];
 
   constructor(
     private myState: StateService
-  ) { 
+  ) {
     myState.onSelectionModeChange.subscribe(() => {
-      this._selectedLocations = [];
+      this.clearSelection();
     });
     myState.onIsLocationSelectorChange.subscribe(() => {
-      this._selectedLocations = [];
+      this.clearSelection();
     });
   }
 
@@ -36,9 +36,22 @@ export class LocationSelector {
     }
   }
 
+  public clearSelection() {
+    this._selectedLocations.forEach((l) => {
+      l.selected = false;
+    });
+    this._selectedLocations = [];
+
+    // invoke change
+    this.myState.onMapViewUpdate.next();
+  }
+
   public selectLocation(location: BMLocation) {
     location.selected = true;
     this._selectedLocations.push(location);
+
+    // invoke change
+    this.myState.onMapViewUpdate.next();
   }
 
   public deselectLocation(location: BMLocation) {
@@ -46,6 +59,6 @@ export class LocationSelector {
     this._selectedLocations.splice(this._selectedLocations.indexOf(location), 1);
 
     // invoke change
-    this.myState.setLocations(this.myState.locations.concat([]));
+    this.myState.onMapViewUpdate.next();
   }
 }

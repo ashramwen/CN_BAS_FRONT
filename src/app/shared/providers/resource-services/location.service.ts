@@ -2,13 +2,30 @@ import { Injectable } from '@angular/core';
 import { BasORM } from '../../orm/orm.service';
 import { Location } from '../../models/location.interface';
 import * as _ from 'lodash';
+import { LOCATION_STORAGE } from '../../orm/services/syncronize.service';
 
 @Injectable()
 export class LocationService {
 
+  private _locations: Location[];
+
   constructor(
     private _orm: BasORM
   ) { }
+
+  public async init() {
+    let queryRunner = await this._orm.connection.driver.createQueryRunner();
+    let query = `select * from location order by location.location`;
+    let result: any[] = await queryRunner.query(query);
+    this._locations = result.map((r) => {
+      let location = new Location();
+      Object.assign(location, r);
+      return location;
+    });
+    let root = await this.root;
+    root.subLocations = [];
+    this._buildTree(root, this._locations.slice(1, this._locations.length));
+  }
 
   public get root() {
     return this.getLocation('.');
@@ -42,14 +59,22 @@ export class LocationService {
       .getOne();
   }
 
-  public async getLocationPath(location: Location | string): Promise<Location[]> {
+  public async getLocationPath(
+    location: Location | string
+  ): Promise<Location[]> {
     try {
       if (!location) { return []; }
       let _location: string = _.isString(location) ? location : location.location;
-      return await this._locationSelectors
-        .where(`:location LIKE (location.location || "%")`, { location: _location })
-        .orderBy('location.level', 'ASC')
-        .getMany();
+      let myLocation = this._locations.find((l) => l.location === _location);
+
+      let path = [];
+      let _cursor = myLocation;
+      while (_cursor) {
+        path.push(_cursor);
+        _cursor = _cursor.parent;
+      }
+      path.reverse();
+      return path;
     } catch (e) {
       console.log(e);
     }
@@ -76,4 +101,19 @@ export class LocationService {
       .leftJoinAndSelect('location.subLocations', 'subLocations')
       .orderBy('`subLocations_order`', 'DESC');
   }
+
+  private _buildTree(location: Location, locations: Location[]) {
+    location.subLocations = location.subLocations || [];
+    while (true) {
+      if (locations[0] && locations[0].parentID === location.id) {
+        let subLocation = locations[0];
+        location.subLocations.push(locations[0]);
+        locations.splice(0, 1);
+        subLocation.parent = location;
+        this._buildTree(subLocation, locations);
+      } else {
+        break;
+      }
+    }
+  };
 }
